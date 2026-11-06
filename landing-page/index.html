@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Route and Resource Management System</title>
+  <meta name="description" content="Mission-critical dispatch, intelligent route optimization, and real-time fleet coordination for emergency responders.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@500;600;700&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="site-nav">
+    <div class="container nav-row">
+      <a href="#top" class="brand-mark" aria-label="Emergency Route System home">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+        <span>ResQ Operations</span>
+      </a>
+      <nav class="nav-actions" aria-label="Primary navigation">
+        <a href="#features" class="nav-link">Capabilities</a>
+        <a href="#roles" class="nav-link">Roles</a>
+        <a href="app-release.apk" download="app-release.apk" class="btn-primary" id="nav-download-btn">
+          <span>Download APK</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero Section -->
+    <section class="hero-stage">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <h1 class="hero-title">Emergency route and fleet management.</h1>
+          <p class="hero-lead">Real-time dispatch, route optimization, and vehicle allocation for first responders.</p>
+          <div class="hero-cta-group">
+            <a href="app-release.apk" download="app-release.apk" class="btn-primary" id="hero-download-btn" aria-label="Download Android APK">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Download Android APK</span>
+            </a>
+            <a href="#features" class="btn-secondary">Explore system</a>
+          </div>
+          <p class="apk-spec-text">Android 8.0+ release build (arm64, armv7, x86_64)</p>
+        </div>
+
+        <div class="hero-graphic" aria-hidden="true">
+          <div class="telemetry-card">
+            <div class="telemetry-bar">
+              <span class="telemetry-badge">Live telemetry feed</span>
+              <span class="telemetry-status">Active dispatch</span>
+            </div>
+            <div class="metric-strip">
+              <div class="metric-cell">
+                <div class="metric-label">Incident response</div>
+                <div class="metric-val num">Real-time</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-label">Route calculation</div>
+                <div class="metric-val num">OSM Graph</div>
+              </div>
+            </div>
+            <div class="dispatch-log">
+              <div class="dispatch-row">
+                <span>Critical incident priority-1</span>
+                <span class="num">En route</span>
+              </div>
+              <div class="dispatch-row">
+                <span>Ambulance unit-04</span>
+                <span class="num">Dispatched</span>
+              </div>
+              <div class="dispatch-row">
+                <span>Citizen emergency alert</span>
+                <span class="num">Verified</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Capabilities -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">Engineered for critical uptime.</h2>
+          <p class="section-lead">Integrated dispatch infrastructure coordinating citizens, triage personnel, and active response units.</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-box">
+            <h3 class="feature-heading">Dynamic routing</h3>
+            <p class="feature-desc">Offline-tolerant OpenStreetMap road network calculations avoiding congestion and physical blockages.</p>
+          </div>
+          <div class="feature-box">
+            <h3 class="feature-heading">Algorithmic triage</h3>
+            <p class="feature-desc">Automated priority queuing matching closest equipped emergency vehicles to severe casualty reports.</p>
+          </div>
+          <div class="feature-box">
+            <h3 class="feature-heading">Live vehicle telemetry</h3>
+            <p class="feature-desc">Full fleet position tracking with live status indicators for standby, en route, and on-scene units.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Role Matrix -->
+    <section class="role-section" id="roles">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">Four unified operational roles.</h2>
+          <p class="section-lead">A single application providing specialized workspaces tailored by authenticated role.</p>
+        </div>
+        <div class="role-grid">
+          <div class="role-card">
+            <h3 class="role-name">Administrator</h3>
+            <p class="role-scope">Fleet management, system analytics, user provisioning, and operational logs.</p>
+          </div>
+          <div class="role-card">
+            <h3 class="role-name">Dispatcher</h3>
+            <p class="role-scope">Live triage management, mission assignments, and resource distribution.</p>
+          </div>
+          <div class="role-card">
+            <h3 class="role-name">First Responder</h3>
+            <p class="role-scope">Turn-by-turn navigation, patient status reporting, and mission completion logs.</p>
+          </div>
+          <div class="role-card">
+            <h3 class="role-name">Citizen</h3>
+            <p class="role-scope">Instant emergency SOS reporting, real-time tracking, and emergency hotline index.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Direct Download Call to Action -->
+    <section class="download-band" id="download">
+      <div class="container">
+        <div class="download-box">
+          <h2 class="section-title">Install the mobile application.</h2>
+          <p class="section-lead">Download the standalone Android package for immediate on-device testing and field deployment.</p>
+          <a href="app-release.apk" download="app-release.apk" class="btn-primary" id="cta-download-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Download app-release.apk</span>
+          </a>
+          <span class="apk-spec-text">Direct APK installation package for Android devices</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="brand-mark">
+        <span>Emergency Route &amp; Resource Management System</span>
+      </div>
+      <div class="footer-copy">
+        <span>Android APK Distribution</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
