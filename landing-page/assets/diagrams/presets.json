@@ -886,6 +886,7 @@
       ]
     },
     "fanin-telemetry": {
+      "phoneLoop": true,
       "types": [
         "tech",
         "software"

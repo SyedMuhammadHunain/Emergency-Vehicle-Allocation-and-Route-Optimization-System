@@ -45,6 +45,13 @@
 }
 @media (max-width: 639px) {
   #features, #roles, #specs, #faq { --hm: 2; }
+  #specs .frame--split {
+    min-height: 460px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px 10px;
+    box-sizing: border-box;
+  }
 }
 
 /* Hero HUD Terminal */
@@ -726,7 +733,7 @@
         </div>
 
         <div class="frame frame--split span-6 start-7 fill" role="img" aria-label="Telemetry integration diagram">
-          <div class="dg" data-diagram="fanin-telemetry" style="width: 100%; height: 100%;"></div>
+          <div class="dg" data-diagram="fanin-telemetry" data-dg-phone="loop" style="width: 100%; height: 100%;"></div>
         </div>
       </div>
     </div>

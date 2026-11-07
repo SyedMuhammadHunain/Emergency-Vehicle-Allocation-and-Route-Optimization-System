@@ -345,7 +345,7 @@ function kindOf(n, ctx) {
   }
 }
 // tiles under 480px carry their label below them in these layouts (elsewhere the icon alone stands, labelled for screen readers)
-const CAPS = { lanes: true, timeline: true, grid: false, fanin: false, bowtie: false, hub: false, ring: false, tree: false, free: true, sync: false };
+const CAPS = { lanes: true, timeline: true, grid: false, fanin: true, bowtie: false, hub: false, ring: false, tree: false, free: true, sync: false };
 
 const CHECK = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 6.2 5 8.2 9 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
@@ -577,7 +577,7 @@ const LAYOUTS = {
     const cols = [src, [tg], ...then.map(g => [g])];
     const colW = cols.map(c => Math.max(...c.map(A.mE)));
     const us = spread(colW, B.pad, A.M - B.pad, 32, B.gapMax);
-    const cs = spread(src.map(A.cE), B.pad, A.C - B.pad, 6, B.tier === 'l' ? 18 : 12);
+    const cs = spread(src.map(A.cE), B.pad, A.C - B.pad, 6, A.v ? (B.tier === 'c' ? 48 : 80) : (B.tier === 'l' ? 18 : 12));
     src.forEach((g, i) => A.put(g, us[0], cs[i], false, 'end', colW[0]));
     A.put(tg, us[1], A.C / 2, true);
     then.forEach((g, i) => A.put(g, us[2 + i], A.C / 2, true));
@@ -1070,7 +1070,7 @@ class Diagram {
     this.relayout = () => { if (this.rq) return; this.rq = requestAnimationFrame(() => { this.rq = 0; if (this.el.isConnected) this.build(); }); };
     this.ro = new ResizeObserver(() => this.queue());
     this.ro.observe(el);
-    this.io = new IntersectionObserver(es => { this.visible = es[es.length - 1].isIntersecting; this.sync(); }, { threshold: 0.12 });
+    this.io = new IntersectionObserver(es => { this.visible = es[es.length - 1].isIntersecting; this.sync(); }, { threshold: 0.05 });
     this.io.observe(el);
     this.onVis = () => this.sync();
     document.addEventListener('visibilitychange', this.onVis);
