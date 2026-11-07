@@ -44,12 +44,64 @@
   #specs .frame--split { max-height: 100%; margin-top: 0; }
 }
 @media (max-width: 639px) {
-  #features, #roles, #specs, #faq { --hm: 2; }
+  #features, #telemetry, #specs { --hm: 2; }
+  #roles, #faq { --hm: 1; }
+  .hero-hud {
+    min-height: 320px;
+    height: 100%;
+  }
+  .hero-hud__canvas {
+    min-height: 200px;
+    padding: 12px;
+  }
+  .hero__media {
+    position: relative;
+    height: 100%;
+  }
+  .hero__media .ly-float {
+    display: none !important;
+  }
+  #roles .role-tablist {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  #roles .role-tab-btn {
+    padding: 8px 10px !important;
+  }
+  #roles .role-tab-btn b {
+    font-size: 12px !important;
+    margin-bottom: 0 !important;
+  }
+  #roles .role-tab-btn span {
+    display: none !important;
+  }
+  #roles .role-tab-btn svg {
+    display: none !important;
+  }
+  #roles .role-panels.frame {
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  #roles .role-panels.frame::before {
+    display: none !important;
+  }
+  #roles .role-panel-box {
+    height: auto !important;
+    padding: 16px !important;
+  }
+  #roles .role-panel-box ul {
+    margin: 10px 0 !important;
+    gap: 8px !important;
+  }
   #specs .frame--split {
-    min-height: 460px;
+    min-height: 440px;
     width: 100%;
-    margin-top: 20px;
-    padding: 20px 10px;
+    margin-top: 16px;
+    padding: 16px 8px;
     box-sizing: border-box;
   }
 }
@@ -433,7 +485,7 @@
   </section>
 
   <!-- TELEMETRY CONSOLE (app-frame) -->
-  <section class="section" id="telemetry" aria-labelledby="telemetry-h" style="--h: 1">
+  <section class="section" id="telemetry" aria-labelledby="telemetry-h" style="--h: 1" data-screen="free">
     <div class="wrap">
       <div class="section-head">
         <h2 id="telemetry-h">Mission-critical dispatch console. <span class="muted">Live OSM road calculation and fleet coordination across municipal networks.</span></h2>
@@ -536,7 +588,7 @@
   </section>
 
   <!-- FEATURES (3 cards across) -->
-  <section class="section ground-surface" id="features" aria-labelledby="features-h" style="--h: 1">
+  <section class="section ground-surface" id="features" aria-labelledby="features-h" style="--h: 1" data-screen="free">
     <div class="wrap">
       <div class="section-head">
         <h2 id="features-h">Engineered for critical uptime. <span class="muted">Routing, triage, and telemetry in one synchronized runtime.</span></h2>
@@ -594,7 +646,7 @@
   </section>
 
   <!-- ROLES (tabs-tour) -->
-  <section class="section" id="roles" aria-labelledby="roles-h" style="--h: 1">
+  <section class="section" id="roles" aria-labelledby="roles-h" style="--h: 1" data-screen="free">
     <div class="wrap">
       <div class="section-head">
         <h2 id="roles-h">Four unified operational roles. <span class="muted">A single application providing specialized workspaces tailored by authenticated role.</span></h2>
@@ -701,7 +753,7 @@
   </section>
 
   <!-- SPECS -->
-  <section class="section ground-surface" id="specs" aria-labelledby="specs-h" style="--h: 1">
+  <section class="section ground-surface" id="specs" aria-labelledby="specs-h" style="--h: 1" data-screen="free">
     <div class="wrap">
       <div class="grid fill">
         <div class="span-5">
@@ -740,7 +792,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="section" id="faq" aria-labelledby="faq-h" style="--h: 1">
+  <section class="section" id="faq" aria-labelledby="faq-h" style="--h: 1" data-screen="free">
     <div class="wrap">
       <div class="grid">
         <div class="span-4">
@@ -775,7 +827,7 @@
 </main>
 
 <!-- FOOTER.CLOSING: close-type + footer-columns -->
-<footer class="footer closing" id="contact" aria-labelledby="close-h" style="--h: 1">
+<footer class="footer closing" id="contact" aria-labelledby="close-h" style="--h: 1" data-screen="free">
   <div class="wrap">
     <div class="closing__cta close--type">
       <div class="section-head">
