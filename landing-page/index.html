@@ -21,7 +21,8 @@
       </a>
       <nav class="nav-actions" aria-label="Primary navigation">
         <a href="#features" class="nav-link">Capabilities</a>
-        <a href="#roles" class="nav-link">Roles</a>
+        <a href="#roles" class="nav-link">Workspaces</a>
+        <a href="#specs" class="nav-link">Specs</a>
         <a href="app-release.apk" download="app-release.apk" class="btn-primary" id="nav-download-btn">
           <span>Download APK</span>
         </a>
@@ -47,7 +48,7 @@
             </a>
             <a href="#features" class="btn-secondary">Explore system</a>
           </div>
-          <p class="apk-spec-text">Android 8.0+ release build (arm64, armv7, x86_64)</p>
+          <p class="apk-spec-text">Release package (55 MB) for Android devices</p>
         </div>
 
         <div class="hero-graphic" aria-hidden="true">
@@ -56,6 +57,17 @@
               <span class="telemetry-badge">Live telemetry feed</span>
               <span class="telemetry-status">Active dispatch</span>
             </div>
+            
+            <div class="route-canvas-box">
+              <svg class="vector-route-svg" viewBox="0 0 320 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20 70H300M160 20V120M60 30L260 110" stroke="currentColor" stroke-opacity="0.15" stroke-width="2"/>
+                <path d="M40 90L100 45L220 95L280 40" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="40" cy="90" r="5" fill="var(--color-paper-2)" stroke="var(--color-accent)" stroke-width="2"/>
+                <circle cx="100" cy="45" r="4" fill="var(--color-paper-2)" stroke="var(--color-accent)" stroke-width="2"/>
+                <circle cx="280" cy="40" r="6" fill="var(--color-accent)"/>
+              </svg>
+            </div>
+
             <div class="metric-strip">
               <div class="metric-cell">
                 <div class="metric-label">Incident response</div>
@@ -69,7 +81,7 @@
             <div class="dispatch-log">
               <div class="dispatch-row">
                 <span>Critical incident priority-1</span>
-                <span class="num">En route</span>
+                <span class="num">En route (3 min)</span>
               </div>
               <div class="dispatch-row">
                 <span>Ambulance unit-04</span>
@@ -109,29 +121,190 @@
       </div>
     </section>
 
-    <!-- Role Matrix -->
+    <!-- Role Workspaces Section -->
     <section class="role-section" id="roles">
       <div class="container">
         <div class="section-head">
           <h2 class="section-title">Four unified operational roles.</h2>
           <p class="section-lead">A single application providing specialized workspaces tailored by authenticated role.</p>
         </div>
-        <div class="role-grid">
-          <div class="role-card">
-            <h3 class="role-name">Administrator</h3>
-            <p class="role-scope">Fleet management, system analytics, user provisioning, and operational logs.</p>
+
+        <div class="role-tabs" role="tablist" aria-label="Role selector">
+          <button class="role-tab-btn active" role="tab" aria-selected="true" data-role="admin">Administrator</button>
+          <button class="role-tab-btn" role="tab" aria-selected="false" data-role="dispatcher">Dispatcher</button>
+          <button class="role-tab-btn" role="tab" aria-selected="false" data-role="driver">First Responder</button>
+          <button class="role-tab-btn" role="tab" aria-selected="false" data-role="citizen">Citizen</button>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="role-panel active" id="panel-admin" role="tabpanel">
+          <div class="role-panel-info">
+            <h3 class="role-panel-title">Operations administration</h3>
+            <p class="role-panel-desc">Manage fleet assets, monitor regional emergency health, provision accounts, and inspect operational metrics.</p>
+            <ul class="role-detail-list">
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Fleet availability and vehicle status dashboard</span>
+              </li>
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Live triage audit logs and operational history</span>
+              </li>
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Account permissions and staff management</span>
+              </li>
+            </ul>
           </div>
-          <div class="role-card">
-            <h3 class="role-name">Dispatcher</h3>
-            <p class="role-scope">Live triage management, mission assignments, and resource distribution.</p>
+          <div class="role-preview-box">
+            <div class="preview-stat-row">
+              <span class="color-muted">Active emergency units</span>
+              <span class="num">12 vehicles</span>
+            </div>
+            <div class="preview-stat-row">
+              <span class="color-muted">Standby fleet</span>
+              <span class="num">8 vehicles</span>
+            </div>
+            <div class="preview-stat-row">
+              <span class="color-muted">Average response time</span>
+              <span class="num">4.2 min</span>
+            </div>
           </div>
-          <div class="role-card">
-            <h3 class="role-name">First Responder</h3>
-            <p class="role-scope">Turn-by-turn navigation, patient status reporting, and mission completion logs.</p>
+        </div>
+
+        <!-- Dispatcher Panel -->
+        <div class="role-panel" id="panel-dispatcher" role="tabpanel">
+          <div class="role-panel-info">
+            <h3 class="role-panel-title">Mission triage &amp; dispatch</h3>
+            <p class="role-panel-desc">Receive citizen alerts, triage casualty severity levels, and route closest qualified units with one touch.</p>
+            <ul class="role-detail-list">
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Priority incident triage queue</span>
+              </li>
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Real-time unit proximity assignment</span>
+              </li>
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Direct mission status broadcast</span>
+              </li>
+            </ul>
           </div>
-          <div class="role-card">
-            <h3 class="role-name">Citizen</h3>
-            <p class="role-scope">Instant emergency SOS reporting, real-time tracking, and emergency hotline index.</p>
+          <div class="role-preview-box">
+            <div class="preview-stat-row">
+              <span class="color-muted">Pending triage</span>
+              <span class="num">2 alerts</span>
+            </div>
+            <div class="preview-stat-row">
+              <span class="color-muted">Dispatched missions</span>
+              <span class="num">5 active</span>
+            </div>
+            <div class="preview-stat-row">
+              <span class="color-muted">Route calculation</span>
+              <span class="num">Automated</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Driver Panel -->
+        <div class="role-panel" id="panel-driver" role="tabpanel">
+          <div class="role-panel-info">
+            <h3 class="role-panel-title">First responder navigation</h3>
+            <p class="role-panel-desc">Field view for drivers and paramedics with turn-by-turn guidance and one-touch mission progression.</p>
+            <ul class="role-detail-list">
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Clear navigation instructions with route blockages</span>
+              </li>
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Status toggling: Standby, En Route, On Scene</span>
+              </li>
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Incident details and casualty contact info</span>
+              </li>
+            </ul>
+          </div>
+          <div class="role-preview-box">
+            <div class="preview-stat-row">
+              <span class="color-muted">Current mission</span>
+              <span class="num">Priority-1 Medical</span>
+            </div>
+            <div class="preview-stat-row">
+              <span class="color-muted">ETA to scene</span>
+              <span class="num">3.5 minutes</span>
+            </div>
+            <div class="preview-stat-row">
+              <span class="color-muted">GPS Telemetry</span>
+              <span class="num">High accuracy</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Citizen Panel -->
+        <div class="role-panel" id="panel-citizen" role="tabpanel">
+          <div class="role-panel-info">
+            <h3 class="role-panel-title">Citizen emergency SOS</h3>
+            <p class="role-panel-desc">Fast reporting interface allowing citizens to transmit location and incident details with real-time tracking.</p>
+            <ul class="role-detail-list">
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>One-tap emergency alert transmission</span>
+              </li>
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Real-time ambulance distance &amp; ETA tracking</span>
+              </li>
+              <li class="role-detail-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Direct regional hotline dialers</span>
+              </li>
+            </ul>
+          </div>
+          <div class="role-preview-box">
+            <div class="preview-stat-row">
+              <span class="color-muted">SOS Transmission</span>
+              <span class="num">Instant</span>
+            </div>
+            <div class="preview-stat-row">
+              <span class="color-muted">Live Tracking</span>
+              <span class="num">Active</span>
+            </div>
+            <div class="preview-stat-row">
+              <span class="color-muted">Emergency Directory</span>
+              <span class="num">Integrated</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Specifications -->
+    <section class="specs-section" id="specs">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">Technical specifications.</h2>
+          <p class="section-lead">Architecture parameters and device compatibility for field hardware.</p>
+        </div>
+        <div class="specs-grid">
+          <div class="spec-card">
+            <div class="spec-title">Package binary</div>
+            <div class="spec-value num">55 MB APK</div>
+          </div>
+          <div class="spec-card">
+            <div class="spec-title">Target Android API</div>
+            <div class="spec-value num">API 36 (Android 8.0+)</div>
+          </div>
+          <div class="spec-card">
+            <div class="spec-title">Runtime framework</div>
+            <div class="spec-value">Flutter 3.44 / Dart 3.12</div>
+          </div>
+          <div class="spec-card">
+            <div class="spec-title">Architecture</div>
+            <div class="spec-value">Universal arm64 / x86</div>
           </div>
         </div>
       </div>
@@ -151,6 +324,7 @@
             </svg>
             <span>Download app-release.apk</span>
           </a>
+          <div class="command-snippet">adb install app-release.apk</div>
           <span class="apk-spec-text">Direct APK installation package for Android devices</span>
         </div>
       </div>
@@ -167,5 +341,26 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    document.querySelectorAll('.role-tab-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const role = button.dataset.role;
+        document.querySelectorAll('.role-tab-btn').forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.role-panel').forEach(p => {
+          p.classList.remove('active');
+        });
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+        const activePanel = document.getElementById(`panel-${role}`);
+        if (activePanel) {
+          activePanel.classList.add('active');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

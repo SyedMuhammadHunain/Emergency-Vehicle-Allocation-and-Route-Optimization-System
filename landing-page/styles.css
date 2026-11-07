@@ -1,7 +1,7 @@
 /* Hallmark · shape: Stage · genre: modern-minimal · theme: Dusk (deal 2/3, seed emergency-route-resource-management-a282·d4968389·2026-11-06·r0) · job: try · draw: emergency-route
  * hero: stage · nav: split · footer: compact · imagery: product · signature: emergency-triage-radar · dusk: cool
  * axes: dark/grotesk-sans/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: none, disciplined layout and token adherence */
+/* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: none, disciplined layout, interactive role previews, and strict token adherence */
 @import url("./tokens.css");
 @import url("./base.css");
 
@@ -89,6 +89,13 @@
   color: var(--color-ink);
 }
 
+.btn-primary:disabled,
+.btn-primary[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -111,6 +118,13 @@
   background: var(--color-shade);
 }
 
+.btn-secondary:disabled,
+.btn-secondary[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Hero Section */
 .hero-stage {
   padding-top: var(--space-xl);
@@ -120,7 +134,7 @@
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: var(--gap-columns);
   align-items: center;
 }
@@ -157,7 +171,7 @@
   color: var(--color-muted);
 }
 
-/* Telemetry Card */
+/* Telemetry Card & Map Simulation Signature */
 .telemetry-card {
   background: var(--color-paper-2);
   border: var(--rule-hair) solid var(--color-rule);
@@ -183,6 +197,20 @@
 .telemetry-status {
   font-size: var(--text-xs);
   color: var(--color-success);
+}
+
+.route-canvas-box {
+  background: var(--color-paper-3);
+  border-radius: var(--radius-inner);
+  border: var(--rule-hair) solid var(--color-rule);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.vector-route-svg {
+  width: 100%;
+  height: 140px;
+  display: block;
 }
 
 .metric-strip {
@@ -231,7 +259,7 @@
   border-bottom: none;
 }
 
-/* Features Grid */
+/* Features Grid with distinct column cadence */
 .features-section {
   padding-top: var(--space-2xl);
   padding-bottom: var(--space-2xl);
@@ -256,7 +284,7 @@
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr) minmax(0, 0.9fr);
   gap: var(--gap-columns);
 }
 
@@ -265,6 +293,7 @@
   border: var(--rule-hair) solid var(--color-rule);
   border-radius: var(--radius-card);
   padding: var(--space-lg);
+  color: var(--color-ink);
 }
 
 .feature-heading {
@@ -279,20 +308,136 @@
   line-height: 1.5;
 }
 
-/* Role Matrix Section */
+/* Interactive Role Matrix & Workspaces */
 .role-section {
   padding-top: var(--space-2xl);
   padding-bottom: var(--space-2xl);
   border-bottom: var(--rule-hair) solid var(--color-rule);
 }
 
-.role-grid {
+.role-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.role-tab-btn {
+  background: var(--color-paper-2);
+  color: var(--color-muted);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.role-tab-btn:hover {
+  color: var(--color-ink);
+  background: var(--color-paper-3);
+}
+
+.role-tab-btn:active {
+  background: var(--color-shade);
+}
+
+.role-tab-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.role-tab-btn.active {
+  background: var(--color-paper-3);
+  color: var(--color-ink);
+  border-color: var(--color-accent);
+  font-weight: 600;
+}
+
+.role-panel {
+  display: none;
+  background: var(--color-paper-2);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--space-xl);
+  color: var(--color-ink);
+}
+
+.role-panel.active {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: var(--gap-columns);
+  align-items: center;
+}
+
+.role-panel-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.role-panel-title {
+  font-size: var(--text-title);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.role-panel-desc {
+  font-size: var(--text-md);
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.role-detail-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-xs) 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.role-detail-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+}
+
+.role-preview-box {
+  background: var(--color-paper-3);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-inner);
+  padding: var(--space-md);
+}
+
+.preview-stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  font-size: var(--text-xs);
+}
+
+.preview-stat-row:last-child {
+  border-bottom: none;
+}
+
+/* System Specifications & Download Band */
+.specs-section {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.specs-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-md);
 }
 
-.role-card {
+.spec-card {
   background: var(--color-paper-2);
   border: var(--rule-hair) solid var(--color-rule);
   border-radius: var(--radius-inner);
@@ -300,20 +445,19 @@
   color: var(--color-ink);
 }
 
-.role-name {
-  font-size: var(--text-md);
-  font-weight: 600;
-  color: var(--color-ink);
+.spec-title {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
   margin-bottom: var(--space-2xs);
 }
 
-.role-scope {
-  font-size: var(--text-xs);
-  color: var(--color-muted);
-  line-height: 1.45;
+.spec-value {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--color-ink);
 }
 
-/* Download Band */
 .download-band {
   padding-top: var(--space-2xl);
   padding-bottom: var(--space-3xl);
@@ -321,12 +465,22 @@
 }
 
 .download-box {
-  max-width: 600px;
+  max-width: 640px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+}
+
+.command-snippet {
+  background: var(--color-paper-2);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  padding: var(--space-xs) var(--space-md);
+  font-family: monospace;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
 }
 
 /* Footer */
@@ -355,13 +509,16 @@
   .features-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  .role-grid {
+  .role-panel.active {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .specs-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 40rem) {
-  .role-grid {
+  .specs-grid {
     grid-template-columns: minmax(0, 1fr);
   }
   .footer-row {
