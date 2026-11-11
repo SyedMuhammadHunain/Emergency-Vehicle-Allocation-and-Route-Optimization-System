@@ -1,50 +1,49 @@
 # Task List
 
-## Task 1: Create Hunain Branch
-**Description:** Create and checkout branch `Hunain` using GitHub CLI / git, push upstream if remote accessible.
+## Task 1: Draft Complete Comprehensive Report Markdown
+**Description:** Write full content in `docs/CCP_Final_Report.md` adhering strictly to all requirements from `CCP Report Format.docx.pdf` and proposal contents.
 **Acceptance criteria:**
-- [x] Active branch is `Hunain` (`git branch --show-current` == `Hunain`)
+- [x] Title (14pt header specification), Abstract (>= 10 lines)
+- [x] Section 1 Introduction (>= 0.5 page)
+- [x] Section 2 Literature Review (>= 1 page)
+- [x] Section 3 Methodology (>= 2 pages) with DP & Dijkstra pseudocode and flowchart / architecture diagrams
+- [x] Section 4 Results with empirical simulation data, time complexity, and labeled empty screenshot placeholders
+- [x] Section 5 Conclusion (>= 12 lines)
+- [x] Annexure with Dart/Flutter data models
 **Verification:**
-- [x] `git status` shows on branch `Hunain`
+- [x] Line count and section completeness check
 **Dependencies:** None
-**Files touched:** `.git`
+**Files touched:** `docs/CCP_Final_Report.md`
 
-## Task 2: Build Android Release APK
-**Description:** Compile Flutter Android release binary.
+## Checkpoint: Content Verification
+- [x] All 5 standard sections + Title + Abstract + Annexure present
+- [x] Empty screenshot placeholders clearly demarcated
+
+## Task 2: Build python-docx Formatted Word Document
+**Description:** Generate `docs/CCP_Final_Report.docx` with exact typography: Title font size 14, standard body typography, clear labeled boxes for screenshots, and 2-column Annexure in font size 8.
 **Acceptance criteria:**
-- [x] `build/app/outputs/flutter-apk/app-release.apk` created
-- [x] File size > 10MB (55MB)
+- [x] `docs/CCP_Final_Report.docx` created successfully
+- [x] Annexure uses 2-column section format with font size 8pt
 **Verification:**
-- [x] `ls -lh build/app/outputs/flutter-apk/app-release.apk`
+- [x] python-docx generation script runs without error
 **Dependencies:** Task 1
-**Files touched:** `build/app/outputs/flutter-apk/*`
+**Files touched:** `docs/CCP_Final_Report.docx`
 
-## Checkpoint: Foundation
-- [x] Branch active
-- [x] APK verified
+## Checkpoint: Document Compilation
+- [x] docx verified
 
-## Task 3: Build Hallmark Landing Page & Bundle APK
-**Description:** Create `landing-page/` directory with Hallmark aesthetic, modern emergency management UI, responsive download CTA, and copy `app-release.apk` into static directory.
+## Task 3: Export PDF via LibreOffice
+**Description:** Compile `.docx` to PDF using headless LibreOffice.
 **Acceptance criteria:**
-- [x] `landing-page/index.html` and `landing-page/styles.css` created
-- [x] Download CTA links directly to `/app-release.apk`
-- [x] `landing-page/app-release.apk` present (55MB)
+- [x] `docs/CCP_Final_Report.pdf` generated
+- [x] File size > 0 and readable
 **Verification:**
-- [x] `sloplint.mjs` clean (0 FAIL, 0 REFLEX, 0 WARN)
+- [x] `ls -lh docs/CCP_Final_Report.pdf` (217 KB)
+- [x] PDF text verification check (3,438 words, all 8 required sections verified)
 **Dependencies:** Task 2
-**Files touched:** `landing-page/index.html`, `landing-page/styles.css`, `landing-page/app-release.apk`, `landing-page/vercel.json`
-
-## Task 4: Install Vercel CLI & Deploy
-**Description:** Install `vercel` CLI globally or locally via npm, deploy `landing-page` directory to Vercel production.
-**Acceptance criteria:**
-- [x] `vercel` binary available in PATH (`65.12.1`)
-- [x] Vercel deployment deployed and URL live
-**Verification:**
-- [x] Deployment URL: `https://zippy-ruby-4tu5dcs.tmp.now`
-- [x] Direct download endpoint bundled: `/app-release.apk`
-**Dependencies:** Task 3
-**Files touched:** `landing-page/`
+**Files touched:** `docs/CCP_Final_Report.pdf`
 
 ## Checkpoint: Final
-- [x] All tasks completed
-- [x] Live URL verified
+- [x] 100% compliant with CCP Report Format
+- [x] All deliverable artifacts ready
+
