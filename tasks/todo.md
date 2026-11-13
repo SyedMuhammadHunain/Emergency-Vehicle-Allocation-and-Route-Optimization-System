@@ -25,12 +25,12 @@
 **Description:** Set up `.env` with `DB_ENGINE=sqlite` for zero-dependency local execution and execute Django database migrations.
 
 **Acceptance criteria:**
-- [ ] `Backend/.env` configured with `DB_ENGINE=sqlite`
-- [ ] `accounts` and `dispatch` migrations applied to database
-- [ ] Database schema tables created in `Backend/db.sqlite3`
+- [x] `Backend/.env` configured with `DB_ENGINE=sqlite`
+- [x] `accounts` and `dispatch` migrations applied to database
+- [x] Database schema tables created in `Backend/db.sqlite3`
 
 **Verification:**
-- [ ] `python manage.py showmigrations` shows all migrations applied `[X]`
+- [x] `python manage.py showmigrations` shows all migrations applied `[X]`
 
 **Dependencies:** Task 1
 

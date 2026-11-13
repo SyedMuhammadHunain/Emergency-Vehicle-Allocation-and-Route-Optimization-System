@@ -33,7 +33,7 @@ Local Git Commits (Branch Hunain - No Push)
 
 ### Phase 1: Backend Environment & Database Setup
 - [x] Task 1: Create Python virtual environment and install backend dependencies
-- [ ] Task 2: Configure SQLite database and run Django migrations
+- [x] Task 2: Configure SQLite database and run Django migrations
 - [ ] Task 3: Seed Karachi road network, accounts, and demo data (`python manage.py seed_demo --allocate`)
 - [ ] Task 4: Run Django algorithm and API test suite (`python manage.py test algorithms dispatch`)
 
