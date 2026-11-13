@@ -1,45 +1,69 @@
-# Implementation Plan: Final CCP Project Report Generation
+# Implementation Plan: Complete Project Backend & Integration
 
 ## Overview
-Generate complete course project report for "Emergency Vehicle Allocation and Route Optimization System" (CT-363 Design and Analysis of Algorithm, CSIT Department, NED University). Report will strictly fulfill all requirements specified in `CCP Report Format.docx.pdf`, leaving clearly labeled empty placeholder frames for application screenshots, and embedding core Dart/Flutter models into the Annexure in 2-column format. Both Markdown (`docs/CCP_Final_Report.md`) and `.docx` (`docs/CCP_Final_Report.docx`) will be produced, along with a compiled `.pdf`.
+Complete the ResQ emergency route and resource management system in branch `Hunain`. Initialize the Django REST backend with SQLite and demo Karachi data, verify all algorithms and backend endpoints with tests, wire the Flutter mobile app via an `ApiService` with offline mock fallback, verify release build, and commit all changes locally (strictly no push).
 
-## Architecture & Section Decisions
-1. **Title & Front Matter**:
-   - Title (Font Size 14): Emergency Vehicle Allocation and Route Optimization System
-   - Submissions details: NED University of Engineering & Technology, Department of CSIT, Course CT-363: Design and Analysis of Algorithm, Batch 2024, Fall 2026, Section "A".
-   - Authors: Muhammad Afzal [CT-24263], Syed Muhammad Hunain [CT-24281], Raza Ali [CT-24308], Ayesha [CT-24309].
-2. **Abstract**:
-   - Minimum 8-10 lines summarizing problem, objectives, DP knapsack/multi-criteria dispatch & Dijkstra pathfinding, key findings, and significance.
-3. **1. Introduction**:
-   - Background, core research problem, research goals & contributions (> 0.5 page).
-4. **2. Literature Review**:
-   - Existing studies and frameworks (Emergency vehicle routing, dynamic ambulance dispatching, shortest path variants, graph models, knowledge gaps) (>= 1 page).
-5. **3. Methodology**:
-   - Step-by-step technical approach, experimental setup, datasets, and validation metrics (>= 2 pages).
-   - Dynamic Programming formulation (0/1 Multi-Criteria Knapsack / Priority Benefit Function), Pseudocode.
-   - Dijkstra's Algorithm formulation with edge weights as dynamic travel time (handling congestion & road blocks), Pseudocode.
-   - Flowchart of project / Block diagram (Ascii / Mermaid / Structured layout).
-6. **4. Results**:
-   - Empirical data, simulation output, description of results, time complexity analysis (DP: $O(N \cdot W)$, Dijkstra: $O((V+E)\log V)$), and labeled empty screenshot placeholders (> 0.5 page text + placeholders).
-7. **5. Conclusion**:
-   - Summary of primary contributions, real-world implications, future research directions (>= 10-12 lines).
-8. **Annexure**:
-   - 2-column format in font size 8 containing the core Dart/Flutter models (`IncidentModel`, `ResponderModel`, `UserProfileModel`, and algorithmic dispatch/routing controllers).
+## Dependency Graph
+```
+SQLite Database & Django Migrations
+    │
+    ▼
+Seed Demo Karachi Road Grid & Accounts (accounts + dispatch + algorithms)
+    │
+    ▼
+Automated Algorithm & Dispatch Tests
+    │
+    ▼
+Flutter HTTP Client Integration (ApiService with MockRepository Fallback)
+    │
+    ▼
+Validation & Clean Flutter Analysis
+    │
+    ▼
+Local Git Commits (Branch Hunain - No Push)
+```
+
+## Architecture Decisions
+- **Database Engine**: Use SQLite (`DB_ENGINE=sqlite`) by default for instant, zero-dependency, local execution, preserving full MySQL schema compatibility.
+- **Karachi Road Graph & Demo Data**: Run `python manage.py seed_demo --allocate` to populate realistic arterial roads (Shahrah-e-Faisal, University Road, etc.), demo users matching Flutter credentials, and dynamic allocation records.
+- **Frontend Hybrid Mode**: Implement `ApiService` in Flutter with automatic fallback to `MockRepository` on connection error or timeout, ensuring the app functions seamlessly in both connected and offline demo states.
+- **VCS Boundary**: Commit all changes to local branch `Hunain`. Under no circumstances execute `git push`.
 
 ## Task List
 
-### Phase 1: Markdown Report Generation
-- [ ] Task 1: Draft complete comprehensive report text in `docs/CCP_Final_Report.md` meeting all section and length constraints with empty screenshot frames.
+### Phase 1: Backend Environment & Database Setup
+- [x] Task 1: Create Python virtual environment and install backend dependencies
+- [ ] Task 2: Configure SQLite database and run Django migrations
+- [ ] Task 3: Seed Karachi road network, accounts, and demo data (`python manage.py seed_demo --allocate`)
+- [ ] Task 4: Run Django algorithm and API test suite (`python manage.py test algorithms dispatch`)
 
-### Checkpoint: Content Verification
-- [ ] Verify line counts, section headers, algorithm pseudocode, and mathematical rigor.
+### Checkpoint: Backend Operational
+- [ ] Django runs cleanly on port 8000 with healthy endpoints
+- [ ] 100% of algorithm and dispatch tests pass
 
-### Phase 2: Document Compilation (.docx and .pdf)
-- [ ] Task 2: Build script using `python-docx` to format the document with exact font sizes, 2-column Annexure (font size 8), and generate `docs/CCP_Final_Report.docx`.
-- [ ] Task 3: Export to PDF using `libreoffice --headless --convert-to pdf` and verify output files.
+### Phase 2: Frontend-Backend API Connection
+- [ ] Task 5: Implement Flutter HTTP API client targeting `AppConstants.apiBase` with offline mock fallback
+- [ ] Task 6: Wire Authentication flow (`/api/auth/login/`, `/api/auth/me/`) with fallback
+- [ ] Task 7: Wire Emergency Reporting & Vehicle Allocation (`/api/allocate/`, `/api/emergencies/`) with fallback
+
+### Checkpoint: End-to-End Integration
+- [ ] Mobile app authenticates and dispatches against backend when running, and gracefully degrades to mock data when backend is stopped
+- [ ] `flutter analyze` passes with zero errors
+
+### Phase 3: Final Build & Local Commit
+- [ ] Task 8: Rebuild Android release APK with backend integration
+- [ ] Task 9: Commit all changes locally to branch `Hunain` (Strictly NO push)
+
+### Checkpoint: Complete Project Delivered
+- [ ] Project fully completed and verified locally on branch `Hunain`
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Section length under threshold | High | Elaborate theoretical and practical algorithms, edge cases, and architectural models |
-| Screenshot layout issues | Low | Create high-contrast placeholder callout boxes with dimensions and descriptions |
+| Python dependency conflicts on Python 3.14 | Low | Pin compatible versions in requirements or use clean isolated venv |
+| Android emulator cannot reach localhost | Med | `AppConstants.apiBase` set to `http://10.0.2.2:8000` |
+| Offline demo failure | High | Automatic fallback to `MockRepository` guarantees app never crashes |
+| Accidental remote push | High | Enforce local `git commit` only; never run `git push` |
+
+## Open Questions
+None.

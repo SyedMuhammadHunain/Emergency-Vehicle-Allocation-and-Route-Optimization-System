@@ -1,66 +1,119 @@
-# Spec: Hunain Branch, Android APK Build, and Hallmark Landing Page Deployment
+# Spec: Complete Backend Setup, Flutter API Integration & Local Delivery
 
 ## Objective
-Build a production-ready Android APK for the Emergency Route and Resource Management System Flutter app. Create a Git branch `Hunain` using GitHub CLI. Develop a high-aesthetic static landing page using `hallmark` design standards with an instant download button serving the APK. Install Vercel CLI and deploy the landing page to Vercel.
+Deliver a complete, functioning emergency route and resource management system (ResQ). Initialize and verify the Django REST backend with SQLite database and synthetic Karachi road grid demo data. Wire the Flutter mobile application's data layer to interface with the Django REST API with automatic offline fallback to local mock data. Verify all algorithm tests and mobile builds, and commit all work locally to branch `Hunain` without pushing to remote.
 
 ## Tech Stack
-- Mobile App: Flutter (Dart 3.12.2 / Flutter 3.44.9)
-- VCS: Git + GitHub CLI (`gh`)
-- Landing Page: HTML5, CSS3 / Modern Tailwind, JavaScript (designed with Hallmark principles)
-- Hosting: Vercel CLI (`npm install -g vercel`)
+- **Backend**: Python 3.14+, Django 5.1.x, Django REST Framework 3.15.x, SQLite 3 (with MySQL dual-support in settings)
+- **Algorithms**: 0/1 Multi-Criteria Knapsack (vehicle allocation), Dynamic Dijkstra (shortest emergency routing), Analytical Hierarchy Process (incident triage)
+- **Frontend**: Flutter 3.44.x / Dart 3.12.x
+- **VCS**: Git (Local branch `Hunain`, strictly local commits, NO push)
 
 ## Commands
 ```bash
-# Git branch
-git checkout -b Hunain
-git push -u origin Hunain
+# Backend Setup
+cd Backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 
-# Flutter APK build
+# Database Migrations & Seeding (SQLite mode)
+export DB_ENGINE=sqlite
+python manage.py migrate
+python manage.py seed_demo --allocate
+
+# Backend Automated Tests
+python manage.py test algorithms dispatch
+
+# Backend Dev Server
+python manage.py runserver 0.0.0.0:8000
+
+# Flutter Frontend Analysis & Build
+flutter analyze
+flutter test
 flutter build apk --release
 
-# Install Vercel CLI
-npm install -g vercel
-
-# Vercel Deployment (within landing-page directory)
-cd landing-page && vercel --prod --yes
+# Local Version Control
+git add .
+git commit -m "feat: complete backend initialization and flutter api integration"
 ```
 
 ## Project Structure
 ```text
 .
-├── android/                 # Flutter Android project source
-├── lib/                     # Flutter Dart application code
-├── build/app/outputs/flutter-apk/app-release.apk # Generated APK
-├── landing-page/            # Standalone landing page for Vercel
-│   ├── index.html           # Landing page with download CTA (Hallmark design)
-│   ├── styles.css           # Custom typography, spacing, aesthetic styling
-│   ├── app-release.apk      # Direct download target bundled in static site
-│   └── vercel.json          # Deployment routing and cache headers
+├── Backend/                 # Django REST Framework backend
+│   ├── accounts/            # Custom User model, auth views & tokens
+│   ├── algorithms/          # Knapsack allocation & Dijkstra routing algorithms
+│   ├── config/              # Django settings, URLs, WSGI
+│   ├── dispatch/            # Emergencies, vehicles, allocations, road network
+│   ├── manage.py
+│   └── requirements.txt
+├── lib/                     # Flutter mobile application
+│   ├── core/
+│   │   ├── constants/       # AppConstants (API endpoints, coords)
+│   │   ├── mock/            # MockRepository & demo Karachi data (offline fallback)
+│   │   └── services/        # ApiService (HTTP client & network handling)
+│   ├── data/
+│   │   ├── models/          # Data serialization models
+│   │   └── repositories/    # Hybrid repository (API + mock fallback)
+│   ├── features/            # Auth, Dispatch, Routing, Admin UI screens
+│   └── main.dart
+├── tasks/
+│   ├── plan.md              # Implementation plan
+│   └── todo.md              # Task checklist
 └── SPEC.md                  # This specification document
 ```
 
-## Code Style & Design System (Hallmark Principles)
-- Typography: Clean typography pairing (e.g. Inter / Geist / Newsreader display + crisp sans body).
-- Layout: Asymmetric, modern, spacious layout with purposeful whitespace; no cookie-cutter AI aesthetic.
-- Color: Curated palette fitting emergency resource management (high contrast slate, safety accents, crisp dark/light harmony).
-- Micro-interactions: Subtle hover states, smooth scroll, direct single-click APK trigger (`<a href="/app-release.apk" download>`).
+## Code Style & Conventions
+- **Backend (Python)**: PEP 8 compliant, type hints where appropriate, clean Django CBVs / ViewSets with drf-spectacular documentation.
+- **Frontend (Dart)**: Strict analysis adherence (`analysis_options.yaml`), repository pattern with clear separation of network layer and UI state.
+- **Error Handling**: Graceful network failure capture; Flutter HTTP client automatically falls back to `MockRepository` when backend is unreachable, logging clear diagnostic warnings rather than crashing.
 
-## Testing & Verification Strategy
-- Git: Run `git branch --show-current` to ensure branch is `Hunain`.
-- APK Build: Verify `build/app/outputs/flutter-apk/app-release.apk` exists and filesize is valid (> 15MB).
-- Landing Page: Validate HTML5 structure, responsive layout on mobile/desktop viewports, verify download link triggers file transfer.
-- Deployment: Inspect live Vercel deployment URL via HTTP GET and verify 200 OK for `/` and `/app-release.apk`.
+```dart
+// Example: Safe API invocation with Mock fallback
+Future<List<Vehicle>> getAvailableVehicles() async {
+  try {
+    final response = await _http.get(Uri.parse('${AppConstants.apiBase}${AppConstants.endpointVehicles}'));
+    if (response.statusCode == 200) {
+      return (jsonDecode(response.body) as List).map((e) => Vehicle.fromJson(e)).toList();
+    }
+  } catch (e) {
+    debugPrint('Backend unreachable, falling back to mock data: $e');
+  }
+  return _mockRepository.getAvailableVehicles();
+}
+```
+
+## Testing Strategy
+1. **Backend Unit & Algorithm Tests**:
+   - `python manage.py test algorithms` verifies Knapsack resource allocation fairness and Dijkstra dynamic path recalculation against synthetic Karachi graph.
+   - `python manage.py test dispatch` verifies emergency dispatch lifecycle, user permissions, and REST endpoints.
+2. **Frontend Analysis**:
+   - `flutter analyze` must pass with zero issues.
+3. **Build Verification**:
+   - `flutter build apk --release` completes successfully.
 
 ## Boundaries
-- Always: Preserve existing Flutter codebase integrity; verify APK build before copying to landing page assets.
-- Ask first: If Vercel authentication requires interactive login tokens (`vercel login`).
-- Never: Commit large binary build artifacts to main Git history unless strictly intended for the deployment folder; do not tamper with sensitive environment configs.
+- **Always**:
+  - Run backend tests and `flutter analyze` before making commits.
+  - Maintain offline mock fallback so mobile app operates whether backend server is online or offline.
+  - Work solely on branch `Hunain`.
+- **Ask first**:
+  - Before modifying existing database models or breaking REST contract schemas.
+- **Never**:
+  - Run `git push` under ANY circumstances (user constraint: strictly commit only, no push).
+  - Delete or bypass failing tests.
+  - Commit Python venv or build output binaries to git.
 
 ## Success Criteria
-1. Git branch `Hunain` created and checked out.
-2. `flutter build apk --release` generates working APK.
-3. Landing page designed according to Hallmark quality bar with working direct download CTA.
-4. Vercel CLI installed and landing page deployed with live accessible URL.
+1. Python venv created at `Backend/.venv` with all requirements installed cleanly.
+2. Django database initialized with SQLite engine and all migrations applied.
+3. Synthetic Karachi road network, demo accounts, and vehicles seeded via `seed_demo --allocate`.
+4. All Django algorithm and dispatch automated tests pass (`OK`).
+5. Flutter HTTP API service implemented with automatic offline fallback to `MockRepository`.
+6. `flutter analyze` passes with 0 issues.
+7. Changes committed to local git branch `Hunain` with descriptive conventional commits.
+8. No git push executed.
 
 ## Open Questions
-- None (confirmed standalone landing page with direct static APK bundling).
+- None. Requirements, database choice (SQLite), fallback strategy, and no-push constraint are established.
