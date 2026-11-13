@@ -82,12 +82,12 @@
 **Description:** Create an HTTP service layer in Flutter to interface with Django REST endpoints, with fallback to in-memory mock repository if server is unreachable.
 
 **Acceptance criteria:**
-- [ ] `ApiService` created in `lib/core/services/`
-- [ ] Network status check, timeout, and error handling implemented
-- [ ] Fallback to `MockRepository` when backend is offline
+- [x] `ApiService` created in `lib/core/services/`
+- [x] Network status check, timeout, and error handling implemented
+- [x] Fallback to `MockRepository` when backend is offline
 
 **Verification:**
-- [ ] `flutter analyze` clean with no errors
+- [x] `flutter analyze` clean with no errors
 
 **Dependencies:** Task 4
 

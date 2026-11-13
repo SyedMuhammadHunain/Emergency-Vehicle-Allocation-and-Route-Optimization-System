@@ -42,7 +42,7 @@ Local Git Commits (Branch Hunain - No Push)
 - [x] 100% of algorithm and dispatch tests pass
 
 ### Phase 2: Frontend-Backend API Connection
-- [ ] Task 5: Implement Flutter HTTP API client targeting `AppConstants.apiBase` with offline mock fallback
+- [x] Task 5: Implement Flutter HTTP API client targeting `AppConstants.apiBase` with offline mock fallback
 - [ ] Task 6: Wire Authentication flow (`/api/auth/login/`, `/api/auth/me/`) with fallback
 - [ ] Task 7: Wire Emergency Reporting & Vehicle Allocation (`/api/allocate/`, `/api/emergencies/`) with fallback
 
