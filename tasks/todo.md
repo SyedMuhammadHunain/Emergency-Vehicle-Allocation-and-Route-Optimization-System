@@ -44,12 +44,12 @@
 **Description:** Run the custom management command `seed_demo` to generate synthetic Karachi road network with real arterial roads, demo users, vehicles, and initial allocation plan.
 
 **Acceptance criteria:**
-- [ ] `python manage.py seed_demo --allocate` runs to completion
-- [ ] Road network graph version recorded
-- [ ] User accounts created matching Flutter demo credentials
+- [x] `python manage.py seed_demo --allocate` runs to completion
+- [x] Road network graph version recorded
+- [x] User accounts created matching Flutter demo credentials
 
 **Verification:**
-- [ ] `python manage.py shell -c "from accounts.models import User; print(User.objects.count())"` > 0
+- [x] `python manage.py shell -c "from accounts.models import User; print(User.objects.count())"` > 0
 
 **Dependencies:** Task 2
 
