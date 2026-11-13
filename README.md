@@ -1,13 +1,13 @@
 # ResQ — Emergency Vehicle Allocation & Route Optimization System
 
 <p align="center">
-  <a href="https://landing-page-lac-eight-11.vercel.app">
+  <a href="https://res-q.tech/">
     <img src="assets/readme/hero-banner.svg" alt="ResQ Operations Banner" width="100%">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://landing-page-lac-eight-11.vercel.app"><img src="https://img.shields.io/badge/Production%20Landing-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Deployed"></a>
+  <a href="https://res-q.tech/"><img src="https://img.shields.io/badge/Live%20Deployment-res--q.tech-black?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Deployment"></a>
   <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.12%2B-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter"></a>
   <a href="https://dart.dev"><img src="https://img.shields.io/badge/Dart-3.x-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart"></a>
   <a href="https://www.djangoproject.com/"><img src="https://img.shields.io/badge/Django%20REST-5.1-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django REST"></a>
@@ -25,9 +25,10 @@
 
 The platform includes a cross-platform **Flutter application** (Web, Android, Desktop), a hardened **Django REST backend**, an interactive **Swagger/OpenAPI documentation portal**, and an autonomous **offline mock fallback** mechanism that guarantees operational resilience even during cellular network disruption.
 
-- 🌐 **Live Web Landing & APK Download**: [https://landing-page-lac-eight-11.vercel.app](https://landing-page-lac-eight-11.vercel.app)
+- 🌐 **Live Production Platform**: [https://res-q.tech/](https://res-q.tech/)
+- 📱 **Android Release APK**: [https://res-q.tech/app-release.apk](https://res-q.tech/app-release.apk)
 - 📑 **OpenAPI Specification**: Interactive Swagger UI at `/api/docs/`
-- 📱 **Android Release Bundle**: Available in `landing-page/app-release.apk` (55 MB)
+- 📦 **Local Release Bundle**: Available in `landing-page/app-release.apk` (55 MB)
 
 ---
 
