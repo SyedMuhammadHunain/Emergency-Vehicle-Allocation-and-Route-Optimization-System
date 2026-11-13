@@ -162,12 +162,12 @@
 **Description:** Commit all updated source code, backend setup, and artifacts to branch `Hunain` locally.
 
 **Acceptance criteria:**
-- [ ] All modified files committed with descriptive conventional commit messages
-- [ ] Zero `git push` executed
+- [x] All modified files committed with descriptive conventional commit messages
+- [x] Zero `git push` executed
 
 **Verification:**
-- [ ] `git status` clean working tree
-- [ ] `git branch --show-current` outputs `Hunain`
+- [x] `git status` clean working tree
+- [x] `git branch --show-current` outputs `Hunain`
 
 **Dependencies:** Task 8
 
@@ -176,4 +176,4 @@
 **Estimated scope:** Small: 1-2 files
 
 ## Checkpoint: Final
-- [ ] Complete project delivered with working database, backend, mobile app, and local commits
+- [x] Complete project delivered with working database, backend, mobile app, and local commits
