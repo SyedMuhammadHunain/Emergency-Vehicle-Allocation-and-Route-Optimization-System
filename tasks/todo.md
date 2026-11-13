@@ -62,11 +62,11 @@
 **Description:** Execute automated test suite for allocation (0/1 Multi-Criteria Knapsack), Dijkstra dynamic shortest path, and dispatch REST endpoints.
 
 **Acceptance criteria:**
-- [ ] Algorithm tests (`test_allocation.py`, `test_dijkstra.py`) pass
-- [ ] API endpoint tests (`test_api.py`) pass
+- [x] Algorithm tests (`test_allocation.py`, `test_dijkstra.py`) pass
+- [x] API endpoint tests (`test_api.py`) pass
 
 **Verification:**
-- [ ] `python manage.py test algorithms dispatch` exits with code 0 (OK)
+- [x] `python manage.py test algorithms dispatch` exits with code 0 (OK)
 
 **Dependencies:** Task 3
 
@@ -75,7 +75,7 @@
 **Estimated scope:** Small: 1-2 files
 
 ## Checkpoint: Backend Operational
-- [ ] Backend running and all algorithm tests passing
+- [x] Backend running and all algorithm tests passing
 
 ## Task 5: Implement Flutter HTTP API client targeting AppConstants.apiBase
 

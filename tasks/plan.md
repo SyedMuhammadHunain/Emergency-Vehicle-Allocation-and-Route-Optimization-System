@@ -35,11 +35,11 @@ Local Git Commits (Branch Hunain - No Push)
 - [x] Task 1: Create Python virtual environment and install backend dependencies
 - [x] Task 2: Configure SQLite database and run Django migrations
 - [x] Task 3: Seed Karachi road network, accounts, and demo data (`python manage.py seed_demo --allocate`)
-- [ ] Task 4: Run Django algorithm and API test suite (`python manage.py test algorithms dispatch`)
+- [x] Task 4: Run Django algorithm and API test suite (`python manage.py test algorithms dispatch`)
 
 ### Checkpoint: Backend Operational
-- [ ] Django runs cleanly on port 8000 with healthy endpoints
-- [ ] 100% of algorithm and dispatch tests pass
+- [x] Django runs cleanly on port 8000 with healthy endpoints
+- [x] 100% of algorithm and dispatch tests pass
 
 ### Phase 2: Frontend-Backend API Connection
 - [ ] Task 5: Implement Flutter HTTP API client targeting `AppConstants.apiBase` with offline mock fallback
