@@ -44,7 +44,7 @@ Local Git Commits (Branch Hunain - No Push)
 ### Phase 2: Frontend-Backend API Connection
 - [x] Task 5: Implement Flutter HTTP API client targeting `AppConstants.apiBase` with offline mock fallback
 - [ ] Task 6: Wire Authentication flow (`/api/auth/login/`, `/api/auth/me/`) with fallback
-- [ ] Task 7: Wire Emergency Reporting & Vehicle Allocation (`/api/allocate/`, `/api/emergencies/`) with fallback
+- [x] Task 7: Wire Emergency Reporting & Vehicle Allocation (`/api/allocate/`, `/api/emergencies/`) with fallback
 
 ### Checkpoint: End-to-End Integration
 - [ ] Mobile app authenticates and dispatches against backend when running, and gracefully degrades to mock data when backend is stopped

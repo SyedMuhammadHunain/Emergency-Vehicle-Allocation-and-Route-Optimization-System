@@ -121,12 +121,12 @@
 **Description:** Connect SOS dispatch and vehicle allocation screens to `/api/allocate/` and `/api/emergencies/` with mock fallback.
 
 **Acceptance criteria:**
-- [ ] SOS incident creation calls backend API
-- [ ] Vehicle allocation displays calculated DP/Dijkstra results from backend
-- [ ] Falls back to local demo incidents/allocations if offline
+- [x] SOS incident creation calls backend API
+- [x] Vehicle allocation displays calculated DP/Dijkstra results from backend
+- [x] Falls back to local demo incidents/allocations if offline
 
 **Verification:**
-- [ ] `flutter analyze` clean
+- [x] `flutter analyze` clean
 
 **Dependencies:** Task 6
 
