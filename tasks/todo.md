@@ -144,11 +144,11 @@
 **Description:** Compile updated Flutter Android release binary bundling the API integration.
 
 **Acceptance criteria:**
-- [ ] `build/app/outputs/flutter-apk/app-release.apk` compiled
-- [ ] Copied to `landing-page/app-release.apk`
+- [x] `build/app/outputs/flutter-apk/app-release.apk` compiled
+- [x] Copied to `landing-page/app-release.apk`
 
 **Verification:**
-- [ ] `ls -lh landing-page/app-release.apk` confirmed
+- [x] `ls -lh landing-page/app-release.apk` confirmed
 
 **Dependencies:** Task 7
 
