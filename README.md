@@ -54,15 +54,11 @@ ResQ operates across four tightly-integrated stages:
 
 ---
 
-## 📸 System Previews
+## 📸 System Preview
 
-| Citizen & Fleet Web App | Swagger OpenAPI Documentation |
-|:---:|:---:|
-| <img src="assets/readme/flutter_web_live.png" width="100%" alt="Flutter Web Live App"> | <img src="assets/readme/swagger_docs.png" width="100%" alt="Swagger OpenAPI 3.0 Documentation"> |
-
-| Landing Page (Desktop) | Landing Page (Mobile) |
-|:---:|:---:|
-| <img src="assets/readme/landing_desktop.png" width="100%" alt="Desktop Landing Page"> | <img src="assets/readme/landing_mobile.png" width="100%" alt="Mobile Landing Page"> |
+<p align="center">
+  <img src="assets/readme/landing_desktop.png" width="100%" alt="ResQ Operations Desktop Platform">
+</p>
 
 ---
 
