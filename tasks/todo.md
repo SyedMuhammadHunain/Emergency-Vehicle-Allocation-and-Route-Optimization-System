@@ -101,12 +101,12 @@
 **Description:** Connect Login and Register screens to `/api/auth/login/` and `/api/auth/me/` with mock fallback.
 
 **Acceptance criteria:**
-- [ ] Login screen authenticates against Django backend
-- [ ] User token and role preserved in session service
-- [ ] Gracefully falls back to mock login if offline
+- [x] Login screen authenticates against Django backend
+- [x] User token and role preserved in session service
+- [x] Gracefully falls back to mock login if offline
 
 **Verification:**
-- [ ] Flutter auth flow passes analysis
+- [x] Flutter auth flow passes analysis
 
 **Dependencies:** Task 5
 
