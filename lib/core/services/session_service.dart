@@ -48,6 +48,28 @@ class SessionService extends ChangeNotifier {
     }
   }
 
+  Future<void> _syncToPrefs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_prefLoggedInKey, _isLoggedIn);
+      if (_isLoggedIn) {
+        if (_role != null) await prefs.setString(_prefRoleKey, _role!);
+        if (_userName != null) await prefs.setString(_prefUserNameKey, _userName!);
+        if (_userEmail != null) await prefs.setString(_prefUserEmailKey, _userEmail!);
+        if (_authToken != null) {
+          await prefs.setString(_prefTokenKey, _authToken!);
+        } else {
+          await prefs.remove(_prefTokenKey);
+        }
+      } else {
+        await prefs.remove(_prefRoleKey);
+        await prefs.remove(_prefUserNameKey);
+        await prefs.remove(_prefUserEmailKey);
+        await prefs.remove(_prefTokenKey);
+      }
+    } catch (_) {}
+  }
+
   /// Authenticates using ApiService against Django backend with automatic
   /// fallback to centralized MockRepository predefined/stored accounts.
   Future<DemoUserAccount?> loginWithCredentials(
@@ -69,17 +91,7 @@ class SessionService extends ChangeNotifier {
     _authToken = api.authToken;
     _isLoggedIn = true;
     notifyListeners();
-
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_prefLoggedInKey, true);
-      await prefs.setString(_prefRoleKey, _role!);
-      await prefs.setString(_prefUserNameKey, _userName!);
-      await prefs.setString(_prefUserEmailKey, _userEmail!);
-      if (_authToken != null) {
-        await prefs.setString(_prefTokenKey, _authToken!);
-      }
-    } catch (_) {}
+    await _syncToPrefs();
 
     return account;
   }
@@ -89,16 +101,10 @@ class SessionService extends ChangeNotifier {
     _role = 'citizen';
     _userName = account.name;
     _userEmail = account.email;
+    _authToken = null;
     _isLoggedIn = true;
     notifyListeners();
-
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_prefLoggedInKey, true);
-      await prefs.setString(_prefRoleKey, _role!);
-      await prefs.setString(_prefUserNameKey, _userName!);
-      await prefs.setString(_prefUserEmailKey, _userEmail!);
-    } catch (_) {}
+    await _syncToPrefs();
   }
 
   /// Quick Demo Role Switcher (clearly labeled DEMO MODE)
@@ -107,15 +113,9 @@ class SessionService extends ChangeNotifier {
     _isLoggedIn = true;
     _userName = 'Demo ${_role![0].toUpperCase()}${_role!.substring(1)}';
     _userEmail = '$_role@resq.com';
+    _authToken = null;
     notifyListeners();
-
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_prefLoggedInKey, true);
-      await prefs.setString(_prefRoleKey, _role!);
-      await prefs.setString(_prefUserNameKey, _userName!);
-      await prefs.setString(_prefUserEmailKey, _userEmail!);
-    } catch (_) {}
+    await _syncToPrefs();
   }
 
   Future<void> logout() async {
@@ -125,14 +125,6 @@ class SessionService extends ChangeNotifier {
     _userEmail = null;
     _authToken = null;
     notifyListeners();
-
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_prefLoggedInKey, false);
-      await prefs.remove(_prefRoleKey);
-      await prefs.remove(_prefUserNameKey);
-      await prefs.remove(_prefUserEmailKey);
-      await prefs.remove(_prefTokenKey);
-    } catch (_) {}
+    await _syncToPrefs();
   }
 }

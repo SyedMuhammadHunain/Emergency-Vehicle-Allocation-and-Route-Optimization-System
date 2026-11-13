@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
@@ -84,66 +83,70 @@ class ApiService {
     }
   }
 
+  Future<http.Response?> _request({
+    required String method,
+    required String path,
+    Map<String, dynamic>? jsonBody,
+    Duration timeout = const Duration(seconds: 5),
+  }) async {
+    final isOnline = await checkHealth();
+    if (!isOnline) return null;
+
+    try {
+      final uri = Uri.parse('$baseUrl$path');
+      final headers = _buildHeaders();
+      final bodyStr = jsonBody != null ? jsonEncode(jsonBody) : null;
+
+      if (method == 'POST') {
+        return await _client.post(uri, headers: headers, body: bodyStr).timeout(timeout);
+      }
+      return await _client.get(uri, headers: headers).timeout(timeout);
+    } catch (e) {
+      debugPrint('ApiService.$path error: $e');
+      return null;
+    }
+  }
+
   /// Authenticate user via Django `/api/auth/login/` with fallback to [MockRepository].
   Future<ApiResponse<DemoUserAccount>> login(
     String email,
     String password, {
     required MockRepository mockRepo,
   }) async {
-    try {
-      final isOnline = await checkHealth();
-      if (isOnline) {
-        final uri = Uri.parse('$baseUrl${AppConstants.endpointAuth}login/');
-        final response = await _client
-            .post(
-              uri,
-              headers: _buildHeaders(),
-              body: jsonEncode({
-                'username': email,
-                'password': password,
-              }),
-            )
-            .timeout(const Duration(seconds: 5));
+    final response = await _request(
+      method: 'POST',
+      path: '${AppConstants.endpointAuth}login/',
+      jsonBody: {'username': email, 'password': password},
+    );
 
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body) as Map<String, dynamic>;
-          _authToken = data['token'] as String?;
-          final userJson = data['user'] as Map<String, dynamic>;
+    if (response != null && response.statusCode == 200) {
+      try {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        _authToken = data['token'] as String?;
+        final userJson = data['user'] as Map<String, dynamic>;
 
-          final account = DemoUserAccount(
-            id: 'USR-${userJson['id']}',
-            name: userJson['full_name'] ?? userJson['username'] ?? 'User',
-            email: userJson['email'] ?? email,
-            password: '',
-            role: (userJson['role'] as String? ?? 'citizen').toLowerCase(),
-            phone: userJson['phone'] ?? '',
-            isActive: userJson['is_active'] ?? true,
-            createdAt: DateTime.now(),
-          );
+        final account = DemoUserAccount(
+          id: 'USR-${userJson['id']}',
+          name: userJson['full_name'] ?? userJson['username'] ?? 'User',
+          email: userJson['email'] ?? email,
+          password: '',
+          role: (userJson['role'] as String? ?? 'citizen').toLowerCase(),
+          phone: userJson['phone'] ?? '',
+          isActive: userJson['is_active'] ?? true,
+          createdAt: DateTime.now(),
+        );
 
-          return ApiResponse(
-            data: account,
-            statusCode: 200,
-            isFromFallback: false,
-          );
-        }
+        return ApiResponse(data: account, statusCode: 200);
+      } catch (e) {
+        debugPrint('ApiService.login decode error: $e');
       }
-    } on SocketException catch (e) {
-      debugPrint('ApiService.login network error: $e');
-    } on TimeoutException catch (e) {
-      debugPrint('ApiService.login timeout: $e');
-    } catch (e) {
-      debugPrint('ApiService.login unexpected error: $e');
     }
 
     // Graceful fallback to mock repository
     debugPrint('ApiService: falling back to MockRepository for login.');
     final mockAccount = mockRepo.authenticate(email, password);
     if (mockAccount != null) {
-      return ApiResponse(
-        data: mockAccount,
-        isFromFallback: true,
-      );
+      return ApiResponse(data: mockAccount, isFromFallback: true);
     }
 
     return const ApiResponse(
@@ -156,46 +159,36 @@ class ApiService {
   Future<ApiResponse<List<DemoVehicle>>> getVehicles({
     required MockRepository mockRepo,
   }) async {
-    try {
-      final isOnline = await checkHealth();
-      if (isOnline) {
-        final uri = Uri.parse('$baseUrl${AppConstants.endpointVehicles}');
-        final response = await _client
-            .get(uri, headers: _buildHeaders())
-            .timeout(const Duration(seconds: 5));
+    final response = await _request(
+      method: 'GET',
+      path: AppConstants.endpointVehicles,
+    );
 
-        if (response.statusCode == 200) {
-          final list = jsonDecode(response.body) as List;
-          final vehicles = list.map((item) {
-            final map = item as Map<String, dynamic>;
-            final lat = (map['latitude'] as num?)?.toDouble() ?? 24.8607;
-            final lng = (map['longitude'] as num?)?.toDouble() ?? 67.0011;
-            return DemoVehicle(
-              id: map['call_sign'] ?? 'VH-${map['id']}',
-              licensePlate: map['license_plate'] ?? 'KHI-${map['id']}',
-              type: map['vehicle_type'] ?? 'Ambulance',
-              status: map['status'] ?? 'Available',
-              location: LatLng(lat, lng),
-              assignedEmergencyId: map['assigned_emergency_id']?.toString(),
-              driverName: map['driver_name'],
-            );
-          }).toList();
-
-          return ApiResponse(
-            data: vehicles,
-            statusCode: 200,
-            isFromFallback: false,
+    if (response != null && response.statusCode == 200) {
+      try {
+        final list = jsonDecode(response.body) as List;
+        final vehicles = list.map((item) {
+          final map = item as Map<String, dynamic>;
+          final lat = (map['latitude'] as num?)?.toDouble() ?? 24.8607;
+          final lng = (map['longitude'] as num?)?.toDouble() ?? 67.0011;
+          return DemoVehicle(
+            id: map['call_sign'] ?? 'VH-${map['id']}',
+            licensePlate: map['license_plate'] ?? 'KHI-${map['id']}',
+            type: map['vehicle_type'] ?? 'Ambulance',
+            status: map['status'] ?? 'Available',
+            location: LatLng(lat, lng),
+            assignedEmergencyId: map['assigned_emergency_id']?.toString(),
+            driverName: map['driver_name'],
           );
-        }
+        }).toList();
+
+        return ApiResponse(data: vehicles, statusCode: 200);
+      } catch (e) {
+        debugPrint('ApiService.getVehicles decode error: $e');
       }
-    } catch (e) {
-      debugPrint('ApiService.getVehicles error: $e');
     }
 
-    return ApiResponse(
-      data: mockRepo.vehicles,
-      isFromFallback: true,
-    );
+    return ApiResponse(data: mockRepo.vehicles, isFromFallback: true);
   }
 
   /// Create emergency report at `/api/emergencies/` with fallback to [MockRepository].
@@ -210,53 +203,43 @@ class ApiService {
     required String userId,
     required MockRepository mockRepo,
   }) async {
-    try {
-      final isOnline = await checkHealth();
-      if (isOnline) {
-        final uri = Uri.parse('$baseUrl${AppConstants.endpointEmergencies}');
-        final response = await _client
-            .post(
-              uri,
-              headers: _buildHeaders(),
-              body: jsonEncode({
-                'title': '$category Emergency at $locationLabel',
-                'description': description,
-                'emergency_type': category.toUpperCase(),
-                'severity': severity,
-                'urgency': urgency,
-                'people_affected': peopleAffected,
-                'latitude': location.latitude,
-                'longitude': location.longitude,
-                'address': locationLabel,
-              }),
-            )
-            .timeout(const Duration(seconds: 5));
+    final response = await _request(
+      method: 'POST',
+      path: AppConstants.endpointEmergencies,
+      jsonBody: {
+        'title': '$category Emergency at $locationLabel',
+        'description': description,
+        'emergency_type': category.toUpperCase(),
+        'severity': severity,
+        'urgency': urgency,
+        'people_affected': peopleAffected,
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+        'address': locationLabel,
+      },
+    );
 
-        if (response.statusCode == 201 || response.statusCode == 200) {
-          final map = jsonDecode(response.body) as Map<String, dynamic>;
-          final createdEmergency = DemoEmergency(
-            id: map['tracking_number'] ?? 'EM-${map['id']}',
-            category: category,
-            status: EmergencyStatus.reported,
-            severity: severity,
-            urgency: urgency,
-            peopleAffected: peopleAffected,
-            description: map['description'] ?? description,
-            location: location,
-            locationLabel: locationLabel,
-            reportedAt: DateTime.now(),
-            reportedByUserId: userId,
-          );
+    if (response != null && (response.statusCode == 201 || response.statusCode == 200)) {
+      try {
+        final map = jsonDecode(response.body) as Map<String, dynamic>;
+        final createdEmergency = DemoEmergency(
+          id: map['tracking_number'] ?? 'EM-${map['id']}',
+          category: category,
+          status: EmergencyStatus.reported,
+          severity: severity,
+          urgency: urgency,
+          peopleAffected: peopleAffected,
+          description: map['description'] ?? description,
+          location: location,
+          locationLabel: locationLabel,
+          reportedAt: DateTime.now(),
+          reportedByUserId: userId,
+        );
 
-          return ApiResponse(
-            data: createdEmergency,
-            statusCode: response.statusCode,
-            isFromFallback: false,
-          );
-        }
+        return ApiResponse(data: createdEmergency, statusCode: response.statusCode);
+      } catch (e) {
+        debugPrint('ApiService.reportEmergency decode error: $e');
       }
-    } catch (e) {
-      debugPrint('ApiService.reportEmergency error: $e');
     }
 
     // Offline fallback to mock repo
@@ -271,36 +254,27 @@ class ApiService {
       userId: userId,
     );
 
-    return ApiResponse(
-      data: mockCreated,
-      isFromFallback: true,
-    );
+    return ApiResponse(data: mockCreated, isFromFallback: true);
   }
 
   /// Trigger multi-criteria 0/1 Knapsack allocation at `/api/allocate/`.
   Future<ApiResponse<Map<String, dynamic>>> triggerAllocation({
     int? emergencyId,
   }) async {
-    try {
-      final isOnline = await checkHealth();
-      if (isOnline) {
-        final uri = Uri.parse('$baseUrl${AppConstants.endpointAllocate}');
-        final body = emergencyId != null ? jsonEncode({'emergency_id': emergencyId}) : null;
-        final response = await _client
-            .post(uri, headers: _buildHeaders(), body: body)
-            .timeout(const Duration(seconds: 8));
+    final response = await _request(
+      method: 'POST',
+      path: AppConstants.endpointAllocate,
+      jsonBody: emergencyId != null ? {'emergency_id': emergencyId} : null,
+      timeout: const Duration(seconds: 8),
+    );
 
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body) as Map<String, dynamic>;
-          return ApiResponse(
-            data: data,
-            statusCode: 200,
-            isFromFallback: false,
-          );
-        }
+    if (response != null && response.statusCode == 200) {
+      try {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        return ApiResponse(data: data, statusCode: 200);
+      } catch (e) {
+        debugPrint('ApiService.triggerAllocation decode error: $e');
       }
-    } catch (e) {
-      debugPrint('ApiService.triggerAllocation error: $e');
     }
 
     return const ApiResponse(
