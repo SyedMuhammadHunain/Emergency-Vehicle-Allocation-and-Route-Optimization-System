@@ -22,12 +22,12 @@ Decompose and execute end-to-end verification of the ResQ Emergency Route and Re
 
 ### Phase 2: Frontend-to-Backend Connectivity & Fallback Verification
 - [x] Task 3: Implement dedicated Flutter `ApiService` online and fallback unit tests
-- [ ] Task 4: Run full Flutter widget test suite and static analysis
+- [x] Task 4: Run full Flutter widget test suite and static analysis
 
 ### Checkpoint: Frontend Integration Validated
-- [ ] `ApiService` correctly handles live responses and falls back to `MockRepository` on error/timeout
-- [ ] `flutter test` passes 100% of widget and role-based test cases
-- [ ] `flutter analyze` reports zero warnings or errors
+- [x] `ApiService` correctly handles live responses and falls back to `MockRepository` on error/timeout
+- [x] `flutter test` passes 100% of widget and role-based test cases
+- [x] `flutter analyze` reports zero warnings or errors
 
 ### Phase 3: Automated End-to-End System Verification
 - [ ] Task 5: Build unified system verification script (`scripts/verify_system.sh`)

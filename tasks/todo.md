@@ -79,13 +79,13 @@
 **Description:** Execute the complete suite of existing Flutter widget tests, auth flow tests, citizen module tests, and static code analyzer to guarantee zero regressions or broken dependencies across the entire UI codebase.
 
 **Acceptance criteria:**
-- [ ] All tests in `test/citizen_module_test.dart`, `test/widget_test.dart`, and `test/phase3_role_test.dart` pass
-- [ ] `flutter analyze` completes with "No issues found!"
-- [ ] Role shell navigation, SOS countdown, and status badge rendering confirmed functional
+- [x] All tests in `test/citizen_module_test.dart`, `test/widget_test.dart`, and `test/phase3_role_test.dart` pass
+- [x] `flutter analyze` completes with "No issues found!"
+- [x] Role shell navigation, SOS countdown, and status badge rendering confirmed functional
 
 **Verification:**
-- [ ] Tests pass: `flutter test`
-- [ ] Analysis passes: `flutter analyze`
+- [x] Tests pass: `flutter test`
+- [x] Analysis passes: `flutter analyze`
 
 **Dependencies:** Task 3
 
@@ -96,10 +96,10 @@
 ---
 
 ## Checkpoint: Frontend Integration Validated
-- [ ] `ApiService` correctly handles live responses and falls back to `MockRepository` on error/timeout
-- [ ] `flutter test` passes 100% of widget and role-based test cases
-- [ ] `flutter analyze` reports zero warnings or errors
-- [ ] Review frontend test report before proceeding to unified system harness
+- [x] `ApiService` correctly handles live responses and falls back to `MockRepository` on error/timeout
+- [x] `flutter test` passes 100% of widget and role-based test cases
+- [x] `flutter analyze` reports zero warnings or errors
+- [x] Review frontend test report before proceeding to unified system harness
 
 ---
 
