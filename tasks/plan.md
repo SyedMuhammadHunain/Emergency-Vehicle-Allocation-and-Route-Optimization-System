@@ -31,11 +31,11 @@ Decompose and execute end-to-end verification of the ResQ Emergency Route and Re
 
 ### Phase 3: Automated End-to-End System Verification
 - [x] Task 5: Build unified system verification script (`scripts/verify_system.sh`)
-- [ ] Task 6: Execute full verification run and produce system connectivity status report
+- [x] Task 6: Execute full verification run and produce system connectivity status report
 
 ### Checkpoint: Final Verification Complete
-- [ ] End-to-end verification script exits code 0 with diagnostic breakdown
-- [ ] System connectivity report generated at `docs/system_verification.md`
+- [x] End-to-end verification script exits code 0 with diagnostic breakdown
+- [x] System connectivity report generated at `docs/system_verification.md`
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |

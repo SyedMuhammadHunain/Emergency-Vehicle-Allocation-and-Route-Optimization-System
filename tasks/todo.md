@@ -129,14 +129,14 @@
 **Description:** Run the unified verification script and compile the comprehensive results into `docs/system_verification.md` detailing the verified database status, API endpoints, response latencies, Flutter test results, and fallback behavior.
 
 **Acceptance criteria:**
-- [ ] `docs/system_verification.md` created with documented verification matrix
-- [ ] Report confirms database status (engine, tables, row counts)
-- [ ] Report confirms backend API endpoint status codes and sample responses
-- [ ] Report confirms Flutter test results and offline fallback verification
+- [x] `docs/system_verification.md` created with documented verification matrix
+- [x] Report confirms database status (engine, tables, row counts)
+- [x] Report confirms backend API endpoint status codes and sample responses
+- [x] Report confirms Flutter test results and offline fallback verification
 
 **Verification:**
-- [ ] File exists: `test -f docs/system_verification.md`
-- [ ] Checkpoint sign-off: all acceptance criteria verified
+- [x] File exists: `test -f docs/system_verification.md`
+- [x] Checkpoint sign-off: all acceptance criteria verified
 
 **Dependencies:** Task 5
 
@@ -148,6 +148,6 @@
 ---
 
 ## Checkpoint: Final Verification Complete
-- [ ] End-to-end verification script exits code 0 with diagnostic breakdown
-- [ ] System connectivity report generated at `docs/system_verification.md`
-- [ ] Ready for human review and presentation
+- [x] End-to-end verification script exits code 0 with diagnostic breakdown
+- [x] System connectivity report generated at `docs/system_verification.md`
+- [x] Ready for human review and presentation
