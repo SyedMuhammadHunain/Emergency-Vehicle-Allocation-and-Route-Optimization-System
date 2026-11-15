@@ -395,12 +395,12 @@ Keep repository and service architecture intact; ensure error handling doesn't s
 **Description:** Run `flutter build web` to ensure clean production compilation on web target without missing platform assets, broken web packages, or tree-shaking issues.
 
 **Acceptance criteria:**
-- [ ] `flutter build web` compiles with exit code 0
-- [ ] Output artifacts created in `build/web/`
-- [ ] Zero unhandled compile-time errors or web target incompatibilities
+- [x] `flutter build web` compiles with exit code 0
+- [x] Output artifacts created in `build/web/`
+- [x] Zero unhandled compile-time errors or web target incompatibilities
 
 **Verification:**
-- [ ] Command check: `flutter build web` completes with exit code 0
+- [x] Command check: `flutter build web --release` completed with exit code 0 (44.3s build time)
 
 **Dependencies:** Task 13
 
@@ -423,12 +423,12 @@ Keep repository and service architecture intact; ensure error handling doesn't s
 8. Actual `flutter run -d chrome` result (or headless web test verification on Linux)
 
 **Acceptance criteria:**
-- [ ] Itemized status for all 15 requirements
-- [ ] Verbatim test and build command outputs included
-- [ ] Clear documentation of all modified files and verified flows
+- [x] Itemized status for all 15 requirements
+- [x] Verbatim test and build command outputs included
+- [x] Clear documentation of all modified files and verified flows
 
 **Verification:**
-- [ ] Report review against teammate prompt criteria
+- [x] Report review against teammate prompt criteria
 
 **Dependencies:** Task 14
 
@@ -439,7 +439,7 @@ Keep repository and service architecture intact; ensure error handling doesn't s
 ---
 
 ## Checkpoint: Final Release Ready
-- [ ] `flutter analyze` passes with zero issues
-- [ ] `flutter test` executes cleanly
-- [ ] `flutter build web` compiles successfully
-- [ ] All 15 teammate requirements satisfied and documented
+- [x] `flutter analyze` passes with zero issues
+- [x] `flutter test` executes cleanly (72/72 tests passing)
+- [x] `flutter build web` compiles successfully (`build/web` created)
+- [x] All 15 teammate requirements satisfied and documented
