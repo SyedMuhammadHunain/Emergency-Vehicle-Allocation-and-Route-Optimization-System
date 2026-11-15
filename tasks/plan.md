@@ -17,12 +17,12 @@ Implement all 15 requirements to transition ResQ from a prototype to a productio
 ### Phase 1: Authentication & Account Creation Hardening
 - [x] Task 1: Contact number format (`03XXXXXXXXX`) and strict validation on Citizen Registration Screen
 - [x] Task 2: Remove Demo Mode Credentials, auto-fill chips, and demo role switcher from Login Screen & App Bar
-- [ ] Task 3: Driver Authentication restriction to Admin-created accounts & session state hardening
+- [x] Task 3: Driver Authentication restriction to Admin-created accounts & session state hardening
 
 ### Checkpoint: Authentication & Registration Verified
-- [ ] Registration rejects invalid numbers and accepts only `03XXXXXXXXX` (11 digits)
-- [ ] Successful registration navigates to Login Screen, allowing login with new credentials
-- [ ] Login screen contains no demo credential chips or demo switcher; driver login requires Admin-created account
+- [x] Registration rejects invalid numbers and accepts only `03XXXXXXXXX` (11 digits)
+- [x] Successful registration navigates to Login Screen, allowing login with new credentials
+- [x] Login screen contains no demo credential chips or demo switcher; driver login requires Admin-created account
 
 ### Phase 2: Citizen Profile & Device Permissions
 - [ ] Task 4: Citizen Profile real data binding and empty medical/emergency contacts (zero fake data, profile editing)

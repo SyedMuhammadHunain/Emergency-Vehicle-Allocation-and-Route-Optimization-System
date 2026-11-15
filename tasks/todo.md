@@ -57,14 +57,14 @@
 **Description:** Ensure Driver login is restricted to valid driver accounts provisioned by the Administrator. Remove demo driver credentials, disallow arbitrary role switching into Driver mode, and verify the driver role upon authentication. Ensure `SessionService` persists user phone number and driver metadata across app sessions.
 
 **Acceptance criteria:**
-- [ ] Driver accounts can only authenticate with valid credentials provisioned by Admin
-- [ ] No arbitrary role switcher allows entering Driver dashboard
-- [ ] `SessionService` properly tracks `userPhone` and account details alongside `role`, `userName`, and `userEmail`
-- [ ] Non-driver accounts attempting to authenticate as driver or accessing restricted driver views are handled safely
+- [x] Driver accounts can only authenticate with valid credentials provisioned by Admin
+- [x] No arbitrary role switcher allows entering Driver dashboard
+- [x] `SessionService` properly tracks `userPhone` and account details alongside `role`, `userName`, and `userEmail`
+- [x] Non-driver accounts attempting to authenticate as driver or accessing restricted driver views are handled safely
 
 **Verification:**
-- [ ] Test verifying that only accounts with `role: 'driver'` created by Admin can access driver views
-- [ ] `flutter analyze` clean
+- [x] Test verifying that only accounts with `role: 'driver'` created by Admin can access driver views (`test/driver_auth_test.dart`)
+- [x] `flutter analyze` clean
 
 **Dependencies:** Task 1, Task 2
 
@@ -78,9 +78,9 @@
 ---
 
 ## Checkpoint: Authentication & Registration Verified
-- [ ] Pakistani phone validation rejects invalid numbers and accepts only `03XXXXXXXXX`
-- [ ] Successful registration navigates to Login Screen, allowing login with new credentials
-- [ ] Login screen contains no demo credential chips or demo switcher; driver login requires Admin-created account
+- [x] Pakistani phone validation rejects invalid numbers and accepts only `03XXXXXXXXX`
+- [x] Successful registration navigates to Login Screen, allowing login with new credentials
+- [x] Login screen contains no demo credential chips or demo switcher; driver login requires Admin-created account
 
 ---
 
