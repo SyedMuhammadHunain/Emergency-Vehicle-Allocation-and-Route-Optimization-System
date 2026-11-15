@@ -26,13 +26,13 @@
 **Description:** Update `Backend/.env` to set `DB_ENGINE=mysql`, execute `python manage.py migrate` to create all Django auth, accounts, and dispatch tables in MySQL, and execute `seed_demo` to populate Karachi road network and demo users.
 
 **Acceptance criteria:**
-- [ ] `Backend/.env` has `DB_ENGINE=mysql`
-- [ ] `python manage.py migrate` executes successfully against MySQL
-- [ ] `python manage.py seed_demo` populates Karachi nodes, edges, vehicles, and roles
+- [x] `Backend/.env` has `DB_ENGINE=mysql`
+- [x] `python manage.py migrate` executes successfully against MySQL
+- [x] `python manage.py seed_demo` populates Karachi nodes, edges, vehicles, and roles
 
 **Verification:**
-- [ ] Migrations check: `cd Backend && .venv/bin/python manage.py showmigrations` shows all unapplied migrations applied
-- [ ] Shell row count check: `cd Backend && .venv/bin/python manage.py shell -c "from accounts.models import User; from dispatch.models import RoadNode; print(f'Users: {User.objects.count()}, Nodes: {RoadNode.objects.count()}')"`
+- [x] Migrations check: `cd Backend && .venv/bin/python manage.py showmigrations` shows all unapplied migrations applied
+- [x] Shell row count check: `cd Backend && .venv/bin/python manage.py shell -c "from accounts.models import User; from dispatch.models import RoadNode; print(f'Users: {User.objects.count()}, Nodes: {RoadNode.objects.count()}')"`
 
 **Dependencies:** Task 1
 
@@ -48,12 +48,12 @@
 **Description:** Run all 57 Django unit tests in `algorithms` and `dispatch` against MySQL, boot dev server, and run live API check to ensure knapsack allocation and Dijkstra route calculation succeed.
 
 **Acceptance criteria:**
-- [ ] 57 tests pass with exit code 0 (`algorithms` and `dispatch`)
-- [ ] Live API health check and route calculation endpoint respond with HTTP 200
+- [x] 57 tests pass with exit code 0 (`algorithms` and `dispatch`)
+- [x] Live API health check and route calculation endpoint respond with HTTP 200
 
 **Verification:**
-- [ ] Unit tests pass: `cd Backend && .venv/bin/python manage.py test algorithms dispatch`
-- [ ] Live test pass: `cd Backend && .venv/bin/python test_live_api.py`
+- [x] Unit tests pass: `cd Backend && .venv/bin/python manage.py test algorithms dispatch`
+- [x] Live test pass: `cd Backend && .venv/bin/python test_live_api.py`
 
 **Dependencies:** Task 2
 
@@ -64,10 +64,10 @@
 ---
 
 ## Checkpoint: Backend Operational on MySQL
-- [ ] Local MySQL daemon running and accepting connections for `resq` user
-- [ ] All Django migrations applied to `resq_db` and Karachi network seeded
-- [ ] 57 algorithm and dispatch tests pass with exit code 0 on MySQL
-- [ ] Review backend verification before moving to showcase landing page
+- [x] Local MySQL daemon running and accepting connections for `resq` user
+- [x] All Django migrations applied to `resq_db` and Karachi network seeded
+- [x] 57 algorithm and dispatch tests pass with exit code 0 on MySQL
+- [x] Review backend verification before moving to showcase landing page
 
 ---
 

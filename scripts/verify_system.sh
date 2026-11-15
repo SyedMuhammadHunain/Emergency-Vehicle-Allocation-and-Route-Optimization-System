@@ -29,7 +29,7 @@ echo ""
 # ------------------------------------------------------------------------------
 # TIER 1: Database & Migrations Check
 # ------------------------------------------------------------------------------
-echo ">>> [1/6] Verifying SQLite Database & Django Migrations..."
+echo ">>> [1/6] Verifying Database (MySQL/MariaDB) & Django Migrations..."
 cd "$BACKEND_DIR"
 "$VENV_PYTHON" manage.py check
 MIGRATION_UNAPPLIED=$("$VENV_PYTHON" manage.py showmigrations | grep -c '\[ \]' || true)
