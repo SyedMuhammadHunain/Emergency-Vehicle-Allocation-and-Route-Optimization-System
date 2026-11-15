@@ -362,5 +362,302 @@ void main() {
       expect(response.isFromFallback, isTrue);
       expect(response.error, contains('offline'));
     });
+
+    test('registerCitizen registers online and falls back offline', () async {
+      final mockClient = MockClient((request) async {
+        if (request.url.path == '/api/health/') {
+          return http.Response(jsonEncode({'status': 'ok'}), 200);
+        }
+        if (request.url.path == '/api/auth/register/') {
+          return http.Response(
+            jsonEncode({
+              'token': 'reg-token-xyz',
+              'user': {
+                'id': 99,
+                'name': 'Live Citizen',
+                'email': 'live@citizen.pk',
+                'phone': '03001234567',
+                'role': 'citizen',
+                'is_active': true,
+              },
+            }),
+            201,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        return http.Response('Not Found', 404);
+      });
+
+      final onlineService = ApiService(
+        baseUrl: 'http://test-server:8000',
+        client: mockClient,
+      );
+      final onlineRes = await onlineService.registerCitizen(
+        name: 'Live Citizen',
+        email: 'live@citizen.pk',
+        password: 'Password123',
+        phone: '03001234567',
+        mockRepo: mockRepo,
+      );
+      expect(onlineRes.isSuccess, isTrue);
+      expect(onlineRes.isFromFallback, isFalse);
+      expect(onlineRes.data?.email, 'live@citizen.pk');
+
+      // Offline fallback
+      final offlineClient = MockClient((request) async {
+        throw Exception('Network unreachable');
+      });
+      final offlineService = ApiService(
+        baseUrl: 'http://offline-server:8000',
+        client: offlineClient,
+      );
+      final offlineRes = await offlineService.registerCitizen(
+        name: 'Offline Citizen',
+        email: 'offline@citizen.pk',
+        password: 'Password123',
+        phone: '03009999999',
+        mockRepo: mockRepo,
+      );
+      expect(offlineRes.isSuccess, isTrue);
+      expect(offlineRes.isFromFallback, isTrue);
+      expect(offlineRes.data?.email, 'offline@citizen.pk');
+    });
+
+    test('getMe and updateProfile manage user profile', () async {
+      final mockClient = MockClient((request) async {
+        if (request.url.path == '/api/health/') {
+          return http.Response(jsonEncode({'status': 'ok'}), 200);
+        }
+        if (request.url.path == '/api/auth/me/') {
+          if (request.method == 'GET') {
+            return http.Response(
+              jsonEncode({
+                'id': 10,
+                'name': 'Original User',
+                'email': 'user@resq.pk',
+                'phone': '03001112223',
+                'role': 'citizen',
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          } else if (request.method == 'PATCH') {
+            final body = jsonDecode(request.body) as Map<String, dynamic>;
+            return http.Response(
+              jsonEncode({
+                'id': 10,
+                'name': body['name'],
+                'email': 'user@resq.pk',
+                'phone': body['phone'],
+                'role': 'citizen',
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+        }
+        return http.Response('Not Found', 404);
+      });
+
+      final apiService = ApiService(
+        baseUrl: 'http://test-server:8000',
+        client: mockClient,
+      );
+
+      final meRes = await apiService.getMe(mockRepo: mockRepo);
+      expect(meRes.isSuccess, isTrue);
+      expect(meRes.data?.name, 'Original User');
+
+      final updateRes = await apiService.updateProfile(
+        name: 'Updated User',
+        phone: '03112223334',
+        mockRepo: mockRepo,
+      );
+      expect(updateRes.isSuccess, isTrue);
+      expect(updateRes.data?.name, 'Updated User');
+      expect(updateRes.data?.phone, '03112223334');
+    });
+
+    test('getUsers and createStaffAccount manage operational staff', () async {
+      final mockClient = MockClient((request) async {
+        if (request.url.path == '/api/health/') {
+          return http.Response(jsonEncode({'status': 'ok'}), 200);
+        }
+        if (request.url.path == '/api/users/') {
+          if (request.method == 'GET') {
+            return http.Response(
+              jsonEncode([
+                {
+                  'id': 1,
+                  'name': 'Dispatcher One',
+                  'email': 'd1@resq.pk',
+                  'phone': '03001234567',
+                  'role': 'dispatcher',
+                  'is_active': true,
+                },
+                {
+                  'id': 2,
+                  'name': 'Demo Citizen',
+                  'email': 'citizen@resq.com',
+                  'phone': '03001234567',
+                  'role': 'citizen',
+                  'is_active': true,
+                },
+              ]),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          } else if (request.method == 'POST') {
+            final body = jsonDecode(request.body) as Map<String, dynamic>;
+            return http.Response(
+              jsonEncode({
+                'id': 88,
+                'name': body['name'],
+                'email': body['email'],
+                'phone': body['phone'],
+                'role': body['role'],
+                'is_active': true,
+              }),
+              201,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+        }
+        return http.Response('Not Found', 404);
+      });
+
+      final apiService = ApiService(
+        baseUrl: 'http://test-server:8000',
+        client: mockClient,
+      );
+
+      // Verify getUsers filters out Demo Citizen
+      final usersRes = await apiService.getUsers(mockRepo: mockRepo);
+      expect(usersRes.isSuccess, isTrue);
+      expect(usersRes.data?.length, 1);
+      expect(usersRes.data?.first.name, 'Dispatcher One');
+
+      // Verify createStaffAccount
+      final staffRes = await apiService.createStaffAccount(
+        name: 'Driver New',
+        email: 'driver.new@resq.pk',
+        password: 'Password123',
+        role: 'driver',
+        phone: '03331112233',
+        mockRepo: mockRepo,
+      );
+      expect(staffRes.isSuccess, isTrue);
+      expect(staffRes.data?.role, 'driver');
+      expect(staffRes.data?.name, 'Driver New');
+    });
+
+    test('getResources and getRoute fetch operational logistics', () async {
+      final mockClient = MockClient((request) async {
+        if (request.url.path == '/api/health/') {
+          return http.Response(jsonEncode({'status': 'ok'}), 200);
+        }
+        if (request.url.path == '/api/resources/') {
+          return http.Response(
+            jsonEncode([
+              {
+                'id': 1,
+                'name': 'Trauma Kit',
+                'category': 'Medical',
+                'quantity': 5,
+                'unit': 'kits',
+              },
+            ]),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        if (request.url.path == '/api/route/') {
+          return http.Response(
+            jsonEncode({
+              'total_time': 6.2,
+              'distance_km': 3.1,
+              'route_coords': [
+                [24.8607, 67.0011],
+                [24.8720, 67.0104],
+              ],
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+        return http.Response('Not Found', 404);
+      });
+
+      final apiService = ApiService(
+        baseUrl: 'http://test-server:8000',
+        client: mockClient,
+      );
+
+      final resRes = await apiService.getResources(mockRepo: mockRepo);
+      expect(resRes.isSuccess, isTrue);
+      expect(resRes.data?.first.name, 'Trauma Kit');
+
+      final routeRes = await apiService.getRoute(
+        from: const LatLng(24.8607, 67.0011),
+        to: const LatLng(24.8720, 67.0104),
+        mockRepo: mockRepo,
+      );
+      expect(routeRes.isSuccess, isTrue);
+      expect(routeRes.data?['total_time'], 6.2);
+    });
+
+    test('updateEmergencyStatus, getDriverMission, and getNotifications', () async {
+      final mockClient = MockClient((request) async {
+        if (request.url.path == '/api/health/') {
+          return http.Response(jsonEncode({'status': 'ok'}), 200);
+        }
+        if (request.url.path == '/api/emergencies/1/status/') {
+          return http.Response(jsonEncode({'status': 'EN_ROUTE'}), 200);
+        }
+        if (request.url.path == '/api/driver/mission/') {
+          return http.Response(
+            jsonEncode({
+              'mission': {'id': 101, 'status': 'ACTIVE'},
+            }),
+            200,
+          );
+        }
+        if (request.url.path == '/api/notifications/') {
+          return http.Response(
+            jsonEncode([
+              {
+                'id': 1,
+                'title': 'Emergency Alert',
+                'message': 'New report nearby',
+                'is_read': false,
+                'target_role': 'citizen',
+              },
+            ]),
+            200,
+          );
+        }
+        return http.Response('Not Found', 404);
+      });
+
+      final apiService = ApiService(
+        baseUrl: 'http://test-server:8000',
+        client: mockClient,
+      );
+
+      final statusRes = await apiService.updateEmergencyStatus(
+        emergencyId: 'EM-1',
+        status: 'EN_ROUTE',
+        mockRepo: mockRepo,
+      );
+      expect(statusRes.isSuccess, isTrue);
+
+      final missionRes = await apiService.getDriverMission(mockRepo: mockRepo);
+      expect(missionRes.isSuccess, isTrue);
+      expect(missionRes.data?['mission']['id'], 101);
+
+      final notifRes = await apiService.getNotifications(mockRepo: mockRepo);
+      expect(notifRes.isSuccess, isTrue);
+      expect(notifRes.data?.first.title, 'Emergency Alert');
+    });
   });
 }

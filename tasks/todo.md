@@ -340,14 +340,14 @@ Preserve all functional profile settings, theme pickers, identity details, and s
 Keep repository and service architecture intact; ensure error handling doesn't silently swallow API errors.
 
 **Acceptance criteria:**
-- [ ] All 12 flows mapped cleanly in `ApiService` with proper request/response contracts matching Django backend
-- [ ] Error messages surfaced to UI rather than silently suppressed
-- [ ] Graceful fallback maintained when backend server is offline during development/testing
-- [ ] No fake local data replaces genuine backend data when connected
+- [x] All 12 flows mapped cleanly in `ApiService` with proper request/response contracts matching Django backend
+- [x] Error messages surfaced to UI rather than silently suppressed
+- [x] Graceful fallback maintained when backend server is offline during development/testing
+- [x] No fake local data replaces genuine backend data when connected
 
 **Verification:**
-- [ ] `test/api_service_test.dart` passes and tests all 12 operational flows
-- [ ] `flutter analyze` clean
+- [x] `test/api_service_test.dart` passes and tests all 12 operational flows
+- [x] `flutter analyze` clean
 
 **Dependencies:** Task 7, Task 8, Task 11
 
