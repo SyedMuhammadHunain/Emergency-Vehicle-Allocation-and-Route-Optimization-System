@@ -54,3 +54,8 @@ __pycache__/
 *.sqlite3
 Backend/.env
 
+# Local artifacts
+.hallmark/
+shots/
+
+
