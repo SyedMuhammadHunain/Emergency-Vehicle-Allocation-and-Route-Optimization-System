@@ -22,6 +22,7 @@ class ApiResponse<T> {
   });
 
   bool get isSuccess => error == null && data != null;
+  bool get hasError => error != null;
 }
 
 /// Service providing unified HTTP access to Django REST backend with
@@ -252,6 +253,8 @@ class ApiService {
           reportedByUserId: userId,
         );
 
+        mockRepo.addEmergency(createdEmergency);
+
         return ApiResponse(
           data: createdEmergency,
           statusCode: response.statusCode,
@@ -299,6 +302,123 @@ class ApiService {
     return const ApiResponse(
       error: 'Backend allocation service offline.',
       isFromFallback: true,
+    );
+  }
+
+  /// Fetch emergencies from `/api/emergencies/` with fallback to [MockRepository].
+  Future<ApiResponse<List<DemoEmergency>>> getEmergencies({
+    MockRepository? mockRepo,
+    String? userId,
+    String? userEmail,
+    String? userName,
+    String? status,
+    String? category,
+  }) async {
+    final queryParams = <String, String>{};
+    if (status != null && status.isNotEmpty) {
+      queryParams['status'] = status;
+    }
+    if (category != null && category.isNotEmpty) {
+      queryParams['category'] = category;
+    }
+    if (userId != null && userId.isNotEmpty) {
+      queryParams['mine'] = 'true';
+    }
+
+    final queryString = queryParams.isNotEmpty
+        ? '?${queryParams.entries.map((e) => '${e.key}=${Uri.encodeComponent(e.value)}').join('&')}'
+        : '';
+
+    final response = await _request(
+      method: 'GET',
+      path: '${AppConstants.endpointEmergencies}$queryString',
+      timeout: const Duration(seconds: 8),
+    );
+
+    if (response != null && response.statusCode == 200) {
+      try {
+        final decoded = jsonDecode(response.body);
+        final List<dynamic> list;
+        if (decoded is List) {
+          list = decoded;
+        } else if (decoded is Map && decoded['results'] is List) {
+          list = decoded['results'] as List;
+        } else {
+          list = [];
+        }
+
+        final emergencies = list.map((item) {
+          final map = item as Map<String, dynamic>;
+          final lat = (map['latitude'] as num?)?.toDouble() ?? 24.8607;
+          final lng = (map['longitude'] as num?)?.toDouble() ?? 67.0011;
+          final repId = map['reported_by']?.toString() ?? (userId ?? '');
+          DateTime repAt;
+          try {
+            repAt = map['created_at'] != null
+                ? DateTime.parse(map['created_at'].toString())
+                : DateTime.now();
+          } catch (_) {
+            repAt = DateTime.now();
+          }
+
+          DemoVehicle? v;
+          if (map['assigned_vehicle'] is Map<String, dynamic>) {
+            final vMap = map['assigned_vehicle'] as Map<String, dynamic>;
+            v = DemoVehicle(
+              id: vMap['call_sign'] ?? 'VH-${vMap['id']}',
+              licensePlate: vMap['license_plate'] ?? 'KHI-${vMap['id']}',
+              type: vMap['vehicle_type'] ?? 'Ambulance',
+              status: vMap['status'] ?? 'Assigned',
+              location: LatLng(lat, lng),
+            );
+          }
+
+          return DemoEmergency(
+            id: map['code'] ?? map['tracking_number'] ?? 'EM-${map['id']}',
+            category: map['category']?.toString().toUpperCase() ?? 'OTHER',
+            status:
+                map['status']?.toString().toUpperCase() ??
+                EmergencyStatus.reported,
+            severity: (map['severity'] as num?)?.toInt() ?? 3,
+            urgency: (map['urgency'] as num?)?.toInt() ?? 3,
+            peopleAffected: (map['people_affected'] as num?)?.toInt() ?? 1,
+            description: map['description']?.toString() ?? '',
+            location: LatLng(lat, lng),
+            locationLabel:
+                map['location_label']?.toString() ?? 'Karachi Grid Location',
+            reportedAt: repAt,
+            reportedByUserId: repId,
+            assignedVehicle: v,
+            allocationReason: map['allocation_reason']?.toString(),
+          );
+        }).toList();
+
+        if (mockRepo != null) {
+          for (final em in emergencies) {
+            mockRepo.addEmergency(em);
+          }
+        }
+
+        return ApiResponse(data: emergencies, statusCode: 200);
+      } catch (e) {
+        debugPrint('ApiService.getEmergencies decode error: $e');
+      }
+    }
+
+    final fallbackEmergencies = mockRepo != null
+        ? mockRepo.getEmergenciesForUser(
+            userId ?? '',
+            userEmail: userEmail,
+            userName: userName,
+          )
+        : <DemoEmergency>[];
+
+    return ApiResponse(
+      data: fallbackEmergencies,
+      isFromFallback: true,
+      error: response != null && response.statusCode != 200
+          ? 'Failed to fetch incident reports from server (${response.statusCode})'
+          : null,
     );
   }
 }

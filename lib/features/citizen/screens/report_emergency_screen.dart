@@ -110,13 +110,21 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
   }
 
   Future<void> _submitReport() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     setState(() => _isSubmitting = true);
 
     try {
       final repo = context.read<MockRepository>();
       final session = context.read<SessionService>();
+      final effectiveUserId =
+          (session.userId != null && session.userId!.isNotEmpty)
+          ? session.userId!
+          : (session.userEmail.isNotEmpty
+                ? session.userEmail
+                : session.userName);
 
       final apiService = ApiService();
       final response = await apiService.reportEmergency(
@@ -131,17 +139,26 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
         locationLabel: _addressController.text.trim().isEmpty
             ? 'Karachi Grid Location'
             : _addressController.text.trim(),
-        userId: session.userName,
+        userId: effectiveUserId,
         mockRepo: repo,
       );
 
-      final newEmergency = response.data ?? repo.emergencies.first;
+      final newEmergency =
+          response.data ??
+          repo.emergencies.firstWhere(
+            (e) => e.reportedByUserId == effectiveUserId,
+            orElse: () => repo.emergencies.first,
+          );
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       _showSuccessDialog(newEmergency);
     } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
     }
   }
 
@@ -224,11 +241,13 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              if (widget.isStandalone && context.canPop()) {
-                context.pop();
-              } else {
-                context.go('/role-shell');
-              }
+              try {
+                if (widget.isStandalone && context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/role-shell');
+                }
+              } catch (_) {}
             },
             child: const Text('Back to Home'),
           ),
@@ -238,7 +257,9 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
             ),
             onPressed: () {
               Navigator.pop(ctx);
-              context.push('/citizen/details/${emergency.id}');
+              try {
+                context.push('/citizen/details/${emergency.id}');
+              } catch (_) {}
             },
             child: const Text('Track Status'),
           ),

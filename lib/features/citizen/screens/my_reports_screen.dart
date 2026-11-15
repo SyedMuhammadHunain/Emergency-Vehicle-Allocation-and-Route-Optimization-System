@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/mock/demo_data.dart';
 import '../../../core/mock/mock_repository.dart';
+import '../../../core/services/api_service.dart';
+import '../../../core/services/session_service.dart';
 import '../../../core/widgets/feedback/state_widgets.dart';
 import '../../../core/widgets/feedback/status_chip.dart';
 
@@ -20,108 +22,251 @@ class MyReportsScreen extends StatefulWidget {
 
 class _MyReportsScreenState extends State<MyReportsScreen> {
   String _activeFilter = 'ALL'; // 'ALL' | 'ACTIVE' | 'RESOLVED'
+  bool _isLoading = false;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchReports();
+    });
+  }
+
+  Future<void> _fetchReports() async {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final session = context.read<SessionService>();
+      final repo = context.read<MockRepository>();
+      final api = ApiService();
+
+      final res = await api.getEmergencies(
+        mockRepo: repo,
+        userId: session.userId,
+        userEmail: session.userEmail,
+        userName: session.userName,
+      );
+
+      if (!mounted) {
+        return;
+      }
+      if (res.hasError && !res.isFromFallback) {
+        setState(() {
+          _errorMessage = res.error;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final repo = context.watch<MockRepository>();
+    final session = context.watch<SessionService>();
+
+    final userEmergencies = repo.getEmergenciesForUser(
+      session.userId ?? '',
+      userEmail: session.userEmail,
+      userName: session.userName,
+    );
+
+    final activeCount = userEmergencies
+        .where((e) => e.status != EmergencyStatus.resolved)
+        .length;
+    final resolvedCount = userEmergencies
+        .where((e) => e.status == EmergencyStatus.resolved)
+        .length;
 
     List<DemoEmergency> list;
     if (_activeFilter == 'ACTIVE') {
-      list = repo.activeEmergencies;
+      list = userEmergencies
+          .where((e) => e.status != EmergencyStatus.resolved)
+          .toList();
     } else if (_activeFilter == 'RESOLVED') {
-      list = repo.resolvedEmergencies;
+      list = userEmergencies
+          .where((e) => e.status == EmergencyStatus.resolved)
+          .toList();
     } else {
-      list = repo.emergencies;
+      list = userEmergencies;
     }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Header & Filter bar
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'My Incident Reports',
-                      style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: isDark ? Colors.white : AppColors.lightTextNavy,
-                      ),
-                    ),
-                    Text(
-                      '${list.length} reports',
-                      style: GoogleFonts.inter(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primaryTeal,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-
-                // Filter Chips
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+      body: RefreshIndicator(
+        onRefresh: _fetchReports,
+        color: AppColors.primaryTeal,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Header & Filter bar
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildFilterChip(
-                        'ALL',
-                        'All Reports (${repo.emergencies.length})',
+                      Text(
+                        'My Incident Reports',
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? Colors.white
+                              : AppColors.lightTextNavy,
+                        ),
                       ),
-                      const SizedBox(width: 8),
-                      _buildFilterChip(
-                        'ACTIVE',
-                        'Active (${repo.activeEmergencies.length})',
-                      ),
-                      const SizedBox(width: 8),
-                      _buildFilterChip(
-                        'RESOLVED',
-                        'Resolved (${repo.resolvedEmergencies.length})',
+                      Row(
+                        children: [
+                          IconButton(
+                            tooltip: 'Refresh Reports',
+                            icon: const Icon(Icons.refresh_rounded, size: 20),
+                            color: AppColors.primaryTeal,
+                            onPressed: _isLoading ? null : _fetchReports,
+                          ),
+                          Text(
+                            '${list.length} reports',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primaryTeal,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 12),
 
-                const SizedBox(height: 16),
-
-                if (list.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40),
-                    child: EmptyState(
-                      'No reports found',
-                      subtitle: _activeFilter == 'ACTIVE'
-                          ? 'You have no active emergency reports pending triage.'
-                          : 'No incidents recorded under this filter.',
-                      icon: Icons.assignment_late_outlined,
-                      action: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.primaryTeal,
+                  // Filter Chips
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildFilterChip(
+                          'ALL',
+                          'All Reports (${userEmergencies.length})',
                         ),
-                        onPressed: () {
-                          if (widget.onNavigateToReport != null) {
-                            widget.onNavigateToReport!();
-                          } else {
-                            context.push('/citizen/report');
-                          }
-                        },
-                        child: const Text('Report Emergency'),
-                      ),
+                        const SizedBox(width: 8),
+                        _buildFilterChip('ACTIVE', 'Active ($activeCount)'),
+                        const SizedBox(width: 8),
+                        _buildFilterChip(
+                          'RESOLVED',
+                          'Resolved ($resolvedCount)',
+                        ),
+                      ],
                     ),
-                  )
-                else
-                  ...list.map(
-                    (e) => _buildEmergencyReportCard(context, e, isDark),
                   ),
-              ],
+
+                  const SizedBox(height: 16),
+
+                  if (_isLoading && userEmergencies.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 60),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            CircularProgressIndicator(
+                              color: AppColors.primaryTeal,
+                            ),
+                            SizedBox(height: 16),
+                            Text('Loading your incident reports...'),
+                          ],
+                        ),
+                      ),
+                    )
+                  else if (_errorMessage != null && userEmergencies.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            const Icon(
+                              Icons.error_outline_rounded,
+                              color: AppColors.statusMaintenance,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Failed to load reports',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              _errorMessage!,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            FilledButton.icon(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: AppColors.primaryTeal,
+                              ),
+                              icon: const Icon(Icons.refresh_rounded, size: 16),
+                              label: const Text('Retry'),
+                              onPressed: _fetchReports,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else if (list.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: EmptyState(
+                        'No reports found',
+                        subtitle: _activeFilter == 'ACTIVE'
+                            ? 'You have no active emergency reports pending triage.'
+                            : 'You have not submitted any reports under this filter.',
+                        icon: Icons.assignment_late_outlined,
+                        action: FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColors.primaryTeal,
+                          ),
+                          onPressed: () {
+                            if (widget.onNavigateToReport != null) {
+                              widget.onNavigateToReport!();
+                            } else {
+                              context.push('/citizen/report');
+                            }
+                          },
+                          child: const Text('Report Emergency'),
+                        ),
+                      ),
+                    )
+                  else
+                    ...list.map(
+                      (e) => _buildEmergencyReportCard(context, e, isDark),
+                    ),
+                ],
+              ),
             ),
           ),
         ),

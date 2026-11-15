@@ -173,16 +173,16 @@
 **Description:** Fix the complete emergency reporting and retrieval flow for Citizens. In `lib/features/citizen/screens/report_emergency_screen.dart` and `lib/features/citizen/screens/my_reports_screen.dart`, ensure that when a citizen reports an emergency, it is stored with their user ID. In `MyReportsScreen`, filter reports strictly to the logged-in citizen (`reportedByUserId == session.userId` or matching email/account). Automatically refresh the list when `MyReportsScreen` is opened. Provide proper loading, empty, and error states without hardcoding sample reports for unrelated citizens.
 
 **Acceptance criteria:**
-- [ ] Emergency reported by a citizen is saved to backend / `MockRepository` linked to that citizen's ID
-- [ ] `MyReportsScreen` displays only reports belonging to currently authenticated citizen
-- [ ] Newly submitted reports appear immediately without needing to log out and log in again
-- [ ] Displays emergency details: title/category, status, description, location label, reported date
-- [ ] Empty state rendered when the citizen has no reports; no unrelated demo emergencies shown
-- [ ] Pull-to-refresh or reload triggers fresh data fetch
+- [x] Emergency reported by a citizen is saved to backend / `MockRepository` linked to that citizen's ID
+- [x] `MyReportsScreen` displays only reports belonging to currently authenticated citizen
+- [x] Newly submitted reports appear immediately without needing to log out and log in again
+- [x] Displays emergency details: title/category, status, description, location label, reported date
+- [x] Empty state rendered when the citizen has no reports; no unrelated demo emergencies shown
+- [x] Pull-to-refresh or reload triggers fresh data fetch
 
 **Verification:**
-- [ ] Integration/Widget test: Citizen registers -> submits emergency -> navigates to My Reports -> emergency is listed; switch user -> My Reports is empty or shows only that user's reports
-- [ ] `flutter test test/citizen_module_test.dart` passes
+- [x] Integration/Widget test: Citizen registers -> submits emergency -> navigates to My Reports -> emergency is listed; switch user -> My Reports is empty or shows only that user's reports (`test/citizen_reports_test.dart`)
+- [x] `flutter test test/citizen_module_test.dart` passes
 
 **Dependencies:** Task 1, Task 4
 

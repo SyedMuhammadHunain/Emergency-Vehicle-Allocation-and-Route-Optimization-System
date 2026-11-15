@@ -88,6 +88,40 @@ class MockRepository extends ChangeNotifier {
 
   List<DemoEmergency> get recentEmergencies => _emergencies.take(5).toList();
 
+  void addEmergency(DemoEmergency emergency) {
+    _emergencies.removeWhere((e) => e.id == emergency.id);
+    _emergencies.insert(0, emergency);
+    notifyListeners();
+  }
+
+  List<DemoEmergency> getEmergenciesForUser(
+    String userId, {
+    String? userEmail,
+    String? userName,
+  }) {
+    final cleanUserId = userId.trim();
+    final cleanEmail = userEmail?.trim().toLowerCase();
+    final cleanName = userName?.trim().toLowerCase();
+
+    return _emergencies.where((e) {
+      final rep = e.reportedByUserId.trim();
+      final repLower = rep.toLowerCase();
+
+      if (cleanUserId.isNotEmpty && rep == cleanUserId) {
+        return true;
+      }
+      if (cleanEmail != null &&
+          cleanEmail.isNotEmpty &&
+          repLower == cleanEmail) {
+        return true;
+      }
+      if (cleanName != null && cleanName.isNotEmpty && repLower == cleanName) {
+        return true;
+      }
+      return false;
+    }).toList();
+  }
+
   /// User Profile & Medical Details Management
   UserProfileModel getProfileForUser(
     String userId, {

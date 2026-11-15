@@ -36,13 +36,13 @@ Implement all 15 requirements to transition ResQ from a prototype to a productio
 - [x] "Frontend Prototype" labels removed from Citizen screens
 
 ### Phase 3: Citizen Reports & Live Tracking Map
-- [ ] Task 7: Citizen Emergency submission & My Reports screen (fetch by current citizen ID, real-time update, loading/empty states)
+- [x] Task 7: Citizen Emergency submission & My Reports screen (fetch by current citizen ID, real-time update, loading/empty states)
 - [ ] Task 8: Citizen Live Tracking Map fixes (real emergency location, assigned vehicle & route, loading/unavailable states, no fake animation)
 - [ ] Task 9: Universal Map Zoom Controls (+/-) added to all 6 FlutterMap screens
 
 ### Checkpoint: Citizen Reporting, Tracking & Maps Operational
-- [ ] Submitted emergencies immediately appear in the reporting citizen's My Reports list
-- [ ] My Reports displays only reports belonging to currently logged-in citizen, with proper empty/loading states
+- [x] Submitted emergencies immediately appear in the reporting citizen's My Reports list
+- [x] My Reports displays only reports belonging to currently logged-in citizen, with proper empty/loading states
 - [ ] Citizen Tracking Map displays correct emergency location, assigned vehicle, real route, and unavailable state when no live tracking exists
 - [ ] All 6 map screens have working zoom in (+) and zoom out (-) controls
 
