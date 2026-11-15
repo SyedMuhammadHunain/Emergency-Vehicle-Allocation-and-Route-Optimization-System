@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/mock/demo_data.dart';
 import '../../../core/mock/mock_repository.dart';
 import '../../../core/widgets/feedback/status_chip.dart';
+import '../../../core/widgets/map/map_zoom_controls.dart';
 
 class DispatcherMapScreen extends StatefulWidget {
   final Function(int tabIndex)? onNavigateToTab;
@@ -235,6 +236,13 @@ class _DispatcherMapScreenState extends State<DispatcherMapScreen> {
               PolylineLayer(polylines: polylines),
               MarkerLayer(markers: markers),
             ],
+          ),
+
+          // Working Map Zoom Controls (+) and (-)
+          MapZoomControls(
+            mapController: _mapController,
+            alignment: Alignment.topRight,
+            padding: const EdgeInsets.only(top: 70, right: 16),
           ),
 
           // Simulation Banner (Top)

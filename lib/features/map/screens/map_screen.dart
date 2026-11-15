@@ -9,6 +9,7 @@ import '../../../data/models/incident_model.dart';
 import '../../../data/models/responder_model.dart';
 import '../../incidents/providers/incident_provider.dart';
 import '../providers/map_provider.dart';
+import '../../../core/widgets/map/map_zoom_controls.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
@@ -253,6 +254,13 @@ class MapScreen extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+
+          // Universal Map Zoom Controls (+) and (-)
+          MapZoomControls(
+            mapController: mapProvider.mapController,
+            alignment: Alignment.topRight,
+            padding: const EdgeInsets.only(top: 145, right: 16),
           ),
 
           // Floating Controls (Re-center and Zoom)

@@ -14,6 +14,7 @@ import '../../../core/services/session_service.dart';
 import '../../../core/widgets/brand/resq_app_bar.dart';
 import '../../../core/widgets/buttons/primary_gradient_button.dart';
 import '../../../core/widgets/inputs/custom_text_field.dart';
+import '../../../core/widgets/map/map_zoom_controls.dart';
 
 class ReportEmergencyScreen extends StatefulWidget {
   final String? initialCategory;
@@ -439,6 +440,11 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                             ],
                           ),
                         ],
+                      ),
+                      MapZoomControls(
+                        mapController: _mapController,
+                        alignment: Alignment.topRight,
+                        padding: const EdgeInsets.all(8),
                       ),
                       Positioned(
                         bottom: 8,

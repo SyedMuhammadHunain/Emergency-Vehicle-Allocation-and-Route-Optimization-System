@@ -10,17 +10,25 @@ import '../../../core/mock/mock_repository.dart';
 import '../../../core/widgets/brand/resq_app_bar.dart';
 import '../../../core/widgets/feedback/state_widgets.dart';
 import '../../../core/widgets/feedback/status_chip.dart';
+import '../../../core/widgets/map/map_zoom_controls.dart';
 
-class EmergencyDetailScreen extends StatelessWidget {
+class EmergencyDetailScreen extends StatefulWidget {
   final String emergencyId;
 
   const EmergencyDetailScreen({super.key, required this.emergencyId});
 
   @override
+  State<EmergencyDetailScreen> createState() => _EmergencyDetailScreenState();
+}
+
+class _EmergencyDetailScreenState extends State<EmergencyDetailScreen> {
+  final MapController _mapController = MapController();
+
+  @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final repo = context.watch<MockRepository>();
-    final emergency = repo.getEmergencyById(emergencyId);
+    final emergency = repo.getEmergencyById(widget.emergencyId);
 
     if (emergency == null) {
       return Scaffold(
@@ -32,7 +40,7 @@ class EmergencyDetailScreen extends StatelessWidget {
           child: EmptyState(
             'Report Not Found',
             subtitle:
-                'Emergency ID "$emergencyId" was not found in the local demo database.',
+                'Emergency ID "${widget.emergencyId}" was not found in the local demo database.',
             icon: Icons.error_outline_rounded,
             action: FilledButton(
               style: FilledButton.styleFrom(
@@ -287,44 +295,51 @@ class EmergencyDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 180,
-                        child: FlutterMap(
-                          options: MapOptions(
-                            initialCenter: emergency.location,
-                            initialZoom: 14.5,
-                            interactionOptions: const InteractionOptions(
-                              flags: InteractiveFlag.none,
-                            ),
-                          ),
+                        height: 200,
+                        child: Stack(
                           children: [
-                            TileLayer(
-                              urlTemplate:
-                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                              userAgentPackageName: 'com.resq.resq_app',
-                            ),
-                            MarkerLayer(
-                              markers: [
-                                Marker(
-                                  point: emergency.location,
-                                  width: 40,
-                                  height: 40,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.emergencyPink,
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 2,
+                            FlutterMap(
+                              mapController: _mapController,
+                              options: MapOptions(
+                                initialCenter: emergency.location,
+                                initialZoom: 14.5,
+                              ),
+                              children: [
+                                TileLayer(
+                                  urlTemplate:
+                                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                  userAgentPackageName: 'com.resq.resq_app',
+                                ),
+                                MarkerLayer(
+                                  markers: [
+                                    Marker(
+                                      point: emergency.location,
+                                      width: 40,
+                                      height: 40,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: AppColors.emergencyPink,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: const Icon(
+                                          Icons.place_rounded,
+                                          color: Colors.white,
+                                          size: 22,
+                                        ),
                                       ),
                                     ),
-                                    child: const Icon(
-                                      Icons.place_rounded,
-                                      color: Colors.white,
-                                      size: 22,
-                                    ),
-                                  ),
+                                  ],
                                 ),
                               ],
+                            ),
+                            MapZoomControls(
+                              mapController: _mapController,
+                              alignment: Alignment.topRight,
+                              padding: const EdgeInsets.all(8),
                             ),
                           ],
                         ),

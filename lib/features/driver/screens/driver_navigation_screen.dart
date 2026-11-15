@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/mock/mock_repository.dart';
 import '../../../core/services/session_service.dart';
 import '../../../core/widgets/feedback/state_widgets.dart';
+import '../../../core/widgets/map/map_zoom_controls.dart';
 
 class DriverNavigationScreen extends StatefulWidget {
   final Function(int tabIndex)? onNavigateToTab;
@@ -165,6 +166,13 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
                 ],
               ),
             ],
+          ),
+
+          // Working Map Zoom Controls (+) and (-)
+          MapZoomControls(
+            mapController: _mapController,
+            alignment: Alignment.topRight,
+            padding: const EdgeInsets.only(top: 70, right: 16),
           ),
 
           // Simulation Banner (Top)

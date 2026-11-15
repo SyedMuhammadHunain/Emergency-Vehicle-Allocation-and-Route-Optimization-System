@@ -201,15 +201,15 @@
 **Description:** In `lib/features/citizen/screens/live_tracking_screen.dart`, fix tracking map display. Display the reported emergency location marker accurately. When an assigned emergency vehicle exists with real location/route, display the vehicle marker and route polyline. If no vehicle is assigned or real tracking data is unavailable, clearly display an appropriate unavailable/pending dispatch state instead of pretending live GPS movement with fake waypoints. Fetch tracking updates from backend / repository integration.
 
 **Acceptance criteria:**
-- [ ] Map displays reported emergency location correctly
-- [ ] Assigned vehicle and real route shown only when an actual assignment exists
-- [ ] If tracking data is unavailable or vehicle not yet dispatched, show clear pending/unavailable status banner instead of fake animated movement
-- [ ] Handles loading, error, and unavailable states properly
-- [ ] Existing map styling and card layout strictly preserved
+- [x] Map displays reported emergency location correctly
+- [x] Assigned vehicle and real route shown only when an actual assignment exists
+- [x] If tracking data is unavailable or vehicle not yet dispatched, show clear pending/unavailable status banner instead of fake animated movement
+- [x] Handles loading, error, and unavailable states properly
+- [x] Existing map styling and card layout strictly preserved
 
 **Verification:**
-- [ ] Widget test for `LiveTrackingScreen` with assigned vehicle and with unassigned emergency
-- [ ] `flutter analyze` clean
+- [x] Widget test for `LiveTrackingScreen` with assigned vehicle and with unassigned emergency (`test/map_tracking_and_zoom_test.dart`)
+- [x] `flutter analyze` clean
 
 **Dependencies:** Task 7
 
@@ -226,22 +226,22 @@
 **Description:** Build a reusable, non-intrusive `MapZoomControls` widget providing working Zoom In (+) and Zoom Out (-) buttons. Integrate it across all 6 map screens in the project: `LiveTrackingScreen`, `EmergencyDetailScreen`, `ReportEmergencyScreen`, `DispatcherMapScreen`, `DriverNavigationScreen`, and `MapScreen`. Ensure buttons actually change zoom level on `MapController` within limits (3.0 to 18.0) and preserve all existing markers, routes, and layout styling.
 
 **Acceptance criteria:**
-- [ ] Reusable `MapZoomControls` widget created in `lib/core/widgets/map/`
-- [ ] Zoom In (+) increases zoom level smoothly via `MapController.move`
-- [ ] Zoom Out (-) decreases zoom level smoothly via `MapController.move`
-- [ ] Integrated into all 6 map screens:
+- [x] Reusable `MapZoomControls` widget created in `lib/core/widgets/map/`
+- [x] Zoom In (+) increases zoom level smoothly via `MapController.move`
+- [x] Zoom Out (-) decreases zoom level smoothly via `MapController.move`
+- [x] Integrated into all 6 map screens:
   - `LiveTrackingScreen`
   - `EmergencyDetailScreen`
   - `ReportEmergencyScreen`
   - `DispatcherMapScreen`
   - `DriverNavigationScreen`
   - `MapScreen`
-- [ ] Map markers, polylines, and responsive styling completely preserved
-- [ ] Zero decorative non-functional zoom buttons
+- [x] Map markers, polylines, and responsive styling completely preserved
+- [x] Zero decorative non-functional zoom buttons
 
 **Verification:**
-- [ ] Widget test verifying zoom controls trigger `move()` on `MapController`
-- [ ] `flutter analyze` passes
+- [x] Widget test verifying zoom controls trigger `move()` on `MapController` (`test/map_tracking_and_zoom_test.dart`)
+- [x] `flutter analyze` passes
 
 **Dependencies:** Task 8
 
@@ -259,10 +259,10 @@
 ---
 
 ## Checkpoint: Citizen Reporting, Tracking & Maps Operational
-- [ ] Submitted emergencies immediately appear in the reporting citizen's My Reports list
-- [ ] My Reports displays only reports belonging to currently logged-in citizen, with proper empty/loading states
-- [ ] Citizen Tracking Map displays correct emergency location, assigned vehicle, real route, and unavailable state when no live tracking exists
-- [ ] All 6 map screens have working zoom in (+) and zoom out (-) controls
+- [x] Submitted emergencies immediately appear in the reporting citizen's My Reports list
+- [x] My Reports displays only reports belonging to currently logged-in citizen, with proper empty/loading states
+- [x] Citizen Tracking Map displays correct emergency location, assigned vehicle, real route, and unavailable state when no live tracking exists
+- [x] All 6 map screens have working zoom in (+) and zoom out (-) controls
 
 ---
 

@@ -421,4 +421,82 @@ class ApiService {
           : null,
     );
   }
+
+  /// Fetch a single emergency by ID or code at `/api/emergencies/{id}/`.
+  Future<ApiResponse<DemoEmergency>> getEmergencyById(
+    String emergencyId, {
+    MockRepository? mockRepo,
+  }) async {
+    final cleanId = emergencyId
+        .replaceFirst('EM-', '')
+        .replaceFirst('2026-', '');
+    final response = await _request(
+      method: 'GET',
+      path: '${AppConstants.endpointEmergencies}$cleanId/',
+      timeout: const Duration(seconds: 8),
+    );
+
+    if (response != null && response.statusCode == 200) {
+      try {
+        final map = jsonDecode(response.body) as Map<String, dynamic>;
+        final lat = (map['latitude'] as num?)?.toDouble() ?? 24.8607;
+        final lng = (map['longitude'] as num?)?.toDouble() ?? 67.0011;
+        final repId = map['reported_by']?.toString() ?? '';
+        DateTime repAt;
+        try {
+          repAt = map['created_at'] != null
+              ? DateTime.parse(map['created_at'].toString())
+              : DateTime.now();
+        } catch (_) {
+          repAt = DateTime.now();
+        }
+
+        DemoVehicle? v;
+        if (map['assigned_vehicle'] is Map<String, dynamic>) {
+          final vMap = map['assigned_vehicle'] as Map<String, dynamic>;
+          v = DemoVehicle(
+            id: vMap['call_sign'] ?? 'VH-${vMap['id']}',
+            licensePlate: vMap['license_plate'] ?? 'KHI-${vMap['id']}',
+            type: vMap['vehicle_type'] ?? 'Ambulance',
+            status: vMap['status'] ?? 'Assigned',
+            location: LatLng(lat, lng),
+          );
+        }
+
+        final emergency = DemoEmergency(
+          id: map['code'] ?? map['tracking_number'] ?? 'EM-${map['id']}',
+          category: map['category']?.toString().toUpperCase() ?? 'OTHER',
+          status:
+              map['status']?.toString().toUpperCase() ??
+              EmergencyStatus.reported,
+          severity: (map['severity'] as num?)?.toInt() ?? 3,
+          urgency: (map['urgency'] as num?)?.toInt() ?? 3,
+          peopleAffected: (map['people_affected'] as num?)?.toInt() ?? 1,
+          description: map['description']?.toString() ?? '',
+          location: LatLng(lat, lng),
+          locationLabel:
+              map['location_label']?.toString() ?? 'Karachi Grid Location',
+          reportedAt: repAt,
+          reportedByUserId: repId,
+          assignedVehicle: v,
+          allocationReason: map['allocation_reason']?.toString(),
+        );
+
+        if (mockRepo != null) {
+          mockRepo.addEmergency(emergency);
+        }
+
+        return ApiResponse(data: emergency, statusCode: 200);
+      } catch (e) {
+        debugPrint('ApiService.getEmergencyById decode error: $e');
+      }
+    }
+
+    final fallback = mockRepo?.getEmergencyById(emergencyId);
+    return ApiResponse(
+      data: fallback,
+      isFromFallback: true,
+      error: fallback == null ? 'Emergency not found.' : null,
+    );
+  }
 }
