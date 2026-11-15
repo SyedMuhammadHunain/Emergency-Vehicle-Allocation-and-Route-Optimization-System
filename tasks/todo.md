@@ -108,12 +108,12 @@
 **Description:** Create an executable shell verification runner script `scripts/verify_system.sh` that sequentially runs backend migrations check, Django unit tests, boots the backend server, runs the live HTTP API diagnostic, runs the Flutter test suite, runs Flutter static analysis, and safely terminates background processes.
 
 **Acceptance criteria:**
-- [ ] `scripts/verify_system.sh` created and set executable (`chmod +x`)
-- [ ] Script handles starting and stopping the Django server cleanly using traps
-- [ ] Script checks return codes and outputs structured PASS/FAIL indicators for each tier (Database, Backend APIs, Frontend Tests, Static Analysis)
+- [x] `scripts/verify_system.sh` created and set executable (`chmod +x`)
+- [x] Script handles starting and stopping the Django server cleanly using traps
+- [x] Script checks return codes and outputs structured PASS/FAIL indicators for each tier (Database, Backend APIs, Frontend Tests, Static Analysis)
 
 **Verification:**
-- [ ] Script execution: `bash scripts/verify_system.sh` exits code 0
+- [x] Script execution: `bash scripts/verify_system.sh` exits code 0
 
 **Dependencies:** Tasks 1-4
 

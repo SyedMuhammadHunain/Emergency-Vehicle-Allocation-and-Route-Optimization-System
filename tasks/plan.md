@@ -30,7 +30,7 @@ Decompose and execute end-to-end verification of the ResQ Emergency Route and Re
 - [x] `flutter analyze` reports zero warnings or errors
 
 ### Phase 3: Automated End-to-End System Verification
-- [ ] Task 5: Build unified system verification script (`scripts/verify_system.sh`)
+- [x] Task 5: Build unified system verification script (`scripts/verify_system.sh`)
 - [ ] Task 6: Execute full verification run and produce system connectivity status report
 
 ### Checkpoint: Final Verification Complete
