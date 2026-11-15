@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Res-Q — Emergency Route & Resource Management Engine</title>
+  <meta name="description" content="Mission-critical dispatch, 0/1 Knapsack dynamic triage, and dynamic Dijkstra route optimization for emergency responders across the Karachi road network.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230f0f11'/><path d='M35 50h30M50 35v30' stroke='%23dafa9c' stroke-width='12' stroke-linecap='round'/></svg>">
+
+  <!-- Typography: Mona Sans & Geist Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Mona+Sans:ital,wght@0,300..900;1,300..900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-dark">
+
+  <!-- Glassmorphic Site Header -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="#hero" class="brand" aria-label="Res-Q Home">
+        <span class="brand-badge">
+          <span class="brand-pulse"></span>
+          RES-Q
+        </span>
+        <span class="brand-meta">SYS/OPS v1.0 • KARACHI GRID</span>
+      </a>
+
+      <nav class="header-nav">
+        <a href="#manifesto" class="nav-link">Manifesto</a>
+        <a href="#lifecycle" class="nav-link">Lifecycle</a>
+        <a href="#algorithms" class="nav-link">Algorithms</a>
+        <a href="#telemetry" class="nav-link">Telemetry</a>
+        <a href="#mobile" class="nav-link">Mobile App</a>
+        <a href="/legacy/" class="nav-link nav-legacy" title="View original site">Legacy Site ↗</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#download" class="btn-download-header">
+          <span>Download APK</span>
+          <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Side Navigation / Scroll Indicator (Guillaume Zhu Signature) -->
+  <nav class="scroll-indicator" aria-label="Section navigation">
+    <a class="scroll-indicator__item is-active" href="#hero" aria-label="Hero">
+      <span class="scroll-indicator__label">Hero</span>
+      <span class="scroll-indicator__bar" aria-hidden="true"></span>
+    </a>
+    <a class="scroll-indicator__item" href="#manifesto" aria-label="Manifesto">
+      <span class="scroll-indicator__label">Manifesto</span>
+      <span class="scroll-indicator__bar" aria-hidden="true"></span>
+    </a>
+    <a class="scroll-indicator__item" href="#lifecycle" aria-label="Lifecycle">
+      <span class="scroll-indicator__label">Lifecycle</span>
+      <span class="scroll-indicator__bar" aria-hidden="true"></span>
+    </a>
+    <a class="scroll-indicator__item" href="#algorithms" aria-label="Algorithms">
+      <span class="scroll-indicator__label">Algorithms</span>
+      <span class="scroll-indicator__bar" aria-hidden="true"></span>
+    </a>
+    <a class="scroll-indicator__item" href="#telemetry" aria-label="Telemetry">
+      <span class="scroll-indicator__label">Telemetry</span>
+      <span class="scroll-indicator__bar" aria-hidden="true"></span>
+    </a>
+    <a class="scroll-indicator__item" href="#mobile" aria-label="Mobile">
+      <span class="scroll-indicator__label">Mobile App</span>
+      <span class="scroll-indicator__bar" aria-hidden="true"></span>
+    </a>
+    <a class="scroll-indicator__item" href="#download" aria-label="Download">
+      <span class="scroll-indicator__label">Download</span>
+      <span class="scroll-indicator__bar" aria-hidden="true"></span>
+    </a>
+  </nav>
+
+  <main>
+    <!-- Section 1: Hero with Interactive Canvas Simulation -->
+    <section class="section-hero" id="hero">
+      <div class="hero-canvas-wrap">
+        <canvas id="network-canvas" aria-hidden="true"></canvas>
+        <div class="canvas-overlay-radial"></div>
+      </div>
+
+      <div class="hero-container container">
+        <div class="hero-status-row">
+          <div class="status-pill">
+            <span class="pulse-dot"></span>
+            <span>900 ROAD NODES</span>
+          </div>
+          <div class="status-pill">
+            <span>1,720 GRAPH EDGES</span>
+          </div>
+          <div class="status-pill">
+            <span>5 VEHICLES DEPLOYED</span>
+          </div>
+          <div class="status-pill accent-pill">
+            <span>MYSQL & MARIADB LIVE</span>
+          </div>
+        </div>
+
+        <h1 class="hero-title">
+          EMERGENCY ROUTE & RESOURCE<br>
+          <span class="title-highlight">MANAGEMENT ENGINE</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Next-generation urban emergency response. High-throughput 0/1 Knapsack resource triage,
+          sub-second dynamic Dijkstra routing over Karachi's road network, and real-time telemetry for first responders.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#download" class="btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            <span>Download Release APK</span>
+            <span class="btn-meta-badge">v1.0.0 • 54MB</span>
+          </a>
+          <a href="#algorithms" class="btn-secondary">
+            <span>Explore Algorithmic Engine</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="hero-footer-specs">
+          <div class="spec-item">
+            <span class="spec-label">OPTIMIZATION CORE</span>
+            <span class="spec-value">0/1 Knapsack Dynamic Programming</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">PATH ENGINE</span>
+            <span class="spec-value">Dynamic Dijkstra (< 45ms)</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">DATA INFRASTRUCTURE</span>
+            <span class="spec-value">MariaDB / MySQL ACID Engine</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">CLIENT RUNTIME</span>
+            <span class="spec-value">Flutter 3.x Cross-Platform</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Manifesto Section (Editorial Voice) -->
+    <section class="section-manifesto" id="manifesto">
+      <div class="container">
+        <span class="section-kicker">01 // THE MANIFESTO</span>
+        <blockquote class="manifesto-statement">
+          IN CRITICAL EMERGENCY DISPATCH, SECONDS DECIDE SURVIVAL. RES-Q CONVERTS URBAN GRIDLOCK INTO PREDICTIVE LIFE-SAVING CORRIDORS.
+        </blockquote>
+        <div class="manifesto-grid">
+          <div class="manifesto-col">
+            <p class="body-lead">
+              Traditional emergency dispatching in congested megacities suffers from disconnected telemetry, static routing oblivious to live blockages, and arbitrary responder allocation. When golden-hour response windows close, outcomes turn fatal.
+            </p>
+          </div>
+          <div class="manifesto-col">
+            <p class="body-sub">
+              Res-Q bridges the critical divide. By pairing mathematical resource optimization with continuous graph recalculation over 900 Karachi road vertices, Res-Q ensures the nearest, most capable responder reaches the patient with zero guesswork.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Incident-to-Resolution Lifecycle -->
+    <section class="section-lifecycle" id="lifecycle">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">02 // OPERATIONAL PIPELINE</span>
+          <h2 class="section-title">THE INCIDENT LIFECYCLE</h2>
+          <p class="section-desc">From the instant a citizen triggers an SOS to safe hospital intake.</p>
+        </div>
+
+        <div class="lifecycle-steps">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <div class="step-badge">CITIZEN LAYER</div>
+            <h3 class="step-title">Instant SOS & Geolocation</h3>
+            <p class="step-desc">
+              One-touch emergency beacon transmits precise GPS coordinates, incident classification, and severity score to central dispatch in under 200ms.
+            </p>
+            <div class="step-tags">
+              <span>GPS Lock</span>
+              <span>Category Triage</span>
+              <span>Offline Cache</span>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <div class="step-badge">DECISION CORE</div>
+            <h3 class="step-title">0/1 Knapsack Resource Triage</h3>
+            <p class="step-desc">
+              Dynamic programming solves multi-criteria resource allocation, matching critical patient demands with responder equipment, fuel, and proximity.
+            </p>
+            <div class="step-tags">
+              <span>O(N·W) DP</span>
+              <span>Priority Weighting</span>
+              <span>Unit Matching</span>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <div class="step-badge">GRAPH ROUTER</div>
+            <h3 class="step-title">Dynamic Dijkstra Routing</h3>
+            <p class="step-desc">
+              Evaluates 1,720 Karachi road edges with live congestion penalties and blockage avoidance, calculating fastest path in < 45 milliseconds.
+            </p>
+            <div class="step-tags">
+              <span>1,720 Edges</span>
+              <span>Congestion Weights</span>
+              <span>Min-Heap Queue</span>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">04</div>
+            <div class="step-badge">FIELD TELEMETRY</div>
+            <h3 class="step-title">Responder Turn-by-Turn Guidance</h3>
+            <p class="step-desc">
+              Driver receives turn-by-turn navigation; central dispatcher monitors real-time fleet coordinates; hospital prep team receives live ETA countdown.
+            </p>
+            <div class="step-tags">
+              <span>Turn-by-Turn</span>
+              <span>ETA Countdown</span>
+              <span>Hospital Handshake</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Algorithmic Engines & Interactive Simulator -->
+    <section class="section-algorithms" id="algorithms">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">03 // COMPUTATIONAL FOUNDATION</span>
+          <h2 class="section-title">THE ALGORITHMIC ENGINES</h2>
+          <p class="section-desc">Deterministic algorithms engineered for zero-failure emergency optimization.</p>
+        </div>
+
+        <div class="algorithm-cards">
+          <!-- Card 1: Knapsack -->
+          <div class="algo-card">
+            <div class="algo-header">
+              <span class="algo-type">ALLOCATION ENGINE</span>
+              <span class="algo-complexity">COMPLEXITY: O(N·W)</span>
+            </div>
+            <h3 class="algo-title">0/1 Knapsack Multi-Resource Optimization</h3>
+            <p class="algo-text">
+              In mass-casualty or concurrent incident surges, responders are a bounded knapsack. Res-Q scores each emergency by severity (Medical 10, Fire 8, Accident 6), evaluating responder capacity and travel penalty to maximize life preservation.
+            </p>
+
+            <div class="interactive-simulator" id="knapsack-simulator">
+              <div class="sim-header">
+                <span class="sim-title">Interactive Priority Simulator</span>
+                <span class="sim-status" id="knapsack-score">Optimal Value: 24 pts</span>
+              </div>
+              <div class="sim-controls">
+                <div class="sim-slider-row">
+                  <label for="severity-slider">Incident Surge Count: <span id="surge-val">4 Incidents</span></label>
+                  <input type="range" id="severity-slider" min="1" max="10" value="4">
+                </div>
+                <div class="sim-slider-row">
+                  <label for="capacity-slider">Available Fleet Capacity: <span id="capacity-val">5 Units</span></label>
+                  <input type="range" id="capacity-slider" min="1" max="8" value="5">
+                </div>
+              </div>
+              <div class="sim-result-box" id="knapsack-result-output">
+                Allocated 4 high-priority emergencies to Units Amb-01, Amb-02, Amb-03, Fire-01. 0 dropped calls.
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Dijkstra -->
+          <div class="algo-card">
+            <div class="algo-header">
+              <span class="algo-type">GRAPH NAVIGATION</span>
+              <span class="algo-complexity">COMPLEXITY: O(E + V log V)</span>
+            </div>
+            <h3 class="algo-title">Dynamic Dijkstra with Road Congestion Penalty</h3>
+            <p class="algo-text">
+              Karachi's arterial corridors experience sudden blockages and peak-hour friction. Res-Q weights edges dynamically using live reports: <code>weight' = length × (1 + congestion_multiplier)</code>. If an edge is blocked, weight becomes infinity.
+            </p>
+
+            <div class="interactive-simulator" id="dijkstra-simulator">
+              <div class="sim-header">
+                <span class="sim-title">Karachi Road Graph Route Probe</span>
+                <span class="sim-status" id="dijkstra-latency">Runtime: 12ms</span>
+              </div>
+              <div class="route-probe-row">
+                <div class="probe-col">
+                  <span class="probe-label">Origin:</span>
+                  <span class="probe-value">Node 142 (Saddar Town)</span>
+                </div>
+                <div class="probe-arrow">➔</div>
+                <div class="probe-col">
+                  <span class="probe-label">Destination:</span>
+                  <span class="probe-value">Civil Hospital Trauma Center</span>
+                </div>
+              </div>
+              <div class="route-metrics">
+                <div class="metric-mini">
+                  <span class="m-val">8.27 km</span>
+                  <span class="m-lbl">Distance</span>
+                </div>
+                <div class="metric-mini">
+                  <span class="m-val">16.4 min</span>
+                  <span class="m-lbl">Travel Time</span>
+                </div>
+                <div class="metric-mini">
+                  <span class="m-val">13 Nodes</span>
+                  <span class="m-lbl">Waypoints</span>
+                </div>
+                <div class="metric-mini">
+                  <span class="m-val highlight-green">0 Blockages</span>
+                  <span class="m-lbl">Clear Path</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Telemetry & Karachi Grid Overview -->
+    <section class="section-telemetry" id="telemetry">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">04 // SYSTEM TELEMETRY</span>
+          <h2 class="section-title">KARACHI FLEET GRID & HOSPITALS</h2>
+          <p class="section-desc">Active responder nodes and hospital trauma centers mapped across the metropolitan area.</p>
+        </div>
+
+        <div class="telemetry-grid">
+          <div class="telemetry-radar-card">
+            <div class="radar-header">
+              <div class="radar-title-group">
+                <span class="pulse-dot"></span>
+                <span class="radar-title">ACTIVE DISPATCH RADAR</span>
+              </div>
+              <span class="radar-freq">REFRESH: 500MS • HOST: 127.0.0.1:8000</span>
+            </div>
+            
+            <div class="radar-screen">
+              <canvas id="radar-canvas" width="600" height="350"></canvas>
+              <div class="radar-hud-overlay">
+                <div class="hud-item hud-top-left">KARACHI-SOUTH // GRID 24.86° N, 67.00° E</div>
+                <div class="hud-item hud-bottom-right">5 UNITS IN SECTOR • 0 DELAYS</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="telemetry-stats-card">
+            <div class="stats-header">HOSPITAL CAPACITY MATRIX</div>
+            <div class="hospital-rows">
+              <div class="hospital-item">
+                <div class="h-name-row">
+                  <span class="h-name">Civil Hospital Karachi</span>
+                  <span class="h-beds status-ok">12 ICU BEDS AVAIL</span>
+                </div>
+                <div class="h-bar"><div class="h-bar-fill" style="width: 78%;"></div></div>
+              </div>
+
+              <div class="hospital-item">
+                <div class="h-name-row">
+                  <span class="h-name">Jinnah Postgraduate Med Ctr (JPMC)</span>
+                  <span class="h-beds status-warn">4 ICU BEDS AVAIL</span>
+                </div>
+                <div class="h-bar"><div class="h-bar-fill status-warn" style="width: 92%;"></div></div>
+              </div>
+
+              <div class="hospital-item">
+                <div class="h-name-row">
+                  <span class="h-name">The Indus Hospital Korangi</span>
+                  <span class="h-beds status-ok">18 ICU BEDS AVAIL</span>
+                </div>
+                <div class="h-bar"><div class="h-bar-fill" style="width: 65%;"></div></div>
+              </div>
+            </div>
+
+            <div class="system-infra-box">
+              <div class="infra-row">
+                <span class="infra-key">Database Engine:</span>
+                <span class="infra-val">MariaDB / MySQL 13.0 (ACID compliant)</span>
+              </div>
+              <div class="infra-row">
+                <span class="infra-key">REST Protocol:</span>
+                <span class="infra-val">Django REST Framework 3.16</span>
+              </div>
+              <div class="infra-row">
+                <span class="infra-key">Verification Status:</span>
+                <span class="infra-val highlight-green">57/57 Tests Passed Cleanly</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Mobile Application Showcase -->
+    <section class="section-mobile" id="mobile">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">05 // FIELD INTERFACES</span>
+          <h2 class="section-title">THE RES-Q MOBILE CLIENT</h2>
+          <p class="section-desc">Engineered with Flutter for instantaneous feedback under high stress.</p>
+        </div>
+
+        <div class="mobile-showcase-grid">
+          <!-- Role Card 1 -->
+          <div class="role-card">
+            <div class="role-badge citizen">CITIZEN PORTAL</div>
+            <h3 class="role-title">One-Tap SOS & Status Tracking</h3>
+            <p class="role-desc">
+              Immediate distress trigger, automated location pinning, real-time responder arrival timeline, and offline incident caching.
+            </p>
+            <div class="role-screenshot-wrap">
+              <img src="shots/390.png" alt="Citizen Mobile Interface" class="app-screenshot" loading="lazy">
+            </div>
+          </div>
+
+          <!-- Role Card 2 -->
+          <div class="role-card">
+            <div class="role-badge dispatcher">DISPATCH COMMAND</div>
+            <h3 class="role-title">Central Karachi Triage Grid</h3>
+            <p class="role-desc">
+              Global overview of emergency queues, Knapsack 0/1 auto-allocation suggestions, hospital triage capacity, and dynamic road closure overrides.
+            </p>
+            <div class="role-screenshot-wrap">
+              <img src="shots/1440.png" alt="Dispatcher Control Interface" class="app-screenshot" loading="lazy">
+            </div>
+          </div>
+
+          <!-- Role Card 3 -->
+          <div class="role-card">
+            <div class="role-badge driver">DRIVER TERMINAL</div>
+            <h3 class="role-title">Dijkstra Turn-by-Turn Navigation</h3>
+            <p class="role-desc">
+              Continuous live rerouting around road closures, hospital destination handover, and arrival timestamp verification.
+            </p>
+            <div class="role-screenshot-wrap">
+              <img src="assets/readme/system-pipeline.svg" alt="System Pipeline" class="app-screenshot svg-flow" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Download Section (Full Callout) -->
+    <section class="section-download" id="download">
+      <div class="container">
+        <div class="download-card">
+          <div class="download-glow"></div>
+          
+          <div class="download-content">
+            <span class="download-kicker">06 // DEPLOY NOW</span>
+            <h2 class="download-title">DOWNLOAD RES-Q ANDROID APK</h2>
+            <p class="download-subtitle">
+              Get the complete production release package. Pre-bundled with Karachi road graph, offline-first fallback, and role-based demonstration profiles.
+            </p>
+
+            <div class="download-action-row">
+              <a href="/app-release.apk" class="btn-giant-download" download="app-release.apk">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                <div class="btn-text-group">
+                  <span class="btn-main-label">Download Android APK</span>
+                  <span class="btn-sub-label">Release v1.0.0 • app-release.apk (54.5 MB)</span>
+                </div>
+              </a>
+            </div>
+
+            <div class="download-specs-grid">
+              <div class="d-spec">
+                <span class="d-key">Target Platform</span>
+                <span class="d-val">Android 8.0+ (Oreo, Pie, 10, 11, 12, 13, 14, 15)</span>
+              </div>
+              <div class="d-spec">
+                <span class="d-key">Architecture</span>
+                <span class="d-val">ARM64-v8a / armeabi-v7a / x86_64</span>
+              </div>
+              <div class="d-spec">
+                <span class="d-key">Security Signature</span>
+                <span class="d-val">SHA-256 Release Sign Verified</span>
+              </div>
+              <div class="d-spec">
+                <span class="d-key">Demo Logins Included</span>
+                <span class="d-val">Citizen, Dispatcher, Driver, Admin</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <div class="footer-brand">RES-Q SYSTEMS</div>
+        <p class="footer-copy">Emergency Route & Resource Management System • Academic & Industry Evaluation Release 2026.</p>
+        <p class="footer-legacy-link">
+          Prefer the previous design? <a href="/legacy/">View Original Landing Page ↗</a>
+        </p>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-links-col">
+          <span class="f-col-title">Navigation</span>
+          <a href="#hero">Top</a>
+          <a href="#manifesto">Manifesto</a>
+          <a href="#algorithms">Algorithms</a>
+          <a href="#download">Download APK</a>
+        </div>
+        <div class="footer-links-col">
+          <span class="f-col-title">Resources</span>
+          <a href="/legacy/">Legacy Site</a>
+          <a href="/legacy/privacy.html">Privacy</a>
+          <a href="/legacy/terms.html">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

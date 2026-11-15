@@ -15,34 +15,34 @@ Execute two core objectives for project evaluation and UI enhancement:
 ## Task List
 
 ### Phase 1: MySQL Database Installation & Backend Connection
-- [ ] Task 1: Provision and configure local MySQL server and `resq_db` database
-- [ ] Task 2: Configure Django environment and apply migrations & seed demo data
-- [ ] Task 3: Verify backend tests and API endpoints against MySQL
+- [x] Task 1: Provision and configure local MySQL server and `resq_db` database
+- [x] Task 2: Configure Django environment and apply migrations & seed demo data
+- [x] Task 3: Verify backend tests and API endpoints against MySQL
 
 ### Checkpoint: Backend Operational on MySQL
-- [ ] Local MySQL daemon running and accepting connections for `resq` user
-- [ ] All Django migrations applied to `resq_db` and Karachi network seeded
-- [ ] 57 algorithm and dispatch tests pass with exit code 0 on MySQL
+- [x] Local MySQL daemon running and accepting connections for `resq` user
+- [x] All Django migrations applied to `resq_db` and Karachi network seeded
+- [x] 57 algorithm and dispatch tests pass with exit code 0 on MySQL
 
 ### Phase 2: Reverse-Engineer & Build Res-Q Showcase Landing Page
-- [ ] Task 4: Reverse-engineer structural layout and styling of `https://guillaumezhu.com/` in a new showcase directory
-- [ ] Task 5: Populate showcase site with Res-Q content and remove personal portfolio links/pages
-- [ ] Task 6: Implement Download APK section and wire `app-release.apk` asset and download trigger
+- [x] Task 4: Reverse-engineer structural layout and styling of `https://guillaumezhu.com/` in a new showcase directory
+- [x] Task 5: Populate showcase site with Res-Q content and remove personal portfolio links/pages
+- [x] Task 6: Implement Download APK section and wire `app-release.apk` asset and download trigger
 
 ### Checkpoint: Showcase Site Functional Locally
-- [ ] Showcase site renders with high-aesthetic styling, animations, and Res-Q content
-- [ ] "Download APK" button triggers valid download of `app-release.apk`
-- [ ] Irrelevant portfolio sections/links removed; responsive across mobile and desktop
+- [x] Showcase site renders with high-aesthetic styling, animations, and Res-Q content
+- [x] "Download APK" button triggers valid download of `app-release.apk`
+- [x] Irrelevant portfolio sections/links removed; responsive across mobile and desktop
 
 ### Phase 3: Legacy Preservation, Routing & Production Deployment
-- [ ] Task 7: Relocate and configure existing landing page under `/legacy/`
-- [ ] Task 8: Configure Vercel build/routes and deploy to `http://res-q.tech/`
-- [ ] Task 9: End-to-end verification of live `http://res-q.tech/` (new showcase, legacy route, APK download)
+- [x] Task 7: Relocate and configure existing landing page under `/legacy/`
+- [x] Task 8: Configure Vercel build/routes and deploy to `http://res-q.tech/`
+- [x] Task 9: End-to-end verification of live `http://res-q.tech/` (new showcase, legacy route, APK download)
 
 ### Checkpoint: Production Deployment Live & Verified
-- [ ] `http://res-q.tech/` loads the new showcase landing page
-- [ ] `http://res-q.tech/legacy/` serves the preserved original landing page
-- [ ] Live APK download link tested and verified functional
+- [x] `http://res-q.tech/` loads the new showcase landing page
+- [x] `http://res-q.tech/legacy/` serves the preserved original landing page
+- [x] Live APK download link tested and verified functional
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |
