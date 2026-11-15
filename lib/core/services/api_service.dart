@@ -609,10 +609,7 @@ class ApiService {
       }
     }
 
-    return const ApiResponse(
-      error: 'Profile not found.',
-      isFromFallback: true,
-    );
+    return const ApiResponse(error: 'Profile not found.', isFromFallback: true);
   }
 
   /// Update own profile (name, phone) via `/api/auth/me/` with fallback to [MockRepository].
@@ -625,10 +622,7 @@ class ApiService {
     final response = await _request(
       method: 'PATCH',
       path: '${AppConstants.endpointAuth}me/',
-      jsonBody: {
-        'name': name.trim(),
-        'phone': phone.trim(),
-      },
+      jsonBody: {'name': name.trim(), 'phone': phone.trim()},
     );
 
     if (response != null && response.statusCode == 200) {

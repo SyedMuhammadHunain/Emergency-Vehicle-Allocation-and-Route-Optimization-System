@@ -11,16 +11,10 @@ Widget createTestWidget(MockRepository repo) {
   return MultiProvider(
     providers: [
       ChangeNotifierProvider<MockRepository>.value(value: repo),
-      ChangeNotifierProvider<SessionService>(
-        create: (_) => SessionService(),
-      ),
-      ChangeNotifierProvider<ThemeController>(
-        create: (_) => ThemeController(),
-      ),
+      ChangeNotifierProvider<SessionService>(create: (_) => SessionService()),
+      ChangeNotifierProvider<ThemeController>(create: (_) => ThemeController()),
     ],
-    child: const MaterialApp(
-      home: AdminStaffScreen(),
-    ),
+    child: const MaterialApp(home: AdminStaffScreen()),
   );
 }
 

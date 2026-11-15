@@ -272,9 +272,13 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                       child: TextField(
                         onChanged: (val) => setState(() => _searchQuery = val),
                         decoration: InputDecoration(
-                          hintText: 'Search accounts by name, email, or role...',
+                          hintText:
+                              'Search accounts by name, email, or role...',
                           hintStyle: GoogleFonts.inter(fontSize: 13),
-                          prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                          prefixIcon: const Icon(
+                            Icons.search_rounded,
+                            size: 20,
+                          ),
                           isDense: true,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 14,
@@ -302,18 +306,24 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                       final isSelected = _selectedRoleFilter == r;
                       final count = r == 'ALL'
                           ? repo.accounts
-                              .where((u) =>
-                                  u.id != 'USR-CIT-001' &&
-                                  u.name.toLowerCase() != 'demo citizen' &&
-                                  u.email.toLowerCase() != 'citizen@resq.com')
-                              .length
+                                .where(
+                                  (u) =>
+                                      u.id != 'USR-CIT-001' &&
+                                      u.name.toLowerCase() != 'demo citizen' &&
+                                      u.email.toLowerCase() !=
+                                          'citizen@resq.com',
+                                )
+                                .length
                           : repo.accounts
-                              .where((a) =>
-                                  a.role == r &&
-                                  a.id != 'USR-CIT-001' &&
-                                  a.name.toLowerCase() != 'demo citizen' &&
-                                  a.email.toLowerCase() != 'citizen@resq.com')
-                              .length;
+                                .where(
+                                  (a) =>
+                                      a.role == r &&
+                                      a.id != 'USR-CIT-001' &&
+                                      a.name.toLowerCase() != 'demo citizen' &&
+                                      a.email.toLowerCase() !=
+                                          'citizen@resq.com',
+                                )
+                                .length;
 
                       return Padding(
                         padding: const EdgeInsets.only(right: 8),
@@ -360,145 +370,145 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                       ],
                     )
                   : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: accounts.length,
-                    itemBuilder: (context, index) {
-                      final user = accounts[index];
-                      final isStaff =
-                          user.role == 'dispatcher' || user.role == 'driver';
-                      final isAdmin = user.role == 'admin';
+                      padding: const EdgeInsets.all(16),
+                      itemCount: accounts.length,
+                      itemBuilder: (context, index) {
+                        final user = accounts[index];
+                        final isStaff =
+                            user.role == 'dispatcher' || user.role == 'driver';
+                        final isAdmin = user.role == 'admin';
 
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(
-                            color: isDark
-                                ? AppColors.darkBorder
-                                : AppColors.lightBorder,
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(
+                              color: isDark
+                                  ? AppColors.darkBorder
+                                  : AppColors.lightBorder,
+                            ),
                           ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color:
-                                      (isAdmin
-                                              ? AppColors.emergencyPink
-                                              : isStaff
-                                              ? AppColors.primaryTeal
-                                              : AppColors.aquaAccent)
-                                          .withValues(alpha: 0.15),
-                                  shape: BoxShape.circle,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        (isAdmin
+                                                ? AppColors.emergencyPink
+                                                : isStaff
+                                                ? AppColors.primaryTeal
+                                                : AppColors.aquaAccent)
+                                            .withValues(alpha: 0.15),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    isAdmin
+                                        ? Icons.security_rounded
+                                        : user.role == 'dispatcher'
+                                        ? Icons.headset_mic_rounded
+                                        : user.role == 'driver'
+                                        ? Icons.local_shipping_rounded
+                                        : Icons.person_rounded,
+                                    color: isAdmin
+                                        ? AppColors.emergencyPink
+                                        : isStaff
+                                        ? AppColors.primaryTeal
+                                        : AppColors.primaryNavy,
+                                    size: 24,
+                                  ),
                                 ),
-                                child: Icon(
-                                  isAdmin
-                                      ? Icons.security_rounded
-                                      : user.role == 'dispatcher'
-                                      ? Icons.headset_mic_rounded
-                                      : user.role == 'driver'
-                                      ? Icons.local_shipping_rounded
-                                      : Icons.person_rounded,
-                                  color: isAdmin
-                                      ? AppColors.emergencyPink
-                                      : isStaff
-                                      ? AppColors.primaryTeal
-                                      : AppColors.primaryNavy,
-                                  size: 24,
-                                ),
-                              ),
-                              const SizedBox(width: 14),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          user.name,
-                                          style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 6,
-                                            vertical: 2,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.primaryTeal
-                                                .withValues(alpha: 0.1),
-                                            borderRadius: BorderRadius.circular(
-                                              6,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            user.role.toUpperCase(),
+                                const SizedBox(width: 14),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            user.name,
                                             style: GoogleFonts.inter(
-                                              fontSize: 9,
-                                              fontWeight: FontWeight.w800,
-                                              color: AppColors.primaryTeal,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      user.email,
-                                      style: GoogleFonts.inter(
-                                        fontSize: 12,
-                                        color: Colors.grey,
+                                          const SizedBox(width: 8),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.primaryTeal
+                                                  .withValues(alpha: 0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: Text(
+                                              user.role.toUpperCase(),
+                                              style: GoogleFonts.inter(
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.w800,
+                                                color: AppColors.primaryTeal,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    if (user.phone.isNotEmpty)
+                                      const SizedBox(height: 2),
                                       Text(
-                                        'Phone: ${user.phone}',
+                                        user.email,
                                         style: GoogleFonts.inter(
-                                          fontSize: 11,
+                                          fontSize: 12,
                                           color: Colors.grey,
                                         ),
                                       ),
-                                  ],
+                                      if (user.phone.isNotEmpty)
+                                        Text(
+                                          'Phone: ${user.phone}',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 11,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
-                              ),
 
-                              // Active / Inactive Toggle (cannot deactivate root admin)
-                              if (!isAdmin) ...[
-                                Column(
-                                  children: [
-                                    Text(
-                                      user.isActive ? 'Active' : 'Inactive',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w600,
-                                        color: user.isActive
-                                            ? AppColors.statusCompleted
-                                            : Colors.red,
+                                // Active / Inactive Toggle (cannot deactivate root admin)
+                                if (!isAdmin) ...[
+                                  Column(
+                                    children: [
+                                      Text(
+                                        user.isActive ? 'Active' : 'Inactive',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                          color: user.isActive
+                                              ? AppColors.statusCompleted
+                                              : Colors.red,
+                                        ),
                                       ),
-                                    ),
-                                    Switch(
-                                      value: user.isActive,
-                                      activeThumbColor:
-                                          AppColors.statusCompleted,
-                                      onChanged: (val) {
-                                        repo.toggleUserStatus(user.id);
-                                      },
-                                    ),
-                                  ],
-                                ),
+                                      Switch(
+                                        value: user.isActive,
+                                        activeThumbColor:
+                                            AppColors.statusCompleted,
+                                        onChanged: (val) {
+                                          repo.toggleUserStatus(user.id);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
             ),
           ),
         ],

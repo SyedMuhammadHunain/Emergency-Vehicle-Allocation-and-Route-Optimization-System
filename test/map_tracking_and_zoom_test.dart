@@ -160,56 +160,57 @@ void main() {
   });
 
   group('Task 9 - Universal Map Zoom Controls Tests Across All Maps', () {
-    testWidgets('MapZoomControls zoom in and zoom out functions on controller', (
-      WidgetTester tester,
-    ) async {
-      final mapController = MapController();
+    testWidgets(
+      'MapZoomControls zoom in and zoom out functions on controller',
+      (WidgetTester tester) async {
+        final mapController = MapController();
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Stack(
-              children: [
-                FlutterMap(
-                  mapController: mapController,
-                  options: const MapOptions(
-                    initialCenter: LatLng(24.8607, 67.0011),
-                    initialZoom: 12.0,
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  FlutterMap(
+                    mapController: mapController,
+                    options: const MapOptions(
+                      initialCenter: LatLng(24.8607, 67.0011),
+                      initialZoom: 12.0,
                     ),
-                  ],
-                ),
-                MapZoomControls(mapController: mapController),
-              ],
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      ),
+                    ],
+                  ),
+                  MapZoomControls(mapController: mapController),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.byType(MapZoomControls), findsOneWidget);
-      expect(mapController.camera.zoom, equals(12.0));
+        expect(find.byType(MapZoomControls), findsOneWidget);
+        expect(mapController.camera.zoom, equals(12.0));
 
-      // Tap Zoom In (+)
-      final zoomInBtn = find.byIcon(Icons.add_rounded);
-      expect(zoomInBtn, findsOneWidget);
-      await tester.tap(zoomInBtn);
-      await tester.pumpAndSettle();
+        // Tap Zoom In (+)
+        final zoomInBtn = find.byIcon(Icons.add_rounded);
+        expect(zoomInBtn, findsOneWidget);
+        await tester.tap(zoomInBtn);
+        await tester.pumpAndSettle();
 
-      expect(mapController.camera.zoom, equals(13.0));
+        expect(mapController.camera.zoom, equals(13.0));
 
-      // Tap Zoom Out (-)
-      final zoomOutBtn = find.byIcon(Icons.remove_rounded);
-      expect(zoomOutBtn, findsOneWidget);
-      await tester.tap(zoomOutBtn);
-      await tester.pumpAndSettle();
+        // Tap Zoom Out (-)
+        final zoomOutBtn = find.byIcon(Icons.remove_rounded);
+        expect(zoomOutBtn, findsOneWidget);
+        await tester.tap(zoomOutBtn);
+        await tester.pumpAndSettle();
 
-      expect(mapController.camera.zoom, equals(12.0));
-    });
+        expect(mapController.camera.zoom, equals(12.0));
+      },
+    );
 
     testWidgets(
       'EmergencyDetailScreen renders map with working MapZoomControls',

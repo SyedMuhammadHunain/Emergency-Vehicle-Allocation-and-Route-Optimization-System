@@ -606,58 +606,63 @@ void main() {
       expect(routeRes.data?['total_time'], 6.2);
     });
 
-    test('updateEmergencyStatus, getDriverMission, and getNotifications', () async {
-      final mockClient = MockClient((request) async {
-        if (request.url.path == '/api/health/') {
-          return http.Response(jsonEncode({'status': 'ok'}), 200);
-        }
-        if (request.url.path == '/api/emergencies/1/status/') {
-          return http.Response(jsonEncode({'status': 'EN_ROUTE'}), 200);
-        }
-        if (request.url.path == '/api/driver/mission/') {
-          return http.Response(
-            jsonEncode({
-              'mission': {'id': 101, 'status': 'ACTIVE'},
-            }),
-            200,
-          );
-        }
-        if (request.url.path == '/api/notifications/') {
-          return http.Response(
-            jsonEncode([
-              {
-                'id': 1,
-                'title': 'Emergency Alert',
-                'message': 'New report nearby',
-                'is_read': false,
-                'target_role': 'citizen',
-              },
-            ]),
-            200,
-          );
-        }
-        return http.Response('Not Found', 404);
-      });
+    test(
+      'updateEmergencyStatus, getDriverMission, and getNotifications',
+      () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path == '/api/health/') {
+            return http.Response(jsonEncode({'status': 'ok'}), 200);
+          }
+          if (request.url.path == '/api/emergencies/1/status/') {
+            return http.Response(jsonEncode({'status': 'EN_ROUTE'}), 200);
+          }
+          if (request.url.path == '/api/driver/mission/') {
+            return http.Response(
+              jsonEncode({
+                'mission': {'id': 101, 'status': 'ACTIVE'},
+              }),
+              200,
+            );
+          }
+          if (request.url.path == '/api/notifications/') {
+            return http.Response(
+              jsonEncode([
+                {
+                  'id': 1,
+                  'title': 'Emergency Alert',
+                  'message': 'New report nearby',
+                  'is_read': false,
+                  'target_role': 'citizen',
+                },
+              ]),
+              200,
+            );
+          }
+          return http.Response('Not Found', 404);
+        });
 
-      final apiService = ApiService(
-        baseUrl: 'http://test-server:8000',
-        client: mockClient,
-      );
+        final apiService = ApiService(
+          baseUrl: 'http://test-server:8000',
+          client: mockClient,
+        );
 
-      final statusRes = await apiService.updateEmergencyStatus(
-        emergencyId: 'EM-1',
-        status: 'EN_ROUTE',
-        mockRepo: mockRepo,
-      );
-      expect(statusRes.isSuccess, isTrue);
+        final statusRes = await apiService.updateEmergencyStatus(
+          emergencyId: 'EM-1',
+          status: 'EN_ROUTE',
+          mockRepo: mockRepo,
+        );
+        expect(statusRes.isSuccess, isTrue);
 
-      final missionRes = await apiService.getDriverMission(mockRepo: mockRepo);
-      expect(missionRes.isSuccess, isTrue);
-      expect(missionRes.data?['mission']['id'], 101);
+        final missionRes = await apiService.getDriverMission(
+          mockRepo: mockRepo,
+        );
+        expect(missionRes.isSuccess, isTrue);
+        expect(missionRes.data?['mission']['id'], 101);
 
-      final notifRes = await apiService.getNotifications(mockRepo: mockRepo);
-      expect(notifRes.isSuccess, isTrue);
-      expect(notifRes.data?.first.title, 'Emergency Alert');
-    });
+        final notifRes = await apiService.getNotifications(mockRepo: mockRepo);
+        expect(notifRes.isSuccess, isTrue);
+        expect(notifRes.data?.first.title, 'Emergency Alert');
+      },
+    );
   });
 }
