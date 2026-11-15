@@ -33,14 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _fillDemoCredentials(String email, String password) {
-    setState(() {
-      _emailController.text = email;
-      _passwordController.text = password;
-      _errorMessage = null;
-    });
-  }
-
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() {
@@ -63,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (account == null) {
         setState(() {
           _errorMessage =
-              'Invalid credentials. Please use the valid DEMO MODE credentials listed below.';
+              'Invalid email or password. Please verify your credentials and try again.';
           _isLoading = false;
         });
         return;
@@ -319,94 +311,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               label: "Don't have an account? Sign Up (Citizen)",
                               onPressed: () => context.push('/register'),
                             ),
-
-                            const SizedBox(height: 24),
-
-                            // DEMO ACCOUNTS QUICK-FILL SECTION (Strictly labeled DEMO MODE)
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color:
-                                    (isDark
-                                            ? AppColors.darkBg
-                                            : AppColors.lightBg)
-                                        .withValues(alpha: 0.8),
-                                borderRadius: BorderRadius.circular(14),
-                                border: Border.all(
-                                  color: isDark
-                                      ? AppColors.darkBorder
-                                      : AppColors.lightBorder,
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 8,
-                                        height: 8,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.statusPending,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        'DEMO MODE CREDENTIALS',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w800,
-                                          letterSpacing: 0.8,
-                                          color: AppColors.statusPending,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    'Tap any role below to prefill its credentials, then tap "Sign In":',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 11,
-                                      color: isDark
-                                          ? AppColors.darkTextSecondary
-                                          : AppColors.lightTextSecondary,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Wrap(
-                                    spacing: 8,
-                                    runSpacing: 8,
-                                    children: [
-                                      _buildDemoChip(
-                                        'Citizen',
-                                        'citizen@resq.com',
-                                        'Citizen123',
-                                        Icons.person_rounded,
-                                      ),
-                                      _buildDemoChip(
-                                        'Dispatcher',
-                                        'dispatcher@resq.com',
-                                        'Dispatch123',
-                                        Icons.headset_mic_rounded,
-                                      ),
-                                      _buildDemoChip(
-                                        'Driver',
-                                        'driver@resq.com',
-                                        'Driver123',
-                                        Icons.directions_car_rounded,
-                                      ),
-                                      _buildDemoChip(
-                                        'Admin',
-                                        'admin@resq.com',
-                                        'Admin123',
-                                        Icons.admin_panel_settings_rounded,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -418,28 +322,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildDemoChip(
-    String roleName,
-    String email,
-    String password,
-    IconData icon,
-  ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return ActionChip(
-      avatar: Icon(icon, size: 16, color: AppColors.primaryTeal),
-      label: Text(
-        '$roleName ($email)',
-        style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600),
-      ),
-      backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
-      side: BorderSide(
-        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-      ),
-      onPressed: () => _fillDemoCredentials(email, password),
     );
   }
 }

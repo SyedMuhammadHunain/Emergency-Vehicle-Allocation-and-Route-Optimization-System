@@ -16,7 +16,7 @@ Implement all 15 requirements to transition ResQ from a prototype to a productio
 
 ### Phase 1: Authentication & Account Creation Hardening
 - [x] Task 1: Contact number format (`03XXXXXXXXX`) and strict validation on Citizen Registration Screen
-- [ ] Task 2: Remove Demo Mode Credentials, auto-fill chips, and demo role switcher from Login Screen & App Bar
+- [x] Task 2: Remove Demo Mode Credentials, auto-fill chips, and demo role switcher from Login Screen & App Bar
 - [ ] Task 3: Driver Authentication restriction to Admin-created accounts & session state hardening
 
 ### Checkpoint: Authentication & Registration Verified

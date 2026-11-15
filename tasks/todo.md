@@ -31,16 +31,16 @@
 **Description:** In `lib/features/auth/screens/login_screen.dart`, remove the visible "DEMO MODE CREDENTIALS" container, remove all demo email/password credential chips, and eliminate auto-fill on click. In `lib/core/widgets/brand/resq_app_bar.dart`, remove the demo role switcher pill and modal sheet trigger that allowed switching roles arbitrarily. Preserve existing login form aesthetics, layout, and normal credential authentication for all genuine roles.
 
 **Acceptance criteria:**
-- [ ] "DEMO MODE CREDENTIALS" container and role chips removed from Login Screen
-- [ ] Clicking to auto-fill demo credentials completely eliminated
-- [ ] Demo role switcher pill and `_showRoleSwitcherSheet` removed/disabled from `ResQAppBar`
-- [ ] Login screen retains clean responsive layout, form styling, and error handling
-- [ ] Normal authentication works with registered credentials
+- [x] "DEMO MODE CREDENTIALS" container and role chips removed from Login Screen
+- [x] Clicking to auto-fill demo credentials completely eliminated
+- [x] Demo role switcher pill and `_showRoleSwitcherSheet` removed/disabled from `ResQAppBar`
+- [x] Login screen retains clean responsive layout, form styling, and error handling
+- [x] Normal authentication works with registered credentials
 
 **Verification:**
-- [ ] `flutter analyze` clean
-- [ ] Widget test verifying login screen elements render without demo credentials container
-- [ ] Valid credentials log in properly; invalid credentials display standard authentication error
+- [x] `flutter analyze` clean
+- [x] Widget test verifying login screen elements render without demo credentials container (`test/login_cleanup_test.dart`)
+- [x] Valid credentials log in properly; invalid credentials display standard authentication error
 
 **Dependencies:** None
 

@@ -6,6 +6,7 @@ import 'package:resq/core/services/session_service.dart';
 import 'package:resq/core/theme/theme_controller.dart';
 import 'package:resq/core/widgets/brand/resq_wordmark.dart';
 import 'package:resq/core/widgets/buttons/primary_gradient_button.dart';
+import 'package:resq/features/citizen/screens/citizen_home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -141,7 +142,7 @@ void main() {
 
       // Verify we navigated to RoleShell with CitizenHomeScreen loaded
       expect(find.text('REPORT EMERGENCY NOW'), findsOneWidget);
-      expect(find.text('CITIZEN'), findsOneWidget);
+      expect(find.byType(CitizenHomeScreen), findsOneWidget);
     });
 
     test('SessionService demo switching updates active role', () async {

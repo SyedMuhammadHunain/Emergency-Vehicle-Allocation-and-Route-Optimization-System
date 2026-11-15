@@ -24,7 +24,7 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = false,
     this.onBackPressed,
     this.customActions,
-    this.showRoleSwitcher = true,
+    this.showRoleSwitcher = false,
     this.showNotifications = true,
   });
 
