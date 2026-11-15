@@ -14,7 +14,8 @@ class DispatcherEmergencyScreen extends StatefulWidget {
   const DispatcherEmergencyScreen({super.key, this.onNavigateToTab});
 
   @override
-  State<DispatcherEmergencyScreen> createState() => _DispatcherEmergencyScreenState();
+  State<DispatcherEmergencyScreen> createState() =>
+      _DispatcherEmergencyScreenState();
 }
 
 class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
@@ -22,10 +23,27 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
   String _selectedCategoryFilter = 'ALL';
   String _searchQuery = '';
 
-  final List<String> _statusFilters = ['ALL', 'REPORTED', 'ASSIGNED', 'EN_ROUTE', 'ON_SCENE', 'RESOLVED'];
-  final List<String> _categoryFilters = ['ALL', 'MEDICAL', 'FIRE', 'ACCIDENT', 'RESCUE'];
+  final List<String> _statusFilters = [
+    'ALL',
+    'REPORTED',
+    'ASSIGNED',
+    'EN_ROUTE',
+    'ON_SCENE',
+    'RESOLVED',
+  ];
+  final List<String> _categoryFilters = [
+    'ALL',
+    'MEDICAL',
+    'FIRE',
+    'ACCIDENT',
+    'RESCUE',
+  ];
 
-  void _showEmergencyDetailsModal(BuildContext context, DemoEmergency emergency, MockRepository repo) {
+  void _showEmergencyDetailsModal(
+    BuildContext context,
+    DemoEmergency emergency,
+    MockRepository repo,
+  ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     showModalBottomSheet(
@@ -75,7 +93,10 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                   const SizedBox(height: 12),
                   Text(
                     '${emergency.category} EMERGENCY',
-                    style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -83,7 +104,11 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                     style: GoogleFonts.inter(fontSize: 14, height: 1.4),
                   ),
                   const Divider(height: 28),
-                  _buildDetailTile(Icons.place_rounded, 'Location', emergency.locationLabel),
+                  _buildDetailTile(
+                    Icons.place_rounded,
+                    'Location',
+                    emergency.locationLabel,
+                  ),
                   _buildDetailTile(
                     Icons.warning_amber_rounded,
                     'Severity & Urgency',
@@ -124,14 +149,18 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.primaryTeal,
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       icon: const Icon(Icons.account_tree_rounded),
                       label: const Text('Open Allocation Assistant'),
                       onPressed: () {
                         Navigator.pop(ctx);
                         if (widget.onNavigateToTab != null) {
-                          widget.onNavigateToTab!(3); // Navigate to allocation tab
+                          widget.onNavigateToTab!(
+                            3,
+                          ); // Navigate to allocation tab
                         }
                       },
                     ),
@@ -141,19 +170,28 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                     OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.statusCompleted,
-                        side: const BorderSide(color: AppColors.statusCompleted),
+                        side: const BorderSide(
+                          color: AppColors.statusCompleted,
+                        ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       icon: const Icon(Icons.check_circle_rounded),
                       label: const Text('Mark Emergency as Resolved'),
                       onPressed: () {
-                        repo.updateEmergencyStatus(emergency.id, EmergencyStatus.resolved);
+                        repo.updateEmergencyStatus(
+                          emergency.id,
+                          EmergencyStatus.resolved,
+                        );
                         Navigator.pop(ctx);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: AppColors.statusCompleted,
-                            content: Text('${emergency.id} marked as RESOLVED.'),
+                            content: Text(
+                              '${emergency.id} marked as RESOLVED.',
+                            ),
                           ),
                         );
                       },
@@ -182,12 +220,19 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey),
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey,
+                  ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500),
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
@@ -207,7 +252,8 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
       if (_selectedStatusFilter != 'ALL' && e.status != _selectedStatusFilter) {
         return false;
       }
-      if (_selectedCategoryFilter != 'ALL' && e.category != _selectedCategoryFilter) {
+      if (_selectedCategoryFilter != 'ALL' &&
+          e.category != _selectedCategoryFilter) {
         return false;
       }
       if (_searchQuery.isNotEmpty) {
@@ -245,11 +291,16 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                     hintStyle: GoogleFonts.inter(fontSize: 13),
                     prefixIcon: const Icon(Icons.search_rounded, size: 20),
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : AppColors.lightBorder,
                       ),
                     ),
                   ),
@@ -267,16 +318,28 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                         child: FilterChip(
                           label: Text(status),
                           selected: isSelected,
-                          onSelected: (_) => setState(() => _selectedStatusFilter = status),
+                          onSelected: (_) =>
+                              setState(() => _selectedStatusFilter = status),
                           labelStyle: GoogleFonts.inter(
                             fontSize: 11,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                            color: isSelected ? Colors.white : (isDark ? Colors.white70 : AppColors.lightTextSecondary),
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? Colors.white
+                                : (isDark
+                                      ? Colors.white70
+                                      : AppColors.lightTextSecondary),
                           ),
-                          backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
+                          backgroundColor: isDark
+                              ? AppColors.darkBg
+                              : AppColors.lightBg,
                           selectedColor: AppColors.primaryTeal,
                           showCheckmark: false,
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                         ),
                       );
                     }).toList(),
@@ -295,16 +358,29 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                         child: ChoiceChip(
                           label: Text(category),
                           selected: isSelected,
-                          onSelected: (_) => setState(() => _selectedCategoryFilter = category),
+                          onSelected: (_) => setState(
+                            () => _selectedCategoryFilter = category,
+                          ),
                           labelStyle: GoogleFonts.inter(
                             fontSize: 11,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                            color: isSelected ? Colors.white : (isDark ? Colors.white70 : AppColors.lightTextSecondary),
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? Colors.white
+                                : (isDark
+                                      ? Colors.white70
+                                      : AppColors.lightTextSecondary),
                           ),
-                          backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
+                          backgroundColor: isDark
+                              ? AppColors.darkBg
+                              : AppColors.lightBg,
                           selectedColor: AppColors.primaryNavy,
                           showCheckmark: false,
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                         ),
                       );
                     }).toList(),
@@ -320,7 +396,8 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                 ? const Center(
                     child: EmptyState(
                       'No matching emergencies found',
-                      subtitle: 'Try adjusting your search criteria or status filter.',
+                      subtitle:
+                          'Try adjusting your search criteria or status filter.',
                       icon: Icons.search_off_rounded,
                     ),
                   )
@@ -334,11 +411,18 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
                           'id': emergency.id,
                           'type': emergency.category,
                           'status': emergency.status,
-                          'created_at': emergency.reportedAt.toLocal().toString().split('.')[0],
+                          'created_at': emergency.reportedAt
+                              .toLocal()
+                              .toString()
+                              .split('.')[0],
                           'location': emergency.locationLabel,
                           'severity': emergency.severity,
                         },
-                        onTap: () => _showEmergencyDetailsModal(context, emergency, repo),
+                        onTap: () => _showEmergencyDetailsModal(
+                          context,
+                          emergency,
+                          repo,
+                        ),
                       );
                     },
                   ),

@@ -29,28 +29,31 @@ void main() {
       expect(repo.activeEmergencies.isNotEmpty, isTrue);
     });
 
-    test('MockRepository reportEmergency adds incident and creates notification', () {
-      final repo = MockRepository();
-      final initialCount = repo.emergencies.length;
-      final initialNotifs = repo.notifications.length;
+    test(
+      'MockRepository reportEmergency adds incident and creates notification',
+      () {
+        final repo = MockRepository();
+        final initialCount = repo.emergencies.length;
+        final initialNotifs = repo.notifications.length;
 
-      final emergency = repo.reportEmergency(
-        category: EmergencyCategory.fire,
-        severity: 5,
-        urgency: 4,
-        peopleAffected: 3,
-        description: 'Test fire incident in Karachi',
-        location: const LatLng(24.8607, 67.0011),
-        locationLabel: 'Saddar, Karachi',
-        userId: 'Demo Citizen',
-      );
+        final emergency = repo.reportEmergency(
+          category: EmergencyCategory.fire,
+          severity: 5,
+          urgency: 4,
+          peopleAffected: 3,
+          description: 'Test fire incident in Karachi',
+          location: const LatLng(24.8607, 67.0011),
+          locationLabel: 'Saddar, Karachi',
+          userId: 'Demo Citizen',
+        );
 
-      expect(repo.emergencies.length, equals(initialCount + 1));
-      expect(repo.notifications.length, equals(initialNotifs + 1));
-      expect(emergency.id.startsWith('EM-2026-'), isTrue);
-      expect(emergency.category, equals(EmergencyCategory.fire));
-      expect(emergency.status, equals(EmergencyStatus.reported));
-    });
+        expect(repo.emergencies.length, equals(initialCount + 1));
+        expect(repo.notifications.length, equals(initialNotifs + 1));
+        expect(emergency.id.startsWith('EM-2026-'), isTrue);
+        expect(emergency.category, equals(EmergencyCategory.fire));
+        expect(emergency.status, equals(EmergencyStatus.reported));
+      },
+    );
 
     test('MockRepository status update and notification read', () {
       final repo = MockRepository();
@@ -65,7 +68,12 @@ void main() {
   });
 
   group('Citizen Module - UI Widget Tests', () {
-    Widget createTestApp(Widget child, {MockRepository? repo, SessionService? session, ThemeController? theme}) {
+    Widget createTestApp(
+      Widget child, {
+      MockRepository? repo,
+      SessionService? session,
+      ThemeController? theme,
+    }) {
       final mockRepo = repo ?? MockRepository();
       final sessionService = session ?? SessionService();
       final themeController = theme ?? ThemeController();
@@ -76,29 +84,30 @@ void main() {
           ChangeNotifierProvider.value(value: sessionService),
           ChangeNotifierProvider.value(value: themeController),
         ],
-        child: MaterialApp(
-          home: child,
-        ),
+        child: MaterialApp(home: child),
       );
     }
 
-    testWidgets('CitizenHomeScreen renders welcome, CTA, categories, and hotlines',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(createTestApp(const CitizenHomeScreen()));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'CitizenHomeScreen renders welcome, CTA, categories, and hotlines',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(createTestApp(const CitizenHomeScreen()));
+        await tester.pumpAndSettle();
 
-      expect(find.text('REPORT EMERGENCY NOW'), findsOneWidget);
-      expect(find.text('Quick Report by Category'), findsOneWidget);
-      expect(find.text('Medical'), findsOneWidget);
-      expect(find.text('Fire'), findsOneWidget);
-      expect(find.text('Accident'), findsOneWidget);
-      expect(find.text('Rescue'), findsOneWidget);
-      expect(find.text('Emergency Hotlines (Karachi)'), findsOneWidget);
-      expect(find.text('1122'), findsOneWidget);
-    });
+        expect(find.text('REPORT EMERGENCY NOW'), findsOneWidget);
+        expect(find.text('Quick Report by Category'), findsOneWidget);
+        expect(find.text('Medical'), findsOneWidget);
+        expect(find.text('Fire'), findsOneWidget);
+        expect(find.text('Accident'), findsOneWidget);
+        expect(find.text('Rescue'), findsOneWidget);
+        expect(find.text('Emergency Hotlines (Karachi)'), findsOneWidget);
+        expect(find.text('1122'), findsOneWidget);
+      },
+    );
 
-    testWidgets('MyReportsScreen displays reports and filter chips',
-        (WidgetTester tester) async {
+    testWidgets('MyReportsScreen displays reports and filter chips', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestApp(const MyReportsScreen()));
       await tester.pumpAndSettle();
 
@@ -108,8 +117,9 @@ void main() {
       expect(find.textContaining('Resolved'), findsOneWidget);
     });
 
-    testWidgets('ReportEmergencyScreen renders form and map components',
-        (WidgetTester tester) async {
+    testWidgets('ReportEmergencyScreen renders form and map components', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestApp(const ReportEmergencyScreen()));
       await tester.pumpAndSettle();
 
@@ -120,15 +130,15 @@ void main() {
       expect(find.text('Use My GPS'), findsOneWidget);
     });
 
-    testWidgets('EmergencyDetailScreen displays status timeline and metrics',
-        (WidgetTester tester) async {
+    testWidgets('EmergencyDetailScreen displays status timeline and metrics', (
+      WidgetTester tester,
+    ) async {
       final repo = MockRepository();
       final firstId = repo.emergencies.first.id;
 
-      await tester.pumpWidget(createTestApp(
-        EmergencyDetailScreen(emergencyId: firstId),
-        repo: repo,
-      ));
+      await tester.pumpWidget(
+        createTestApp(EmergencyDetailScreen(emergencyId: firstId), repo: repo),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text(firstId), findsWidgets);
@@ -137,16 +147,18 @@ void main() {
       expect(find.text('DEMO STATE SIMULATOR'), findsOneWidget);
     });
 
-    testWidgets('CitizenProfileScreen displays verified citizen badge and medical ID',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(createTestApp(const CitizenProfileScreen()));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'CitizenProfileScreen displays verified citizen badge and medical ID',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(createTestApp(const CitizenProfileScreen()));
+        await tester.pumpAndSettle();
 
-      expect(find.text('VERIFIED CITIZEN (DEMO)'), findsOneWidget);
-      expect(find.text('Medical ID & Emergency Contacts'), findsOneWidget);
-      expect(find.text('Blood Group'), findsOneWidget);
-      expect(find.text('Appearance Theme'), findsOneWidget);
-      expect(find.text('Sign Out of ResQ'), findsOneWidget);
-    });
+        expect(find.text('VERIFIED CITIZEN (DEMO)'), findsOneWidget);
+        expect(find.text('Medical ID & Emergency Contacts'), findsOneWidget);
+        expect(find.text('Blood Group'), findsOneWidget);
+        expect(find.text('Appearance Theme'), findsOneWidget);
+        expect(find.text('Sign Out of ResQ'), findsOneWidget);
+      },
+    );
   });
 }

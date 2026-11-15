@@ -12,10 +12,7 @@ import '../../../core/widgets/feedback/status_chip.dart';
 class MyReportsScreen extends StatefulWidget {
   final VoidCallback? onNavigateToReport;
 
-  const MyReportsScreen({
-    super.key,
-    this.onNavigateToReport,
-  });
+  const MyReportsScreen({super.key, this.onNavigateToReport});
 
   @override
   State<MyReportsScreen> createState() => _MyReportsScreenState();
@@ -76,11 +73,20 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      _buildFilterChip('ALL', 'All Reports (${repo.emergencies.length})'),
+                      _buildFilterChip(
+                        'ALL',
+                        'All Reports (${repo.emergencies.length})',
+                      ),
                       const SizedBox(width: 8),
-                      _buildFilterChip('ACTIVE', 'Active (${repo.activeEmergencies.length})'),
+                      _buildFilterChip(
+                        'ACTIVE',
+                        'Active (${repo.activeEmergencies.length})',
+                      ),
                       const SizedBox(width: 8),
-                      _buildFilterChip('RESOLVED', 'Resolved (${repo.resolvedEmergencies.length})'),
+                      _buildFilterChip(
+                        'RESOLVED',
+                        'Resolved (${repo.resolvedEmergencies.length})',
+                      ),
                     ],
                   ),
                 ),
@@ -97,7 +103,9 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
                           : 'No incidents recorded under this filter.',
                       icon: Icons.assignment_late_outlined,
                       action: FilledButton(
-                        style: FilledButton.styleFrom(backgroundColor: AppColors.primaryTeal),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.primaryTeal,
+                        ),
                         onPressed: () {
                           if (widget.onNavigateToReport != null) {
                             widget.onNavigateToReport!();
@@ -110,7 +118,9 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
                     ),
                   )
                 else
-                  ...list.map((e) => _buildEmergencyReportCard(context, e, isDark)),
+                  ...list.map(
+                    (e) => _buildEmergencyReportCard(context, e, isDark),
+                  ),
               ],
             ),
           ),
@@ -133,13 +143,19 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
       selectedColor: AppColors.primaryTeal,
       backgroundColor: AppColors.primaryTeal.withValues(alpha: 0.1),
       side: BorderSide(
-        color: isSelected ? AppColors.primaryTeal : AppColors.primaryTeal.withValues(alpha: 0.3),
+        color: isSelected
+            ? AppColors.primaryTeal
+            : AppColors.primaryTeal.withValues(alpha: 0.3),
       ),
       onSelected: (_) => setState(() => _activeFilter = filterKey),
     );
   }
 
-  Widget _buildEmergencyReportCard(BuildContext context, DemoEmergency item, bool isDark) {
+  Widget _buildEmergencyReportCard(
+    BuildContext context,
+    DemoEmergency item,
+    bool isDark,
+  ) {
     final dateStr = DateFormat('MMM d, y · h:mm a').format(item.reportedAt);
 
     return Card(
@@ -166,7 +182,10 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.primaryTeal.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
@@ -203,7 +222,11 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  const Icon(Icons.place_rounded, size: 14, color: AppColors.primaryTeal),
+                  const Icon(
+                    Icons.place_rounded,
+                    size: 14,
+                    color: AppColors.primaryTeal,
+                  ),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
@@ -212,7 +235,9 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.inter(
                         fontSize: 11,
-                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                        color: isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.lightTextSecondary,
                       ),
                     ),
                   ),
@@ -224,18 +249,28 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.access_time_rounded, size: 12, color: Colors.grey),
+                      const Icon(
+                        Icons.access_time_rounded,
+                        size: 12,
+                        color: Colors.grey,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         dateStr,
-                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.grey.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(6),
@@ -249,7 +284,11 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      const Icon(Icons.chevron_right_rounded, size: 18, color: Colors.grey),
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        size: 18,
+                        color: Colors.grey,
+                      ),
                     ],
                   ),
                 ],

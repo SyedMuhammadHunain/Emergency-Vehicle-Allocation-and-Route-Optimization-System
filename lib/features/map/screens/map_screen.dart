@@ -23,7 +23,8 @@ class MapScreen extends StatelessWidget {
     final incidentMarkers = <Marker>[];
     if (mapProvider.showIncidents) {
       for (final inc in incidentProvider.allIncidents) {
-        if (mapProvider.mapFilterType == null || inc.type == mapProvider.mapFilterType) {
+        if (mapProvider.mapFilterType == null ||
+            inc.type == mapProvider.mapFilterType) {
           final isSelected = mapProvider.selectedIncident?.id == inc.id;
 
           incidentMarkers.add(
@@ -129,7 +130,7 @@ class MapScreen extends StatelessWidget {
                             -0.2, 0, 0, 0, 255, // red
                             0, -0.2, 0, 0, 255, // green
                             0, 0, -0.2, 0, 255, // blue
-                            0, 0, 0, 1, 0,      // alpha
+                            0, 0, 0, 1, 0, // alpha
                           ]),
                           child: tileWidget,
                         );
@@ -150,7 +151,10 @@ class MapScreen extends StatelessWidget {
                 children: [
                   // Search / Status Header Card
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: isDark ? AppColors.surfaceDark : Colors.white,
                       borderRadius: BorderRadius.circular(16),
@@ -164,12 +168,18 @@ class MapScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.emergency_share_rounded, color: AppColors.primary),
+                        const Icon(
+                          Icons.emergency_share_rounded,
+                          color: AppColors.primary,
+                        ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             'Live Incident Map (${incidentMarkers.length} Active)',
-                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                         IconButton(
@@ -177,12 +187,15 @@ class MapScreen extends StatelessWidget {
                             mapProvider.showResponders
                                 ? Icons.shield_rounded
                                 : Icons.shield_outlined,
-                            color: mapProvider.showResponders ? AppColors.primary : Colors.grey,
+                            color: mapProvider.showResponders
+                                ? AppColors.primary
+                                : Colors.grey,
                             size: 20,
                           ),
                           tooltip: 'Toggle Responder Units',
-                          onPressed: () =>
-                              mapProvider.toggleResponders(!mapProvider.showResponders),
+                          onPressed: () => mapProvider.toggleResponders(
+                            !mapProvider.showResponders,
+                          ),
                         ),
                       ],
                     ),
@@ -203,26 +216,36 @@ class MapScreen extends StatelessWidget {
                         _FilterChip(
                           label: 'Medical',
                           color: AppColors.medical,
-                          isSelected: mapProvider.mapFilterType == EmergencyType.medical,
-                          onTap: () => mapProvider.setFilterType(EmergencyType.medical),
+                          isSelected:
+                              mapProvider.mapFilterType ==
+                              EmergencyType.medical,
+                          onTap: () =>
+                              mapProvider.setFilterType(EmergencyType.medical),
                         ),
                         _FilterChip(
                           label: 'Fire',
                           color: AppColors.fire,
-                          isSelected: mapProvider.mapFilterType == EmergencyType.fire,
-                          onTap: () => mapProvider.setFilterType(EmergencyType.fire),
+                          isSelected:
+                              mapProvider.mapFilterType == EmergencyType.fire,
+                          onTap: () =>
+                              mapProvider.setFilterType(EmergencyType.fire),
                         ),
                         _FilterChip(
                           label: 'Accidents',
                           color: AppColors.accent,
-                          isSelected: mapProvider.mapFilterType == EmergencyType.accident,
-                          onTap: () => mapProvider.setFilterType(EmergencyType.accident),
+                          isSelected:
+                              mapProvider.mapFilterType ==
+                              EmergencyType.accident,
+                          onTap: () =>
+                              mapProvider.setFilterType(EmergencyType.accident),
                         ),
                         _FilterChip(
                           label: 'Police',
                           color: AppColors.police,
-                          isSelected: mapProvider.mapFilterType == EmergencyType.police,
-                          onTap: () => mapProvider.setFilterType(EmergencyType.police),
+                          isSelected:
+                              mapProvider.mapFilterType == EmergencyType.police,
+                          onTap: () =>
+                              mapProvider.setFilterType(EmergencyType.police),
                         ),
                       ],
                     ),
@@ -235,14 +258,18 @@ class MapScreen extends StatelessWidget {
           // Floating Controls (Re-center and Zoom)
           Positioned(
             right: 16,
-            bottom: mapProvider.selectedIncident != null || mapProvider.selectedResponder != null
+            bottom:
+                mapProvider.selectedIncident != null ||
+                    mapProvider.selectedResponder != null
                 ? 210
                 : 24,
             child: Column(
               children: [
                 FloatingActionButton.small(
                   heroTag: 'recenter_map',
-                  backgroundColor: isDark ? AppColors.surfaceDark : Colors.white,
+                  backgroundColor: isDark
+                      ? AppColors.surfaceDark
+                      : Colors.white,
                   foregroundColor: AppColors.primary,
                   onPressed: () => mapProvider.resetToDefault(),
                   child: const Icon(Icons.my_location_rounded),
@@ -268,8 +295,9 @@ class MapScreen extends StatelessWidget {
               child: _IncidentMapPreview(
                 incident: mapProvider.selectedIncident!,
                 onClose: () => mapProvider.clearSelection(),
-                onViewDetails: () =>
-                    context.push('/incidents/${mapProvider.selectedIncident!.id}'),
+                onViewDetails: () => context.push(
+                  '/incidents/${mapProvider.selectedIncident!.id}',
+                ),
               ),
             ),
 
@@ -341,8 +369,8 @@ class _FilterChip extends StatelessWidget {
               color: isSelected
                   ? Colors.white
                   : (isDark
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight),
+                        ? AppColors.textPrimaryDark
+                        : AppColors.textPrimaryLight),
             ),
           ),
         ),
@@ -391,7 +419,11 @@ class _IncidentMapPreview extends StatelessWidget {
                   color: incident.type.color.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(incident.type.icon, color: incident.type.color, size: 20),
+                child: Icon(
+                  incident.type.icon,
+                  color: incident.type.color,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -400,7 +432,10 @@ class _IncidentMapPreview extends StatelessWidget {
                   children: [
                     Text(
                       incident.title,
-                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -435,8 +470,14 @@ class _IncidentMapPreview extends StatelessWidget {
               ElevatedButton(
                 onPressed: onViewDetails,
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 child: const Text('View Incident'),
               ),
@@ -452,10 +493,7 @@ class _ResponderMapPreview extends StatelessWidget {
   final ResponderModel responder;
   final VoidCallback onClose;
 
-  const _ResponderMapPreview({
-    required this.responder,
-    required this.onClose,
-  });
+  const _ResponderMapPreview({required this.responder, required this.onClose});
 
   @override
   Widget build(BuildContext context) {
@@ -486,7 +524,11 @@ class _ResponderMapPreview extends StatelessWidget {
                   color: responder.type.color.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(responder.type.icon, color: responder.type.color, size: 20),
+                child: Icon(
+                  responder.type.icon,
+                  color: responder.type.color,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -495,7 +537,10 @@ class _ResponderMapPreview extends StatelessWidget {
                   children: [
                     Text(
                       responder.callSign,
-                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
                     ),
                     Text(
                       responder.stationName,
@@ -520,13 +565,21 @@ class _ResponderMapPreview extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               StatusBadge(
-                label: responder.isAvailable ? 'Available • On Standby' : 'Dispatched',
-                color: responder.isAvailable ? AppColors.success : AppColors.warning,
+                label: responder.isAvailable
+                    ? 'Available • On Standby'
+                    : 'Dispatched',
+                color: responder.isAvailable
+                    ? AppColors.success
+                    : AppColors.warning,
               ),
               OutlinedButton.icon(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Calling ${responder.callSign} dispatch...')),
+                    SnackBar(
+                      content: Text(
+                        'Calling ${responder.callSign} dispatch...',
+                      ),
+                    ),
                   );
                 },
                 icon: const Icon(Icons.call, size: 16),

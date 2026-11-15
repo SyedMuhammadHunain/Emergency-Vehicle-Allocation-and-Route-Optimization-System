@@ -14,10 +14,12 @@ class DispatcherAllocationScreen extends StatefulWidget {
   const DispatcherAllocationScreen({super.key, this.onNavigateToTab});
 
   @override
-  State<DispatcherAllocationScreen> createState() => _DispatcherAllocationScreenState();
+  State<DispatcherAllocationScreen> createState() =>
+      _DispatcherAllocationScreenState();
 }
 
-class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen> {
+class _DispatcherAllocationScreenState
+    extends State<DispatcherAllocationScreen> {
   DemoEmergency? _selectedEmergency;
   DemoVehicle? _selectedVehicle;
   bool _isProcessing = false;
@@ -35,12 +37,19 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
       _selectedEmergency = pendingEmergencies.first;
     } else if (_selectedEmergency != null &&
         !pendingEmergencies.any((e) => e.id == _selectedEmergency!.id)) {
-      _selectedEmergency = pendingEmergencies.isNotEmpty ? pendingEmergencies.first : null;
+      _selectedEmergency = pendingEmergencies.isNotEmpty
+          ? pendingEmergencies.first
+          : null;
     }
 
     // Auto-select best matching vehicle if available
-    if (_selectedVehicle == null && availableVehicles.isNotEmpty && _selectedEmergency != null) {
-      _selectedVehicle = _findBestMatchVehicle(_selectedEmergency!, availableVehicles);
+    if (_selectedVehicle == null &&
+        availableVehicles.isNotEmpty &&
+        _selectedEmergency != null) {
+      _selectedVehicle = _findBestMatchVehicle(
+        _selectedEmergency!,
+        availableVehicles,
+      );
     }
 
     return Scaffold(
@@ -72,9 +81,14 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
                             decoration: BoxDecoration(
-                              color: AppColors.aquaAccent.withValues(alpha: 0.25),
+                              color: AppColors.aquaAccent.withValues(
+                                alpha: 0.25,
+                              ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -87,7 +101,11 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                             ),
                           ),
                           const Spacer(),
-                          const Icon(Icons.psychology_alt_rounded, color: Colors.white, size: 22),
+                          const Icon(
+                            Icons.psychology_alt_rounded,
+                            color: Colors.white,
+                            size: 22,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -120,7 +138,8 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                     child: Center(
                       child: EmptyState(
                         'No Pending Emergencies',
-                        subtitle: 'All reported incidents have been allocated to response units.',
+                        subtitle:
+                            'All reported incidents have been allocated to response units.',
                         icon: Icons.check_circle_outline_rounded,
                         action: widget.onNavigateToTab != null
                             ? OutlinedButton.icon(
@@ -136,7 +155,10 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                   // Step 1: Select Pending Incident
                   Text(
                     '1. Select Pending Emergency Request',
-                    style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
@@ -152,7 +174,10 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                           onTap: () {
                             setState(() {
                               _selectedEmergency = item;
-                              _selectedVehicle = _findBestMatchVehicle(item, availableVehicles);
+                              _selectedVehicle = _findBestMatchVehicle(
+                                item,
+                                availableVehicles,
+                              );
                             });
                           },
                           child: AnimatedContainer(
@@ -161,16 +186,24 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                             margin: const EdgeInsets.only(right: 12),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: isDark ? AppColors.darkSurface : Colors.white,
+                              color: isDark
+                                  ? AppColors.darkSurface
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(
-                                color: isSelected ? AppColors.primaryTeal : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                                color: isSelected
+                                    ? AppColors.primaryTeal
+                                    : (isDark
+                                          ? AppColors.darkBorder
+                                          : AppColors.lightBorder),
                                 width: isSelected ? 2.5 : 1.0,
                               ),
                               boxShadow: [
                                 BoxShadow(
                                   color: isSelected
-                                      ? AppColors.primaryTeal.withValues(alpha: 0.2)
+                                      ? AppColors.primaryTeal.withValues(
+                                          alpha: 0.2,
+                                        )
                                       : Colors.black.withValues(alpha: 0.04),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
@@ -182,7 +215,8 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       item.id,
@@ -195,10 +229,17 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                     const SizedBox(width: 6),
                                     Flexible(
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
                                         decoration: BoxDecoration(
-                                          color: AppColors.forCategory(item.category).withValues(alpha: 0.15),
-                                          borderRadius: BorderRadius.circular(6),
+                                          color: AppColors.forCategory(
+                                            item.category,
+                                          ).withValues(alpha: 0.15),
+                                          borderRadius: BorderRadius.circular(
+                                            6,
+                                          ),
                                         ),
                                         child: Text(
                                           item.category,
@@ -207,7 +248,9 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                           style: GoogleFonts.inter(
                                             fontSize: 9.5,
                                             fontWeight: FontWeight.w800,
-                                            color: AppColors.forCategory(item.category),
+                                            color: AppColors.forCategory(
+                                              item.category,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -218,17 +261,39 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                   item.locationLabel,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600),
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 Row(
                                   children: [
-                                    Icon(Icons.warning_amber_rounded, size: 13, color: AppColors.forSeverity(item.severity)),
+                                    Icon(
+                                      Icons.warning_amber_rounded,
+                                      size: 13,
+                                      color: AppColors.forSeverity(
+                                        item.severity,
+                                      ),
+                                    ),
                                     const SizedBox(width: 2),
-                                    Text('Sev ${item.severity}', style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600)),
+                                    Text(
+                                      'Sev ${item.severity}',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                     const SizedBox(width: 8),
-                                    const Icon(Icons.people_outline_rounded, size: 13, color: Colors.grey),
+                                    const Icon(
+                                      Icons.people_outline_rounded,
+                                      size: 13,
+                                      color: Colors.grey,
+                                    ),
                                     const SizedBox(width: 2),
-                                    Text('${item.peopleAffected} pers', style: GoogleFonts.inter(fontSize: 10)),
+                                    Text(
+                                      '${item.peopleAffected} pers',
+                                      style: GoogleFonts.inter(fontSize: 10),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -248,14 +313,20 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                       decoration: BoxDecoration(
                         color: AppColors.primaryTeal.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.primaryTeal.withValues(alpha: 0.3)),
+                        border: Border.all(
+                          color: AppColors.primaryTeal.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.auto_awesome_rounded, color: AppColors.primaryTeal, size: 20),
+                              const Icon(
+                                Icons.auto_awesome_rounded,
+                                color: AppColors.primaryTeal,
+                                size: 20,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -269,9 +340,14 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                               ),
                               const SizedBox(width: 8),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.statusCompleted.withValues(alpha: 0.2),
+                                  color: AppColors.statusCompleted.withValues(
+                                    alpha: 0.2,
+                                  ),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
@@ -299,7 +375,10 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                     // Step 3: Available Vehicles Selection
                     Text(
                       '2. Choose Response Unit to Dispatch',
-                      style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 8),
 
@@ -321,23 +400,30 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                           final isSelected = _selectedVehicle?.id == vehicle.id;
 
                           return GestureDetector(
-                            onTap: () => setState(() => _selectedVehicle = vehicle),
+                            onTap: () =>
+                                setState(() => _selectedVehicle = vehicle),
                             child: Container(
                               margin: const EdgeInsets.only(bottom: 10),
                               padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
-                                color: isDark ? AppColors.darkSurface : Colors.white,
+                                color: isDark
+                                    ? AppColors.darkSurface
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
                                   color: isSelected
                                       ? AppColors.primaryTeal
-                                      : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                                      : (isDark
+                                            ? AppColors.darkBorder
+                                            : AppColors.lightBorder),
                                   width: isSelected ? 2.5 : 1.0,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
                                     color: isSelected
-                                        ? AppColors.primaryTeal.withValues(alpha: 0.15)
+                                        ? AppColors.primaryTeal.withValues(
+                                            alpha: 0.15,
+                                          )
                                         : Colors.black.withValues(alpha: 0.03),
                                     blurRadius: 6,
                                     offset: const Offset(0, 2),
@@ -353,7 +439,11 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: isSelected ? AppColors.primaryTeal : Colors.grey.withValues(alpha: 0.5),
+                                        color: isSelected
+                                            ? AppColors.primaryTeal
+                                            : Colors.grey.withValues(
+                                                alpha: 0.5,
+                                              ),
                                         width: 2,
                                       ),
                                     ),
@@ -373,15 +463,17 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primaryNavy.withValues(alpha: 0.1),
+                                      color: AppColors.primaryNavy.withValues(
+                                        alpha: 0.1,
+                                      ),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Icon(
                                       vehicle.type.contains('Fire')
                                           ? Icons.fire_truck_rounded
                                           : vehicle.type.contains('Rescue')
-                                              ? Icons.airport_shuttle_rounded
-                                              : Icons.emergency_rounded,
+                                          ? Icons.airport_shuttle_rounded
+                                          : Icons.emergency_rounded,
                                       color: AppColors.primaryNavy,
                                       size: 24,
                                     ),
@@ -389,7 +481,8 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                   const SizedBox(width: 14),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
@@ -401,13 +494,19 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                               ),
                                             ),
                                             const SizedBox(width: 8),
-                                            StatusChip(status: vehicle.status.toUpperCase()),
+                                            StatusChip(
+                                              status: vehicle.status
+                                                  .toUpperCase(),
+                                            ),
                                           ],
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
                                           '${vehicle.type} · Driver: ${vehicle.driverName ?? "Available Pool"}',
-                                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -425,7 +524,10 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                       ),
                                       Text(
                                         'Simulated Distance: ~3.2 km',
-                                        style: GoogleFonts.inter(fontSize: 10, color: Colors.grey),
+                                        style: GoogleFonts.inter(
+                                          fontSize: 10,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -443,25 +545,36 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.primaryTeal,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
-                      onPressed: (_selectedEmergency == null || _selectedVehicle == null || _isProcessing)
+                      onPressed:
+                          (_selectedEmergency == null ||
+                              _selectedVehicle == null ||
+                              _isProcessing)
                           ? null
                           : () async {
                               setState(() => _isProcessing = true);
-                              
+
                               // Trigger backend DP allocation sync in background if online
                               try {
                                 final emergencyIdInt = int.tryParse(
-                                  _selectedEmergency!.id.replaceAll(RegExp(r'[^0-9]'), ''),
+                                  _selectedEmergency!.id.replaceAll(
+                                    RegExp(r'[^0-9]'),
+                                    '',
+                                  ),
                                 );
-                                await ApiService().triggerAllocation(emergencyId: emergencyIdInt);
+                                await ApiService().triggerAllocation(
+                                  emergencyId: emergencyIdInt,
+                                );
                               } catch (_) {}
 
                               repo.assignVehicleToEmergency(
                                 _selectedEmergency!.id,
                                 _selectedVehicle!.id,
-                                notes: 'Dispatched via DP allocation assistant to ${_selectedEmergency!.locationLabel}',
+                                notes:
+                                    'Dispatched via DP allocation assistant to ${_selectedEmergency!.locationLabel}',
                               );
 
                               if (!context.mounted) return;
@@ -474,7 +587,9 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   backgroundColor: AppColors.statusCompleted,
-                                  content: Text('Vehicle successfully dispatched! Assignment confirmed in shared repository.'),
+                                  content: Text(
+                                    'Vehicle successfully dispatched! Assignment confirmed in shared repository.',
+                                  ),
                                 ),
                               );
                             },
@@ -482,7 +597,10 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                           ? const SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
                             )
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -491,7 +609,10 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                 const SizedBox(width: 8),
                                 Text(
                                   'Confirm Assignment & Dispatch Unit',
-                                  style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ],
                             ),
@@ -506,7 +627,10 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
     );
   }
 
-  DemoVehicle? _findBestMatchVehicle(DemoEmergency emergency, List<DemoVehicle> vehicles) {
+  DemoVehicle? _findBestMatchVehicle(
+    DemoEmergency emergency,
+    List<DemoVehicle> vehicles,
+  ) {
     if (vehicles.isEmpty) return null;
 
     if (emergency.category == EmergencyCategory.fire) {

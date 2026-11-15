@@ -15,7 +15,10 @@ class AdminProfileScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Appearance Theme', style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
+        title: Text(
+          'Appearance Theme',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -62,15 +65,22 @@ class AdminProfileScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Sign Out', style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
-        content: const Text('Are you sure you want to end your administrative session?'),
+        title: Text(
+          'Sign Out',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+        ),
+        content: const Text(
+          'Are you sure you want to end your administrative session?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text('Cancel'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.statusMaintenance),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.statusMaintenance,
+            ),
             onPressed: () async {
               Navigator.pop(ctx);
               final session = context.read<SessionService>();
@@ -95,8 +105,8 @@ class AdminProfileScreen extends StatelessWidget {
     final themeLabel = theme.mode == ThemeMode.system
         ? 'System Default'
         : theme.mode == ThemeMode.dark
-            ? 'Dark Mode'
-            : 'Light Mode';
+        ? 'Dark Mode'
+        : 'Light Mode';
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -158,7 +168,10 @@ class AdminProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.aquaAccent,
                                 borderRadius: BorderRadius.circular(8),
@@ -185,7 +198,11 @@ class AdminProfileScreen extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                    side: BorderSide(
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -194,13 +211,36 @@ class AdminProfileScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Administrative Credentials & Security',
-                          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const Divider(height: 20),
-                        _buildRow(Icons.badge_rounded, 'Administrator ID', 'ADM-SYS-001', isDark),
-                        _buildRow(Icons.vpn_key_rounded, 'Access Level', 'Superuser / Full Operational Control', isDark),
-                        _buildRow(Icons.rule_rounded, 'Public Signup Policy', 'Enforced Citizen-Only (Staff Restricted)', isDark),
-                        _buildRow(Icons.lock_rounded, 'Session Cryptography', 'Client Session Token [SIMULATED DEMO]', isDark),
+                        _buildRow(
+                          Icons.badge_rounded,
+                          'Administrator ID',
+                          'ADM-SYS-001',
+                          isDark,
+                        ),
+                        _buildRow(
+                          Icons.vpn_key_rounded,
+                          'Access Level',
+                          'Superuser / Full Operational Control',
+                          isDark,
+                        ),
+                        _buildRow(
+                          Icons.rule_rounded,
+                          'Public Signup Policy',
+                          'Enforced Citizen-Only (Staff Restricted)',
+                          isDark,
+                        ),
+                        _buildRow(
+                          Icons.lock_rounded,
+                          'Session Cryptography',
+                          'Client Session Token [SIMULATED DEMO]',
+                          isDark,
+                        ),
                       ],
                     ),
                   ),
@@ -212,7 +252,11 @@ class AdminProfileScreen extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                    side: BorderSide(
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -221,22 +265,55 @@ class AdminProfileScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Theme & Frontend Settings',
-                          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const Divider(height: 20),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.palette_rounded, color: AppColors.primaryTeal),
-                          title: Text('Display Theme', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
-                          subtitle: Text(themeLabel, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                          leading: const Icon(
+                            Icons.palette_rounded,
+                            color: AppColors.primaryTeal,
+                          ),
+                          title: Text(
+                            'Display Theme',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          subtitle: Text(
+                            themeLabel,
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
                           trailing: const Icon(Icons.chevron_right_rounded),
                           onTap: () => _showThemePicker(context),
                         ),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.hub_rounded, color: AppColors.primaryTeal),
-                          title: Text('Django REST Framework Client', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
-                          subtitle: Text('Prepared for future DRF API endpoints and MySQL schema', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                          leading: const Icon(
+                            Icons.hub_rounded,
+                            color: AppColors.primaryTeal,
+                          ),
+                          title: Text(
+                            'Django REST Framework Client',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Prepared for future DRF API endpoints and MySQL schema',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -251,7 +328,9 @@ class AdminProfileScreen extends StatelessWidget {
                     foregroundColor: AppColors.statusMaintenance,
                     side: const BorderSide(color: AppColors.statusMaintenance),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   icon: const Icon(Icons.logout_rounded),
                   label: const Text('End Administrator Session'),
@@ -284,13 +363,18 @@ class AdminProfileScreen extends StatelessWidget {
         children: [
           Icon(icon, size: 18, color: AppColors.primaryTeal),
           const SizedBox(width: 12),
-          Text(label, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(
+            label,
+            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+          ),
           const Spacer(),
           Text(
             value,
             style: GoogleFonts.inter(
               fontSize: 12,
-              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.lightTextSecondary,
             ),
           ),
         ],

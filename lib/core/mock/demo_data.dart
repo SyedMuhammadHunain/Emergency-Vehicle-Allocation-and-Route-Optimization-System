@@ -44,11 +44,7 @@ class DemoUserAccount {
     required this.createdAt,
   });
 
-  DemoUserAccount copyWith({
-    String? name,
-    String? phone,
-    bool? isActive,
-  }) {
+  DemoUserAccount copyWith({String? name, String? phone, bool? isActive}) {
     return DemoUserAccount(
       id: id,
       name: name ?? this.name,
@@ -397,86 +393,93 @@ final List<DemoBlockedRoad> kDemoBlockedRoads = [
 ];
 
 List<DemoEmergency> buildDemoEmergencies(String userId) => [
-      DemoEmergency(
-        id: 'EM-2026-0001',
-        category: EmergencyCategory.medical,
-        status: EmergencyStatus.onScene,
-        severity: 4,
-        urgency: 5,
-        peopleAffected: 2,
-        description: 'Cardiac arrest reported at residential flat. Patient unresponsive.',
-        location: const LatLng(24.8607, 67.0105),
-        locationLabel: 'Gulshan-e-Iqbal, Block 4, Karachi',
-        reportedAt: DateTime.now().subtract(const Duration(hours: 2)),
-        reportedByUserId: userId,
-        assignedVehicle: kDemoVehicles[0],
-        allocationReason: 'Optimal DP score: Ambulance VH-001 is closest with Defibrillator equipment.',
-      ),
-      DemoEmergency(
-        id: 'EM-2026-0002',
-        category: EmergencyCategory.fire,
-        status: EmergencyStatus.enRoute,
-        severity: 5,
-        urgency: 5,
-        peopleAffected: 10,
-        description: 'Multi-story commercial warehouse fire. Thick smoke billowing.',
-        location: const LatLng(24.8700, 66.9950),
-        locationLabel: 'SITE Industrial Area, Karachi',
-        reportedAt: DateTime.now().subtract(const Duration(minutes: 45)),
-        reportedByUserId: userId,
-        assignedVehicle: kDemoVehicles[1],
-        allocationReason: 'High Severity 5: Fire Brigade VH-002 dispatched with Foam Reserve.',
-      ),
-      DemoEmergency(
-        id: 'EM-2026-0003',
-        category: EmergencyCategory.accident,
-        status: EmergencyStatus.reported,
-        severity: 3,
-        urgency: 4,
-        peopleAffected: 4,
-        description: 'Two-vehicle collision on highway. Minor to moderate injuries.',
-        location: const LatLng(24.8550, 67.0350),
-        locationLabel: 'Shahrah-e-Faisal near Baloch Colony, Karachi',
-        reportedAt: DateTime.now().subtract(const Duration(minutes: 12)),
-        reportedByUserId: userId,
-        allocationReason: 'Pending Dispatcher Review: Proposing Ambulance VH-004.',
-      ),
-    ];
+  DemoEmergency(
+    id: 'EM-2026-0001',
+    category: EmergencyCategory.medical,
+    status: EmergencyStatus.onScene,
+    severity: 4,
+    urgency: 5,
+    peopleAffected: 2,
+    description:
+        'Cardiac arrest reported at residential flat. Patient unresponsive.',
+    location: const LatLng(24.8607, 67.0105),
+    locationLabel: 'Gulshan-e-Iqbal, Block 4, Karachi',
+    reportedAt: DateTime.now().subtract(const Duration(hours: 2)),
+    reportedByUserId: userId,
+    assignedVehicle: kDemoVehicles[0],
+    allocationReason:
+        'Optimal DP score: Ambulance VH-001 is closest with Defibrillator equipment.',
+  ),
+  DemoEmergency(
+    id: 'EM-2026-0002',
+    category: EmergencyCategory.fire,
+    status: EmergencyStatus.enRoute,
+    severity: 5,
+    urgency: 5,
+    peopleAffected: 10,
+    description:
+        'Multi-story commercial warehouse fire. Thick smoke billowing.',
+    location: const LatLng(24.8700, 66.9950),
+    locationLabel: 'SITE Industrial Area, Karachi',
+    reportedAt: DateTime.now().subtract(const Duration(minutes: 45)),
+    reportedByUserId: userId,
+    assignedVehicle: kDemoVehicles[1],
+    allocationReason:
+        'High Severity 5: Fire Brigade VH-002 dispatched with Foam Reserve.',
+  ),
+  DemoEmergency(
+    id: 'EM-2026-0003',
+    category: EmergencyCategory.accident,
+    status: EmergencyStatus.reported,
+    severity: 3,
+    urgency: 4,
+    peopleAffected: 4,
+    description:
+        'Two-vehicle collision on highway. Minor to moderate injuries.',
+    location: const LatLng(24.8550, 67.0350),
+    locationLabel: 'Shahrah-e-Faisal near Baloch Colony, Karachi',
+    reportedAt: DateTime.now().subtract(const Duration(minutes: 12)),
+    reportedByUserId: userId,
+    allocationReason: 'Pending Dispatcher Review: Proposing Ambulance VH-004.',
+  ),
+];
 
 List<DemoNotification> buildDemoNotifications(String userId) => [
-      DemoNotification(
-        id: 'NOTIF-001',
-        title: 'Emergency Assigned',
-        message: 'Report EM-2026-0001 assigned to Ambulance KHI-1122-AMB. ETA: ~8 min.',
-        createdAt: DateTime.now().subtract(const Duration(hours: 1, minutes: 45)),
-        isRead: false,
-        relatedEmergencyId: 'EM-2026-0001',
-        targetRole: 'all',
-      ),
-      DemoNotification(
-        id: 'NOTIF-002',
-        title: 'Responder On Scene',
-        message: 'Ambulance KHI-1122-AMB has arrived at your reported location.',
-        createdAt: DateTime.now().subtract(const Duration(hours: 1, minutes: 20)),
-        isRead: false,
-        relatedEmergencyId: 'EM-2026-0001',
-        targetRole: 'all',
-      ),
-      DemoNotification(
-        id: 'NOTIF-003',
-        title: 'Fire Unit Dispatched',
-        message: 'Fire Truck KHI-FIRE-077 dispatched for report EM-2026-0002.',
-        createdAt: DateTime.now().subtract(const Duration(minutes: 38)),
-        isRead: true,
-        relatedEmergencyId: 'EM-2026-0002',
-        targetRole: 'dispatcher',
-      ),
-      DemoNotification(
-        id: 'NOTIF-004',
-        title: 'Road Block Alert',
-        message: 'M.A. Jinnah Road blocked near Tibet Centre. Dijkstra route will re-route.',
-        createdAt: DateTime.now().subtract(const Duration(minutes: 10)),
-        isRead: false,
-        targetRole: 'driver',
-      ),
-    ];
+  DemoNotification(
+    id: 'NOTIF-001',
+    title: 'Emergency Assigned',
+    message:
+        'Report EM-2026-0001 assigned to Ambulance KHI-1122-AMB. ETA: ~8 min.',
+    createdAt: DateTime.now().subtract(const Duration(hours: 1, minutes: 45)),
+    isRead: false,
+    relatedEmergencyId: 'EM-2026-0001',
+    targetRole: 'all',
+  ),
+  DemoNotification(
+    id: 'NOTIF-002',
+    title: 'Responder On Scene',
+    message: 'Ambulance KHI-1122-AMB has arrived at your reported location.',
+    createdAt: DateTime.now().subtract(const Duration(hours: 1, minutes: 20)),
+    isRead: false,
+    relatedEmergencyId: 'EM-2026-0001',
+    targetRole: 'all',
+  ),
+  DemoNotification(
+    id: 'NOTIF-003',
+    title: 'Fire Unit Dispatched',
+    message: 'Fire Truck KHI-FIRE-077 dispatched for report EM-2026-0002.',
+    createdAt: DateTime.now().subtract(const Duration(minutes: 38)),
+    isRead: true,
+    relatedEmergencyId: 'EM-2026-0002',
+    targetRole: 'dispatcher',
+  ),
+  DemoNotification(
+    id: 'NOTIF-004',
+    title: 'Road Block Alert',
+    message:
+        'M.A. Jinnah Road blocked near Tibet Centre. Dijkstra route will re-route.',
+    createdAt: DateTime.now().subtract(const Duration(minutes: 10)),
+    isRead: false,
+    targetRole: 'driver',
+  ),
+];

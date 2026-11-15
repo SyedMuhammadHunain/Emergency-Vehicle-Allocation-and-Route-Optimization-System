@@ -14,10 +14,7 @@ import '../../../core/widgets/feedback/status_chip.dart';
 class EmergencyDetailScreen extends StatelessWidget {
   final String emergencyId;
 
-  const EmergencyDetailScreen({
-    super.key,
-    required this.emergencyId,
-  });
+  const EmergencyDetailScreen({super.key, required this.emergencyId});
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +31,13 @@ class EmergencyDetailScreen extends StatelessWidget {
         body: Center(
           child: EmptyState(
             'Report Not Found',
-            subtitle: 'Emergency ID "$emergencyId" was not found in the local demo database.',
+            subtitle:
+                'Emergency ID "$emergencyId" was not found in the local demo database.',
             icon: Icons.error_outline_rounded,
             action: FilledButton(
-              style: FilledButton.styleFrom(backgroundColor: AppColors.primaryTeal),
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.primaryTeal,
+              ),
               onPressed: () => context.go('/role-shell'),
               child: const Text('Return to Dashboard'),
             ),
@@ -46,13 +46,12 @@ class EmergencyDetailScreen extends StatelessWidget {
       );
     }
 
-    final dateStr = DateFormat('MMMM d, y · h:mm a').format(emergency.reportedAt);
+    final dateStr = DateFormat(
+      'MMMM d, y · h:mm a',
+    ).format(emergency.reportedAt);
 
     return Scaffold(
-      appBar: ResQAppBar(
-        subtitle: emergency.id,
-        showBackButton: true,
-      ),
+      appBar: ResQAppBar(subtitle: emergency.id, showBackButton: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Center(
@@ -68,7 +67,9 @@ class EmergencyDetailScreen extends StatelessWidget {
                     color: isDark ? AppColors.darkSurface : Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
                     ),
                   ),
                   child: Column(
@@ -80,9 +81,14 @@ class EmergencyDetailScreen extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryTeal.withValues(alpha: 0.15),
+                                  color: AppColors.primaryTeal.withValues(
+                                    alpha: 0.15,
+                                  ),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
@@ -115,11 +121,18 @@ class EmergencyDetailScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          const Icon(Icons.access_time_rounded, size: 13, color: Colors.grey),
+                          const Icon(
+                            Icons.access_time_rounded,
+                            size: 13,
+                            color: Colors.grey,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             dateStr,
-                            style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -132,7 +145,10 @@ class EmergencyDetailScreen extends StatelessWidget {
                 // Status Timeline Stepper
                 Text(
                   'Dispatch Progress Timeline',
-                  style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Card(
@@ -148,7 +164,10 @@ class EmergencyDetailScreen extends StatelessWidget {
                 if (emergency.assignedVehicle != null) ...[
                   Text(
                     'Assigned Response Unit [DEMO DATA]',
-                    style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Card(
@@ -161,7 +180,9 @@ class EmergencyDetailScreen extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryTeal.withValues(alpha: 0.12),
+                                  color: AppColors.primaryTeal.withValues(
+                                    alpha: 0.12,
+                                  ),
                                   shape: BoxShape.circle,
                                 ),
                                 child: const Icon(
@@ -186,13 +207,17 @@ class EmergencyDetailScreen extends StatelessWidget {
                                       '${emergency.assignedVehicle!.type} · Unit ${emergency.assignedVehicle!.id}',
                                       style: GoogleFonts.inter(
                                         fontSize: 12,
-                                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                        color: isDark
+                                            ? AppColors.darkTextSecondary
+                                            : AppColors.lightTextSecondary,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              StatusChip(status: emergency.assignedVehicle!.status),
+                              StatusChip(
+                                status: emergency.assignedVehicle!.status,
+                              ),
                             ],
                           ),
                           const Divider(height: 24),
@@ -204,7 +229,10 @@ class EmergencyDetailScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Estimated Arrival (ETA)',
-                                    style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
+                                    style: GoogleFonts.inter(
+                                      fontSize: 11,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                   Text(
                                     '~6 - 8 Minutes [SIMULATED]',
@@ -219,12 +247,20 @@ class EmergencyDetailScreen extends StatelessWidget {
                               FilledButton.icon(
                                 style: FilledButton.styleFrom(
                                   backgroundColor: AppColors.primaryTeal,
-                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 8,
+                                  ),
                                 ),
-                                icon: const Icon(Icons.navigation_rounded, size: 16),
+                                icon: const Icon(
+                                  Icons.navigation_rounded,
+                                  size: 16,
+                                ),
                                 label: const Text('Live Tracking Map'),
                                 onPressed: () {
-                                  context.push('/citizen/tracking/${emergency.id}');
+                                  context.push(
+                                    '/citizen/tracking/${emergency.id}',
+                                  );
                                 },
                               ),
                             ],
@@ -239,7 +275,10 @@ class EmergencyDetailScreen extends StatelessWidget {
                 // Incident Location Map Thumbnail
                 Text(
                   'Reported Incident Location',
-                  style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Card(
@@ -259,7 +298,8 @@ class EmergencyDetailScreen extends StatelessWidget {
                           ),
                           children: [
                             TileLayer(
-                              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              urlTemplate:
+                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                               userAgentPackageName: 'com.resq.resq_app',
                             ),
                             MarkerLayer(
@@ -272,9 +312,16 @@ class EmergencyDetailScreen extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       color: AppColors.emergencyPink,
                                       shape: BoxShape.circle,
-                                      border: Border.all(color: Colors.white, width: 2),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2,
+                                      ),
                                     ),
-                                    child: const Icon(Icons.place_rounded, color: Colors.white, size: 22),
+                                    child: const Icon(
+                                      Icons.place_rounded,
+                                      color: Colors.white,
+                                      size: 22,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -286,12 +333,19 @@ class EmergencyDetailScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(12),
                         child: Row(
                           children: [
-                            const Icon(Icons.place_rounded, size: 16, color: AppColors.primaryTeal),
+                            const Icon(
+                              Icons.place_rounded,
+                              size: 16,
+                              color: AppColors.primaryTeal,
+                            ),
                             const SizedBox(width: 6),
                             Expanded(
                               child: Text(
                                 emergency.locationLabel,
-                                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ],
@@ -355,7 +409,11 @@ class EmergencyDetailScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.science_outlined, size: 16, color: AppColors.statusPending),
+                          const Icon(
+                            Icons.science_outlined,
+                            size: 16,
+                            color: AppColors.statusPending,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             'DEMO STATE SIMULATOR',
@@ -371,18 +429,46 @@ class EmergencyDetailScreen extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         'Simulate the dispatch status change to test UI transitions:',
-                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Wrap(
                         spacing: 8,
                         runSpacing: 6,
                         children: [
-                          _buildStateShiftButton(context, emergency, EmergencyStatus.reported, 'Reported'),
-                          _buildStateShiftButton(context, emergency, EmergencyStatus.assigned, 'Assigned'),
-                          _buildStateShiftButton(context, emergency, EmergencyStatus.enRoute, 'En Route'),
-                          _buildStateShiftButton(context, emergency, EmergencyStatus.onScene, 'On Scene'),
-                          _buildStateShiftButton(context, emergency, EmergencyStatus.resolved, 'Resolved'),
+                          _buildStateShiftButton(
+                            context,
+                            emergency,
+                            EmergencyStatus.reported,
+                            'Reported',
+                          ),
+                          _buildStateShiftButton(
+                            context,
+                            emergency,
+                            EmergencyStatus.assigned,
+                            'Assigned',
+                          ),
+                          _buildStateShiftButton(
+                            context,
+                            emergency,
+                            EmergencyStatus.enRoute,
+                            'En Route',
+                          ),
+                          _buildStateShiftButton(
+                            context,
+                            emergency,
+                            EmergencyStatus.onScene,
+                            'On Scene',
+                          ),
+                          _buildStateShiftButton(
+                            context,
+                            emergency,
+                            EmergencyStatus.resolved,
+                            'Resolved',
+                          ),
                         ],
                       ),
                     ],
@@ -419,7 +505,9 @@ class EmergencyDetailScreen extends StatelessWidget {
           return Expanded(
             child: Container(
               height: 2,
-              color: isCompleted ? AppColors.primaryTeal : Colors.grey.withValues(alpha: 0.3),
+              color: isCompleted
+                  ? AppColors.primaryTeal
+                  : Colors.grey.withValues(alpha: 0.3),
             ),
           );
         } else {
@@ -436,7 +524,9 @@ class EmergencyDetailScreen extends StatelessWidget {
                 height: 26,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isDone ? AppColors.primaryTeal : Colors.grey.withValues(alpha: 0.2),
+                  color: isDone
+                      ? AppColors.primaryTeal
+                      : Colors.grey.withValues(alpha: 0.2),
                   border: isCurrent
                       ? Border.all(color: AppColors.aquaAccent, width: 2)
                       : null,
@@ -446,7 +536,10 @@ class EmergencyDetailScreen extends StatelessWidget {
                       ? const Icon(Icons.check, size: 14, color: Colors.white)
                       : Text(
                           '${stepIndex + 1}',
-                          style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                 ),
               ),
@@ -489,13 +582,18 @@ class EmergencyDetailScreen extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             value,
-            style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           Text(
             label,
             style: GoogleFonts.inter(
               fontSize: 10,
-              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.lightTextSecondary,
             ),
           ),
         ],
@@ -523,7 +621,10 @@ class EmergencyDetailScreen extends StatelessWidget {
       onPressed: isCurrent
           ? null
           : () {
-              context.read<MockRepository>().updateEmergencyStatus(emergency.id, targetStatus);
+              context.read<MockRepository>().updateEmergencyStatus(
+                emergency.id,
+                targetStatus,
+              );
             },
     );
   }

@@ -11,10 +11,7 @@ import '../../../core/widgets/brand/resq_app_bar.dart';
 class LiveTrackingScreen extends StatefulWidget {
   final String emergencyId;
 
-  const LiveTrackingScreen({
-    super.key,
-    required this.emergencyId,
-  });
+  const LiveTrackingScreen({super.key, required this.emergencyId});
 
   @override
   State<LiveTrackingScreen> createState() => _LiveTrackingScreenState();
@@ -43,9 +40,15 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
       builder: (ctx) => AlertDialog(
         title: Row(
           children: [
-            const Icon(Icons.phone_in_talk_rounded, color: AppColors.primaryTeal),
+            const Icon(
+              Icons.phone_in_talk_rounded,
+              color: AppColors.primaryTeal,
+            ),
             const SizedBox(width: 8),
-            Text('Contact Driver', style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
+            Text(
+              'Contact Driver',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+            ),
           ],
         ),
         content: Column(
@@ -54,7 +57,10 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
           children: [
             Text(
               'Responder: ${vehicle.type} (${vehicle.licensePlate})',
-              style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600),
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
@@ -69,7 +75,9 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
             child: const Text('Cancel'),
           ),
           FilledButton.icon(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.primaryTeal),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primaryTeal,
+            ),
             icon: const Icon(Icons.call, size: 16),
             label: const Text('Initiate Call'),
             onPressed: () {
@@ -110,10 +118,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
           // 2D OpenStreetMap Map
           FlutterMap(
             mapController: _mapController,
-            options: MapOptions(
-              initialCenter: targetLoc,
-              initialZoom: 13.5,
-            ),
+            options: MapOptions(initialCenter: targetLoc, initialZoom: 13.5),
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -174,7 +179,10 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                       decoration: BoxDecoration(
                         color: AppColors.primaryDarkTeal,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.aquaAccent, width: 2.5),
+                        border: Border.all(
+                          color: AppColors.aquaAccent,
+                          width: 2.5,
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.25),
@@ -270,7 +278,9 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryTeal.withValues(alpha: 0.15),
+                            color: AppColors.primaryTeal.withValues(
+                              alpha: 0.15,
+                            ),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
@@ -295,9 +305,13 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                                   ),
                                   const SizedBox(width: 6),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: AppColors.statusAssigned.withValues(alpha: 0.15),
+                                      color: AppColors.statusAssigned
+                                          .withValues(alpha: 0.15),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
@@ -316,7 +330,9 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                                 'En Route · Karachi Traffic Normal',
                                 style: GoogleFonts.inter(
                                   fontSize: 11,
-                                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.lightTextSecondary,
                                 ),
                               ),
                             ],
@@ -328,11 +344,31 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildStat('Estimated ETA', '~6 mins', AppColors.primaryTeal),
-                        Container(width: 1, height: 28, color: Colors.grey.withValues(alpha: 0.2)),
-                        _buildStat('Distance', '2.8 km', isDark ? Colors.white : AppColors.lightTextNavy),
-                        Container(width: 1, height: 28, color: Colors.grey.withValues(alpha: 0.2)),
-                        _buildStat('Speed (Sim)', '48 km/h', isDark ? Colors.white : AppColors.lightTextNavy),
+                        _buildStat(
+                          'Estimated ETA',
+                          '~6 mins',
+                          AppColors.primaryTeal,
+                        ),
+                        Container(
+                          width: 1,
+                          height: 28,
+                          color: Colors.grey.withValues(alpha: 0.2),
+                        ),
+                        _buildStat(
+                          'Distance',
+                          '2.8 km',
+                          isDark ? Colors.white : AppColors.lightTextNavy,
+                        ),
+                        Container(
+                          width: 1,
+                          height: 28,
+                          color: Colors.grey.withValues(alpha: 0.2),
+                        ),
+                        _buildStat(
+                          'Speed (Sim)',
+                          '48 km/h',
+                          isDark ? Colors.white : AppColors.lightTextNavy,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 14),
@@ -341,15 +377,26 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                         Expanded(
                           child: OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: AppColors.primaryTeal),
+                              side: const BorderSide(
+                                color: AppColors.primaryTeal,
+                              ),
                               padding: const EdgeInsets.symmetric(vertical: 10),
                             ),
-                            icon: const Icon(Icons.phone_in_talk_rounded, size: 16, color: AppColors.primaryTeal),
+                            icon: const Icon(
+                              Icons.phone_in_talk_rounded,
+                              size: 16,
+                              color: AppColors.primaryTeal,
+                            ),
                             label: Text(
                               'Call Driver',
-                              style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primaryTeal),
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primaryTeal,
+                              ),
                             ),
-                            onPressed: () => _showDriverCallDialog(context, vehicle),
+                            onPressed: () =>
+                                _showDriverCallDialog(context, vehicle),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -362,14 +409,19 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                             icon: const Icon(Icons.refresh_rounded, size: 16),
                             label: Text(
                               'Refresh Route',
-                              style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             onPressed: () {
                               _mapController.move(targetLoc, 14.0);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   backgroundColor: AppColors.primaryTeal,
-                                  content: Text('Simulated Dijkstra shortest route recalculated.'),
+                                  content: Text(
+                                    'Simulated Dijkstra shortest route recalculated.',
+                                  ),
                                   duration: Duration(seconds: 2),
                                 ),
                               );
@@ -400,10 +452,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
           ),
         ),
         const SizedBox(height: 2),
-        Text(
-          label,
-          style: GoogleFonts.inter(fontSize: 10, color: Colors.grey),
-        ),
+        Text(label, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey)),
       ],
     );
   }

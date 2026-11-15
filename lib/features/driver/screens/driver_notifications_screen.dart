@@ -37,24 +37,38 @@ class DriverNotificationsScreen extends StatelessWidget {
                       gradient: AppColors.primaryGradient,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.notifications_active_rounded, color: Colors.white, size: 18),
+                    child: const Icon(
+                      Icons.notifications_active_rounded,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Text(
                     'Mission Alerts',
-                    style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   if (unreadCount > 0)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.emergencyPink,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         '$unreadCount new',
-                        style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white),
+                        style: GoogleFonts.inter(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                 ],
@@ -64,9 +78,14 @@ class DriverNotificationsScreen extends StatelessWidget {
                 icon: const Icon(Icons.done_all_rounded, size: 16),
                 label: Text(
                   'Mark all read',
-                  style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                style: TextButton.styleFrom(foregroundColor: AppColors.primaryTeal),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.primaryTeal,
+                ),
               ),
             ],
           ),
@@ -78,17 +97,23 @@ class DriverNotificationsScreen extends StatelessWidget {
               ? const Center(
                   child: EmptyState(
                     'No Mission Notifications',
-                    subtitle: 'No mission assignments or route alerts at this time.',
+                    subtitle:
+                        'No mission assignments or route alerts at this time.',
                     icon: Icons.notifications_off_outlined,
                   ),
                 )
               : ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
                   itemCount: notifs.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (context, idx) {
                     final item = notifs[idx];
-                    final timeStr = DateFormat('MMM d · h:mm a').format(item.createdAt);
+                    final timeStr = DateFormat(
+                      'MMM d · h:mm a',
+                    ).format(item.createdAt);
 
                     return Card(
                       elevation: item.isRead ? 0 : 2,
@@ -96,13 +121,18 @@ class DriverNotificationsScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                         side: BorderSide(
                           color: item.isRead
-                              ? (isDark ? AppColors.darkBorder : AppColors.lightBorder)
+                              ? (isDark
+                                    ? AppColors.darkBorder
+                                    : AppColors.lightBorder)
                               : AppColors.primaryTeal,
                           width: item.isRead ? 1 : 1.5,
                         ),
                       ),
                       child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         leading: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -113,7 +143,9 @@ class DriverNotificationsScreen extends StatelessWidget {
                           ),
                           child: Icon(
                             _iconForNotification(item.title),
-                            color: item.isRead ? Colors.grey : AppColors.primaryTeal,
+                            color: item.isRead
+                                ? Colors.grey
+                                : AppColors.primaryTeal,
                             size: 20,
                           ),
                         ),
@@ -125,7 +157,9 @@ class DriverNotificationsScreen extends StatelessWidget {
                                 item.title,
                                 style: GoogleFonts.poppins(
                                   fontSize: 13,
-                                  fontWeight: item.isRead ? FontWeight.w600 : FontWeight.w800,
+                                  fontWeight: item.isRead
+                                      ? FontWeight.w600
+                                      : FontWeight.w800,
                                 ),
                               ),
                             ),
@@ -150,14 +184,19 @@ class DriverNotificationsScreen extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(
                                 fontSize: 12,
-                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.lightTextSecondary,
                               ),
                             ),
                             const SizedBox(height: 6),
                             Row(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: item.targetRole == 'driver'
                                         ? Colors.orange.withValues(alpha: 0.1)
@@ -165,7 +204,9 @@ class DriverNotificationsScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
-                                    item.targetRole == 'driver' ? 'MISSION' : 'SYSTEM',
+                                    item.targetRole == 'driver'
+                                        ? 'MISSION'
+                                        : 'SYSTEM',
                                     style: GoogleFonts.inter(
                                       fontSize: 9,
                                       fontWeight: FontWeight.w700,
@@ -178,7 +219,10 @@ class DriverNotificationsScreen extends StatelessWidget {
                                 const Spacer(),
                                 Text(
                                   timeStr,
-                                  style: GoogleFonts.inter(fontSize: 10, color: Colors.grey),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 10,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),

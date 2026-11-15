@@ -145,7 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
@@ -178,10 +181,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppColors.statusMaintenance.withValues(alpha: 0.12),
+                                  color: AppColors.statusMaintenance.withValues(
+                                    alpha: 0.12,
+                                  ),
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: AppColors.statusMaintenance.withValues(alpha: 0.4),
+                                    color: AppColors.statusMaintenance
+                                        .withValues(alpha: 0.4),
                                   ),
                                 ),
                                 child: Row(
@@ -256,10 +262,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                         value: _rememberMe,
                                         activeColor: AppColors.primaryTeal,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
                                         ),
-                                        onChanged: (val) =>
-                                            setState(() => _rememberMe = val ?? true),
+                                        onChanged: (val) => setState(
+                                          () => _rememberMe = val ?? true,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 6),
@@ -270,11 +279,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ],
                                 ),
                                 TextButton(
-                                  onPressed: () => context.push('/forgot-password'),
+                                  onPressed: () =>
+                                      context.push('/forgot-password'),
                                   style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                    ),
                                     minimumSize: Size.zero,
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
                                   child: Text(
                                     'Forgot Password?',
@@ -313,10 +326,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: (isDark
-                                        ? AppColors.darkBg
-                                        : AppColors.lightBg)
-                                    .withValues(alpha: 0.8),
+                                color:
+                                    (isDark
+                                            ? AppColors.darkBg
+                                            : AppColors.lightBg)
+                                        .withValues(alpha: 0.8),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
                                   color: isDark
@@ -364,10 +378,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                     spacing: 8,
                                     runSpacing: 8,
                                     children: [
-                                      _buildDemoChip('Citizen', 'citizen@resq.com', 'Citizen123', Icons.person_rounded),
-                                      _buildDemoChip('Dispatcher', 'dispatcher@resq.com', 'Dispatch123', Icons.headset_mic_rounded),
-                                      _buildDemoChip('Driver', 'driver@resq.com', 'Driver123', Icons.directions_car_rounded),
-                                      _buildDemoChip('Admin', 'admin@resq.com', 'Admin123', Icons.admin_panel_settings_rounded),
+                                      _buildDemoChip(
+                                        'Citizen',
+                                        'citizen@resq.com',
+                                        'Citizen123',
+                                        Icons.person_rounded,
+                                      ),
+                                      _buildDemoChip(
+                                        'Dispatcher',
+                                        'dispatcher@resq.com',
+                                        'Dispatch123',
+                                        Icons.headset_mic_rounded,
+                                      ),
+                                      _buildDemoChip(
+                                        'Driver',
+                                        'driver@resq.com',
+                                        'Driver123',
+                                        Icons.directions_car_rounded,
+                                      ),
+                                      _buildDemoChip(
+                                        'Admin',
+                                        'admin@resq.com',
+                                        'Admin123',
+                                        Icons.admin_panel_settings_rounded,
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -387,17 +421,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildDemoChip(String roleName, String email, String password, IconData icon) {
+  Widget _buildDemoChip(
+    String roleName,
+    String email,
+    String password,
+    IconData icon,
+  ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return ActionChip(
       avatar: Icon(icon, size: 16, color: AppColors.primaryTeal),
       label: Text(
         '$roleName ($email)',
-        style: GoogleFonts.inter(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-        ),
+        style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600),
       ),
       backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
       side: BorderSide(

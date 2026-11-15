@@ -63,10 +63,7 @@ class GradientHeader extends StatelessWidget {
           ),
 
           // Header Content
-          Padding(
-            padding: padding,
-            child: child,
-          ),
+          Padding(padding: padding, child: child),
         ],
       ),
     );

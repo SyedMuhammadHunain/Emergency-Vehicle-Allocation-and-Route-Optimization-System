@@ -33,7 +33,8 @@ class EmergencyProvider extends ChangeNotifier {
         _isCountingDown = false;
         _isSosActive = true;
         _emergencyTriggeredTime = DateTime.now();
-        _activeEmergencyId = 'SOS-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+        _activeEmergencyId =
+            'SOS-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
         notifyListeners();
         onSosTriggered();
       }

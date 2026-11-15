@@ -21,7 +21,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Emergency Medical ID', style: TextStyle(fontWeight: FontWeight.w800)),
+        title: const Text(
+          'Emergency Medical ID',
+          style: TextStyle(fontWeight: FontWeight.w800),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_outlined),
@@ -68,7 +71,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const CircleAvatar(
                           radius: 26,
                           backgroundColor: Colors.white24,
-                          child: Icon(Icons.person, color: Colors.white, size: 30),
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 30,
+                          ),
                         ),
                         const SizedBox(width: 14),
                         Column(
@@ -95,7 +102,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     // Blood Group Badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
@@ -143,14 +153,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   runSpacing: 6,
                   children: profile.medicalConditions.map((cond) {
                     return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         cond,
-                        style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     );
                   }).toList(),
@@ -174,7 +191,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   runSpacing: 6,
                   children: profile.allergies.map((allergy) {
                     return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(12),
@@ -182,11 +202,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.warning_amber_rounded, size: 12, color: Colors.amberAccent),
+                          const Icon(
+                            Icons.warning_amber_rounded,
+                            size: 12,
+                            color: Colors.amberAccent,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             allergy,
-                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -208,7 +236,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
               ),
               IconButton(
-                icon: const Icon(Icons.person_add_alt_1_rounded, color: AppColors.primary),
+                icon: const Icon(
+                  Icons.person_add_alt_1_rounded,
+                  color: AppColors.primary,
+                ),
                 tooltip: 'Add ICE Contact',
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -243,7 +274,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     if (contact.isPrimary) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.primary.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(6),
@@ -260,7 +294,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ],
                 ),
-                subtitle: Text('${contact.relationship} • ${contact.phoneNumber}'),
+                subtitle: Text(
+                  '${contact.relationship} • ${contact.phoneNumber}',
+                ),
                 trailing: IconButton(
                   icon: const Icon(Icons.phone, color: AppColors.success),
                   onPressed: () {
@@ -301,7 +337,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 SwitchListTile(
                   title: const Text('Broadcast GPS on SOS Trigger'),
-                  subtitle: const Text('Transmits high-precision coordinates to local dispatch'),
+                  subtitle: const Text(
+                    'Transmits high-precision coordinates to local dispatch',
+                  ),
                   value: _shareGpsOnSos,
                   activeThumbColor: AppColors.primary,
                   onChanged: (val) => setState(() => _shareGpsOnSos = val),
@@ -309,7 +347,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const Divider(height: 1),
                 SwitchListTile(
                   title: const Text('Audible Emergency Siren'),
-                  subtitle: const Text('Plays loud strobe siren during distress beacon'),
+                  subtitle: const Text(
+                    'Plays loud strobe siren during distress beacon',
+                  ),
                   value: _enableSiren,
                   activeThumbColor: AppColors.primary,
                   onChanged: (val) => setState(() => _enableSiren = val),
@@ -317,7 +357,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const Divider(height: 1),
                 SwitchListTile(
                   title: const Text('Auto-Notify ICE Contacts via SMS'),
-                  subtitle: const Text('Sends distress message with map link to primary contacts'),
+                  subtitle: const Text(
+                    'Sends distress message with map link to primary contacts',
+                  ),
                   value: _notifyIceContacts,
                   activeThumbColor: AppColors.primary,
                   onChanged: (val) => setState(() => _notifyIceContacts = val),

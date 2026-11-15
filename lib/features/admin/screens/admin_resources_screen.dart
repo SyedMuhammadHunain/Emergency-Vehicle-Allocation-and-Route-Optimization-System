@@ -29,8 +29,16 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              title: Text('Add Inventory Resource', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: Text(
+                'Add Inventory Resource',
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               content: Form(
                 key: formKey,
                 child: Column(
@@ -41,16 +49,32 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                       decoration: InputDecoration(
                         labelText: 'Category',
                         isDense: true,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       items: const [
-                        DropdownMenuItem(value: 'Medical', child: Text('Medical Equipment')),
-                        DropdownMenuItem(value: 'Fire & Rescue', child: Text('Fire & Rescue Gear')),
-                        DropdownMenuItem(value: 'Fuel', child: Text('Fuel Reserves')),
-                        DropdownMenuItem(value: 'Personnel', child: Text('Emergency Personnel')),
+                        DropdownMenuItem(
+                          value: 'Medical',
+                          child: Text('Medical Equipment'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Fire & Rescue',
+                          child: Text('Fire & Rescue Gear'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Fuel',
+                          child: Text('Fuel Reserves'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Personnel',
+                          child: Text('Emergency Personnel'),
+                        ),
                       ],
                       onChanged: (val) {
-                        if (val != null) setModalState(() => selectedCategory = val);
+                        if (val != null) {
+                          setModalState(() => selectedCategory = val);
+                        }
                       },
                     ),
                     const SizedBox(height: 12),
@@ -60,9 +84,13 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                         labelText: 'Resource Name',
                         hintText: 'e.g. Oxygen Cylinder 10L',
                         isDense: true,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter resource name' : null,
+                      validator: (v) => (v == null || v.trim().isEmpty)
+                          ? 'Enter resource name'
+                          : null,
                     ),
                     const SizedBox(height: 12),
                     Row(
@@ -74,9 +102,14 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                             decoration: InputDecoration(
                               labelText: 'Initial Quantity',
                               isDense: true,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                            validator: (v) => (v == null || int.tryParse(v) == null) ? 'Enter valid number' : null,
+                            validator: (v) =>
+                                (v == null || int.tryParse(v) == null)
+                                ? 'Enter valid number'
+                                : null,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -87,7 +120,9 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                               labelText: 'Unit',
                               hintText: 'e.g. cylinders, liters',
                               isDense: true,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
                         ),
@@ -102,7 +137,9 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                   child: const Text('Cancel'),
                 ),
                 FilledButton(
-                  style: FilledButton.styleFrom(backgroundColor: AppColors.primaryTeal),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.primaryTeal,
+                  ),
                   onPressed: () {
                     if (!formKey.currentState!.validate()) return;
 
@@ -117,7 +154,9 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: AppColors.statusCompleted,
-                        content: Text('Added ${nameCtrl.text.trim()} to resource pool.'),
+                        content: Text(
+                          'Added ${nameCtrl.text.trim()} to resource pool.',
+                        ),
                       ),
                     );
                   },
@@ -149,7 +188,8 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
           ? const Center(
               child: EmptyState(
                 'No Resources Logged',
-                subtitle: 'Add equipment, fuel reserves, or crew assignments to manage inventory.',
+                subtitle:
+                    'Add equipment, fuel reserves, or crew assignments to manage inventory.',
                 icon: Icons.inventory_2_outlined,
               ),
             )
@@ -164,7 +204,11 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                   margin: const EdgeInsets.only(bottom: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                    side: BorderSide(
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -173,18 +217,24 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: (isAvailable ? AppColors.primaryTeal : Colors.red).withValues(alpha: 0.12),
+                            color:
+                                (isAvailable
+                                        ? AppColors.primaryTeal
+                                        : Colors.red)
+                                    .withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
                             item.category.contains('Medical')
                                 ? Icons.medical_services_rounded
                                 : item.category.contains('Fire')
-                                    ? Icons.fire_extinguisher_rounded
-                                    : item.category.contains('Fuel')
-                                        ? Icons.local_gas_station_rounded
-                                        : Icons.group_rounded,
-                            color: isAvailable ? AppColors.primaryTeal : Colors.red,
+                                ? Icons.fire_extinguisher_rounded
+                                : item.category.contains('Fuel')
+                                ? Icons.local_gas_station_rounded
+                                : Icons.group_rounded,
+                            color: isAvailable
+                                ? AppColors.primaryTeal
+                                : Colors.red,
                             size: 24,
                           ),
                         ),
@@ -211,7 +261,9 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                                 '${item.category} · In Stock: ${item.quantity} ${item.unit}',
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
-                                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.lightTextSecondary,
                                 ),
                               ),
                             ],
@@ -221,20 +273,36 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                         Row(
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.remove_circle_outline_rounded, size: 22),
+                              icon: const Icon(
+                                Icons.remove_circle_outline_rounded,
+                                size: 22,
+                              ),
                               tooltip: 'Decrement',
                               onPressed: item.quantity > 0
-                                  ? () => repo.updateResourceQuantity(item.id, item.quantity - 1)
+                                  ? () => repo.updateResourceQuantity(
+                                      item.id,
+                                      item.quantity - 1,
+                                    )
                                   : null,
                             ),
                             Text(
                               '${item.quantity}',
-                              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800),
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.add_circle_outline_rounded, size: 22, color: AppColors.primaryTeal),
+                              icon: const Icon(
+                                Icons.add_circle_outline_rounded,
+                                size: 22,
+                                color: AppColors.primaryTeal,
+                              ),
                               tooltip: 'Increment',
-                              onPressed: () => repo.updateResourceQuantity(item.id, item.quantity + 1),
+                              onPressed: () => repo.updateResourceQuantity(
+                                item.id,
+                                item.quantity + 1,
+                              ),
                             ),
                           ],
                         ),

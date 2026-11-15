@@ -6,11 +6,7 @@ class StatusChip extends StatelessWidget {
   final String status;
   final bool showDot;
 
-  const StatusChip({
-    super.key,
-    required this.status,
-    this.showDot = true,
-  });
+  const StatusChip({super.key, required this.status, this.showDot = true});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +17,7 @@ class StatusChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: color.withValues(alpha: 0.35),
-          width: 1,
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.35), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -33,10 +26,7 @@ class StatusChip extends StatelessWidget {
             Container(
               width: 6,
               height: 6,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: color,
-              ),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: color),
             ),
             const SizedBox(width: 6),
           ],

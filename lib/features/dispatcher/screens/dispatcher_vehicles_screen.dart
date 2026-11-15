@@ -13,14 +13,20 @@ class DispatcherVehiclesScreen extends StatefulWidget {
   const DispatcherVehiclesScreen({super.key, this.onNavigateToTab});
 
   @override
-  State<DispatcherVehiclesScreen> createState() => _DispatcherVehiclesScreenState();
+  State<DispatcherVehiclesScreen> createState() =>
+      _DispatcherVehiclesScreenState();
 }
 
 class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
   String _selectedType = 'ALL';
   String _searchQuery = '';
 
-  final List<String> _types = ['ALL', 'Ambulance', 'Fire Brigade', 'Rescue Vehicle'];
+  final List<String> _types = [
+    'ALL',
+    'Ambulance',
+    'Fire Brigade',
+    'Rescue Vehicle',
+  ];
 
   void _showVehicleDetails(BuildContext context, DemoVehicle vehicle) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -66,18 +72,33 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
               const SizedBox(height: 12),
               Text(
                 vehicle.type,
-                style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w700),
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const Divider(height: 24),
-              _buildRow('Assigned Driver', vehicle.driverName ?? 'Available Pool (Unassigned)', Icons.person_rounded),
-              _buildRow('Base Sector', 'Karachi Central Depot', Icons.store_mall_directory_rounded),
+              _buildRow(
+                'Assigned Driver',
+                vehicle.driverName ?? 'Available Pool (Unassigned)',
+                Icons.person_rounded,
+              ),
+              _buildRow(
+                'Base Sector',
+                'Karachi Central Depot',
+                Icons.store_mall_directory_rounded,
+              ),
               _buildRow(
                 'Coordinates',
                 '${vehicle.location.latitude.toStringAsFixed(4)}, ${vehicle.location.longitude.toStringAsFixed(4)} (Simulated)',
                 Icons.location_on_rounded,
               ),
               if (vehicle.assignedEmergencyId != null)
-                _buildRow('Active Mission', vehicle.assignedEmergencyId!, Icons.emergency_rounded),
+                _buildRow(
+                  'Active Mission',
+                  vehicle.assignedEmergencyId!,
+                  Icons.emergency_rounded,
+                ),
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
@@ -100,7 +121,10 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
         children: [
           Icon(icon, size: 16, color: AppColors.primaryTeal),
           const SizedBox(width: 8),
-          Text('$label: ', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600)),
+          Text(
+            '$label: ',
+            style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
           Expanded(child: Text(value, style: GoogleFonts.inter(fontSize: 12))),
         ],
       ),
@@ -113,7 +137,8 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
     final repo = context.watch<MockRepository>();
 
     final vehicles = repo.vehicles.where((v) {
-      if (_selectedType != 'ALL' && !v.type.toLowerCase().contains(_selectedType.toLowerCase())) {
+      if (_selectedType != 'ALL' &&
+          !v.type.toLowerCase().contains(_selectedType.toLowerCase())) {
         return false;
       }
       if (_searchQuery.isNotEmpty) {
@@ -149,7 +174,10 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
                     hintStyle: GoogleFonts.inter(fontSize: 13),
                     prefixIcon: const Icon(Icons.search_rounded, size: 20),
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -166,11 +194,14 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
                         child: ChoiceChip(
                           label: Text(type),
                           selected: isSelected,
-                          onSelected: (_) => setState(() => _selectedType = type),
+                          onSelected: (_) =>
+                              setState(() => _selectedType = type),
                           selectedColor: AppColors.primaryTeal,
                           labelStyle: TextStyle(
                             color: isSelected ? Colors.white : null,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
                             fontSize: 12,
                           ),
                         ),
@@ -204,7 +235,9 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                           side: BorderSide(
-                            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : AppColors.lightBorder,
                           ),
                         ),
                         child: InkWell(
@@ -217,24 +250,30 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: (isAvailable ? AppColors.statusCompleted : AppColors.statusAssigned)
-                                        .withValues(alpha: 0.15),
+                                    color:
+                                        (isAvailable
+                                                ? AppColors.statusCompleted
+                                                : AppColors.statusAssigned)
+                                            .withValues(alpha: 0.15),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
                                     v.type.contains('Fire')
                                         ? Icons.fire_truck_rounded
                                         : v.type.contains('Rescue')
-                                            ? Icons.airport_shuttle_rounded
-                                            : Icons.emergency_rounded,
-                                    color: isAvailable ? AppColors.statusCompleted : AppColors.statusAssigned,
+                                        ? Icons.airport_shuttle_rounded
+                                        : Icons.emergency_rounded,
+                                    color: isAvailable
+                                        ? AppColors.statusCompleted
+                                        : AppColors.statusAssigned,
                                     size: 26,
                                   ),
                                 ),
                                 const SizedBox(width: 14),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -246,7 +285,9 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
                                             ),
                                           ),
                                           const SizedBox(width: 8),
-                                          StatusChip(status: v.status.toUpperCase()),
+                                          StatusChip(
+                                            status: v.status.toUpperCase(),
+                                          ),
                                         ],
                                       ),
                                       const SizedBox(height: 4),
@@ -254,13 +295,18 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
                                         '${v.type} · Driver: ${v.driverName ?? "Available Pool"}',
                                         style: GoogleFonts.inter(
                                           fontSize: 12,
-                                          color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                          color: isDark
+                                              ? AppColors.darkTextSecondary
+                                              : AppColors.lightTextSecondary,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                const Icon(Icons.chevron_right_rounded, color: Colors.grey),
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: Colors.grey,
+                                ),
                               ],
                             ),
                           ),

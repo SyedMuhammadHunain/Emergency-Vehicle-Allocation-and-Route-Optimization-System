@@ -21,7 +21,11 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
   bool _isUpdating = false;
 
   Future<void> _advanceMissionStatus(
-      BuildContext context, MockRepository repo, DemoEmergency mission, String newStatus) async {
+    BuildContext context,
+    MockRepository repo,
+    DemoEmergency mission,
+    String newStatus,
+  ) async {
     setState(() => _isUpdating = true);
     await Future.delayed(const Duration(milliseconds: 300));
 
@@ -33,7 +37,9 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: AppColors.primaryTeal,
-        content: Text('Mission status advanced to $newStatus. State updated in shared repository.'),
+        content: Text(
+          'Mission status advanced to $newStatus. State updated in shared repository.',
+        ),
       ),
     );
   }
@@ -51,7 +57,8 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
         body: Center(
           child: EmptyState(
             'No Active Mission',
-            subtitle: 'You are currently standing by at Karachi Central Depot. Ready for incoming dispatch triage.',
+            subtitle:
+                'You are currently standing by at Karachi Central Depot. Ready for incoming dispatch triage.',
             icon: Icons.assignment_turned_in_rounded,
             action: widget.onNavigateToTab != null
                 ? OutlinedButton.icon(
@@ -65,7 +72,9 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
       );
     }
 
-    final isAssigned = mission.status == EmergencyStatus.assigned || mission.status == EmergencyStatus.reported;
+    final isAssigned =
+        mission.status == EmergencyStatus.assigned ||
+        mission.status == EmergencyStatus.reported;
     final isEnRoute = mission.status == EmergencyStatus.enRoute;
     final isOnScene = mission.status == EmergencyStatus.onScene;
 
@@ -100,7 +109,11 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                           color: Colors.white.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.flash_on_rounded, color: Colors.white, size: 28),
+                        child: const Icon(
+                          Icons.flash_on_rounded,
+                          color: Colors.white,
+                          size: 28,
+                        ),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
@@ -148,7 +161,9 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                     color: isDark ? AppColors.darkSurface : Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
                     ),
                   ),
                   child: Column(
@@ -156,18 +171,37 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                     children: [
                       Text(
                         'Mission Progression Workflow',
-                        style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       Row(
                         children: [
-                          _buildStepIndicator('Assigned', isDone: true, isActive: isAssigned),
+                          _buildStepIndicator(
+                            'Assigned',
+                            isDone: true,
+                            isActive: isAssigned,
+                          ),
                           _buildStepDivider(isDone: isEnRoute || isOnScene),
-                          _buildStepIndicator('En Route', isDone: isEnRoute || isOnScene, isActive: isEnRoute),
+                          _buildStepIndicator(
+                            'En Route',
+                            isDone: isEnRoute || isOnScene,
+                            isActive: isEnRoute,
+                          ),
                           _buildStepDivider(isDone: isOnScene),
-                          _buildStepIndicator('On Scene', isDone: isOnScene, isActive: isOnScene),
+                          _buildStepIndicator(
+                            'On Scene',
+                            isDone: isOnScene,
+                            isActive: isOnScene,
+                          ),
                           _buildStepDivider(isDone: false),
-                          _buildStepIndicator('Completed', isDone: false, isActive: false),
+                          _buildStepIndicator(
+                            'Completed',
+                            isDone: false,
+                            isActive: false,
+                          ),
                         ],
                       ),
                     ],
@@ -180,7 +214,11 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                    side: BorderSide(
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -189,16 +227,43 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                       children: [
                         Text(
                           'Incident Intelligence',
-                          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const Divider(height: 20),
-                        _buildInfoRow(Icons.place_rounded, 'Destination', mission.locationLabel),
-                        _buildInfoRow(Icons.description_rounded, 'Description', mission.description),
-                        _buildInfoRow(Icons.warning_amber_rounded, 'Severity / Urgency', '${mission.severity}/5 (Severity) · ${mission.urgency}/5 (Urgency)'),
-                        _buildInfoRow(Icons.people_alt_outlined, 'Casualties Reported', '${mission.peopleAffected} persons'),
-                        _buildInfoRow(Icons.local_shipping_rounded, 'Your Vehicle Unit', '${mission.assignedVehicle?.type ?? "Ambulance"} (${mission.assignedVehicle?.licensePlate ?? "KHI-1122-AMB"})'),
+                        _buildInfoRow(
+                          Icons.place_rounded,
+                          'Destination',
+                          mission.locationLabel,
+                        ),
+                        _buildInfoRow(
+                          Icons.description_rounded,
+                          'Description',
+                          mission.description,
+                        ),
+                        _buildInfoRow(
+                          Icons.warning_amber_rounded,
+                          'Severity / Urgency',
+                          '${mission.severity}/5 (Severity) · ${mission.urgency}/5 (Urgency)',
+                        ),
+                        _buildInfoRow(
+                          Icons.people_alt_outlined,
+                          'Casualties Reported',
+                          '${mission.peopleAffected} persons',
+                        ),
+                        _buildInfoRow(
+                          Icons.local_shipping_rounded,
+                          'Your Vehicle Unit',
+                          '${mission.assignedVehicle?.type ?? "Ambulance"} (${mission.assignedVehicle?.licensePlate ?? "KHI-1122-AMB"})',
+                        ),
                         if (mission.allocationReason != null)
-                          _buildInfoRow(Icons.psychology_alt_rounded, 'DP Dispatch Reason', mission.allocationReason!),
+                          _buildInfoRow(
+                            Icons.psychology_alt_rounded,
+                            'DP Dispatch Reason',
+                            mission.allocationReason!,
+                          ),
                       ],
                     ),
                   ),
@@ -211,23 +276,39 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                   color: AppColors.primaryTeal.withValues(alpha: 0.08),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: AppColors.primaryTeal.withValues(alpha: 0.3)),
+                    side: BorderSide(
+                      color: AppColors.primaryTeal.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    leading: const Icon(Icons.navigation_rounded, color: AppColors.primaryTeal, size: 30),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    leading: const Icon(
+                      Icons.navigation_rounded,
+                      color: AppColors.primaryTeal,
+                      size: 30,
+                    ),
                     title: Text(
                       'Turn-by-Turn Simulated Navigation',
-                      style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     subtitle: Text(
                       'Simulated shortest path through Karachi central grid (ETA: ~6 min)',
                       style: GoogleFonts.inter(fontSize: 11),
                     ),
                     trailing: FilledButton(
-                      style: FilledButton.styleFrom(backgroundColor: AppColors.primaryTeal),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.primaryTeal,
+                      ),
                       onPressed: () {
-                        if (widget.onNavigateToTab != null) widget.onNavigateToTab!(2);
+                        if (widget.onNavigateToTab != null) {
+                          widget.onNavigateToTab!(2);
+                        }
                       },
                       child: const Text('Open Map'),
                     ),
@@ -239,7 +320,10 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                 // Action Step Buttons (Progression Engine)
                 Text(
                   'Update Operational Status',
-                  style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 10),
 
@@ -248,48 +332,84 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.statusAssigned,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     icon: const Icon(Icons.directions_car_rounded),
                     label: Text(
-                      _isUpdating ? 'Updating Status...' : 'Depart Now: Mark as EN ROUTE',
-                      style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                      _isUpdating
+                          ? 'Updating Status...'
+                          : 'Depart Now: Mark as EN ROUTE',
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     onPressed: _isUpdating
                         ? null
-                        : () => _advanceMissionStatus(context, repo, mission, EmergencyStatus.enRoute),
+                        : () => _advanceMissionStatus(
+                            context,
+                            repo,
+                            mission,
+                            EmergencyStatus.enRoute,
+                          ),
                   )
                 else if (isEnRoute)
                   FilledButton.icon(
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.statusPending,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     icon: const Icon(Icons.place_rounded),
                     label: Text(
-                      _isUpdating ? 'Updating Status...' : 'Arrived at Destination: Mark ON SCENE',
-                      style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                      _isUpdating
+                          ? 'Updating Status...'
+                          : 'Arrived at Destination: Mark ON SCENE',
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     onPressed: _isUpdating
                         ? null
-                        : () => _advanceMissionStatus(context, repo, mission, EmergencyStatus.onScene),
+                        : () => _advanceMissionStatus(
+                            context,
+                            repo,
+                            mission,
+                            EmergencyStatus.onScene,
+                          ),
                   )
                 else if (isOnScene)
                   FilledButton.icon(
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.statusCompleted,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     icon: const Icon(Icons.task_alt_rounded),
                     label: Text(
-                      _isUpdating ? 'Updating Status...' : 'Complete Mission & Return to Standby',
-                      style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                      _isUpdating
+                          ? 'Updating Status...'
+                          : 'Complete Mission & Return to Standby',
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     onPressed: _isUpdating
                         ? null
-                        : () => _advanceMissionStatus(context, repo, mission, EmergencyStatus.resolved),
+                        : () => _advanceMissionStatus(
+                            context,
+                            repo,
+                            mission,
+                            EmergencyStatus.resolved,
+                          ),
                   ),
               ],
             ),
@@ -299,10 +419,16 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
     );
   }
 
-  Widget _buildStepIndicator(String label, {required bool isDone, required bool isActive}) {
+  Widget _buildStepIndicator(
+    String label, {
+    required bool isDone,
+    required bool isActive,
+  }) {
     final color = isDone
         ? AppColors.statusCompleted
-        : (isActive ? AppColors.primaryTeal : Colors.grey.withValues(alpha: 0.5));
+        : (isActive
+              ? AppColors.primaryTeal
+              : Colors.grey.withValues(alpha: 0.5));
 
     return Column(
       children: [
@@ -338,7 +464,9 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
       child: Container(
         height: 2,
         margin: const EdgeInsets.only(bottom: 14),
-        color: isDone ? AppColors.statusCompleted : Colors.grey.withValues(alpha: 0.3),
+        color: isDone
+            ? AppColors.statusCompleted
+            : Colors.grey.withValues(alpha: 0.3),
       ),
     );
   }
@@ -357,12 +485,19 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey),
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey,
+                  ),
                 ),
                 const SizedBox(height: 1),
                 Text(
                   value,
-                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500),
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),

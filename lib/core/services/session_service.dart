@@ -31,7 +31,9 @@ class SessionService extends ChangeNotifier {
       _isLoggedIn = prefs.getBool(_prefLoggedInKey) ?? false;
       if (_isLoggedIn) {
         _role = prefs.getString(_prefRoleKey) ?? 'citizen';
-        _userName = prefs.getString(_prefUserNameKey) ?? 'Demo ${_role![0].toUpperCase()}${_role!.substring(1)}';
+        _userName =
+            prefs.getString(_prefUserNameKey) ??
+            'Demo ${_role![0].toUpperCase()}${_role!.substring(1)}';
         _userEmail = prefs.getString(_prefUserEmailKey) ?? '';
         _authToken = prefs.getString(_prefTokenKey);
       } else {
@@ -53,9 +55,15 @@ class SessionService extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(_prefLoggedInKey, _isLoggedIn);
       if (_isLoggedIn) {
-        if (_role != null) await prefs.setString(_prefRoleKey, _role!);
-        if (_userName != null) await prefs.setString(_prefUserNameKey, _userName!);
-        if (_userEmail != null) await prefs.setString(_prefUserEmailKey, _userEmail!);
+        if (_role != null) {
+          await prefs.setString(_prefRoleKey, _role!);
+        }
+        if (_userName != null) {
+          await prefs.setString(_prefUserNameKey, _userName!);
+        }
+        if (_userEmail != null) {
+          await prefs.setString(_prefUserEmailKey, _userEmail!);
+        }
         if (_authToken != null) {
           await prefs.setString(_prefTokenKey, _authToken!);
         } else {

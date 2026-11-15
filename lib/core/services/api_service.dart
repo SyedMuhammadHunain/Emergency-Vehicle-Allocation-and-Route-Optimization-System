@@ -33,11 +33,9 @@ class ApiService {
   bool _isBackendReachable = false;
   DateTime? _lastHealthCheck;
 
-  ApiService({
-    String? baseUrl,
-    http.Client? client,
-  })  : baseUrl = baseUrl ?? AppConstants.apiBase,
-        _client = client ?? http.Client();
+  ApiService({String? baseUrl, http.Client? client})
+    : baseUrl = baseUrl ?? AppConstants.apiBase,
+      _client = client ?? http.Client();
 
   String? get authToken => _authToken;
   bool get isBackendReachable => _isBackendReachable;
@@ -62,7 +60,9 @@ class ApiService {
   }
 
   /// Checks if Django backend `/api/health/` is reachable with a short 2s timeout.
-  Future<bool> checkHealth({Duration timeout = const Duration(seconds: 2)}) async {
+  Future<bool> checkHealth({
+    Duration timeout = const Duration(seconds: 2),
+  }) async {
     final now = DateTime.now();
     if (_lastHealthCheck != null &&
         now.difference(_lastHealthCheck!) < const Duration(seconds: 5)) {
@@ -78,7 +78,9 @@ class ApiService {
     } catch (e) {
       _lastHealthCheck = now;
       _isBackendReachable = false;
-      debugPrint('ApiService.checkHealth: backend unreachable at $baseUrl ($e)');
+      debugPrint(
+        'ApiService.checkHealth: backend unreachable at $baseUrl ($e)',
+      );
       return false;
     }
   }
@@ -98,7 +100,9 @@ class ApiService {
       final bodyStr = jsonBody != null ? jsonEncode(jsonBody) : null;
 
       if (method == 'POST') {
-        return await _client.post(uri, headers: headers, body: bodyStr).timeout(timeout);
+        return await _client
+            .post(uri, headers: headers, body: bodyStr)
+            .timeout(timeout);
       }
       return await _client.get(uri, headers: headers).timeout(timeout);
     } catch (e) {
@@ -127,7 +131,11 @@ class ApiService {
 
         final account = DemoUserAccount(
           id: 'USR-${userJson['id']}',
-          name: userJson['name'] ?? userJson['full_name'] ?? userJson['username'] ?? 'User',
+          name:
+              userJson['name'] ??
+              userJson['full_name'] ??
+              userJson['username'] ??
+              'User',
           email: userJson['email'] ?? email,
           password: '',
           role: (userJson['role'] as String? ?? 'citizen').toLowerCase(),
@@ -204,7 +212,10 @@ class ApiService {
     required MockRepository mockRepo,
   }) async {
     final catUpper = category.toUpperCase();
-    final normalizedCategory = (catUpper == 'TRAFFIC' || catUpper == 'COLLISION') ? 'ACCIDENT' : catUpper;
+    final normalizedCategory =
+        (catUpper == 'TRAFFIC' || catUpper == 'COLLISION')
+        ? 'ACCIDENT'
+        : catUpper;
     final response = await _request(
       method: 'POST',
       path: AppConstants.endpointEmergencies,
@@ -223,7 +234,8 @@ class ApiService {
       },
     );
 
-    if (response != null && (response.statusCode == 201 || response.statusCode == 200)) {
+    if (response != null &&
+        (response.statusCode == 201 || response.statusCode == 200)) {
       try {
         final map = jsonDecode(response.body) as Map<String, dynamic>;
         final createdEmergency = DemoEmergency(
@@ -240,7 +252,10 @@ class ApiService {
           reportedByUserId: userId,
         );
 
-        return ApiResponse(data: createdEmergency, statusCode: response.statusCode);
+        return ApiResponse(
+          data: createdEmergency,
+          statusCode: response.statusCode,
+        );
       } catch (e) {
         debugPrint('ApiService.reportEmergency decode error: $e');
       }

@@ -45,7 +45,8 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
         body: Center(
           child: EmptyState(
             'Navigation Inactive',
-            subtitle: 'No emergency destination is currently assigned to your vehicle.',
+            subtitle:
+                'No emergency destination is currently assigned to your vehicle.',
             icon: Icons.navigation_outlined,
             action: widget.onNavigateToTab != null
                 ? OutlinedButton(
@@ -59,9 +60,13 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
     }
 
     // Default vehicle location: Karachi central
-    final vehicleLocation = mission.assignedVehicle?.location ?? const LatLng(24.8607, 67.0011);
+    final vehicleLocation =
+        mission.assignedVehicle?.location ?? const LatLng(24.8607, 67.0011);
     final emergencyLocation = mission.location;
-    final routePoints = _buildSimulatedRoute(vehicleLocation, emergencyLocation);
+    final routePoints = _buildSimulatedRoute(
+      vehicleLocation,
+      emergencyLocation,
+    );
 
     return Scaffold(
       body: Stack(
@@ -110,7 +115,10 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
                       decoration: BoxDecoration(
                         color: AppColors.primaryNavy,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.aquaAccent, width: 3),
+                        border: Border.all(
+                          color: AppColors.aquaAccent,
+                          width: 3,
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.3),
@@ -119,7 +127,11 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
                           ),
                         ],
                       ),
-                      child: const Icon(Icons.navigation_rounded, color: Colors.white, size: 24),
+                      child: const Icon(
+                        Icons.navigation_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
                   ),
 
@@ -135,13 +147,19 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
                         border: Border.all(color: Colors.white, width: 3),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.emergencyPink.withValues(alpha: 0.4),
+                            color: AppColors.emergencyPink.withValues(
+                              alpha: 0.4,
+                            ),
                             blurRadius: 10,
                             offset: const Offset(0, 3),
                           ),
                         ],
                       ),
-                      child: const Icon(Icons.place_rounded, color: Colors.white, size: 26),
+                      child: const Icon(
+                        Icons.place_rounded,
+                        color: Colors.white,
+                        size: 26,
+                      ),
                     ),
                   ),
                 ],
@@ -165,7 +183,11 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.info_outline_rounded, color: AppColors.statusPending, size: 18),
+                  const Icon(
+                    Icons.info_outline_rounded,
+                    color: AppColors.statusPending,
+                    size: 18,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -208,7 +230,11 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
                       color: AppColors.primaryTeal.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.turn_right_rounded, color: AppColors.primaryTeal, size: 26),
+                    child: const Icon(
+                      Icons.turn_right_rounded,
+                      color: AppColors.primaryTeal,
+                      size: 26,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -217,13 +243,18 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
                       children: [
                         Text(
                           'In 250m, turn right onto Main Boulevard',
-                          style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         Text(
                           'Continuing towards ${mission.locationLabel}',
                           style: GoogleFonts.inter(
                             fontSize: 11,
-                            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.lightTextSecondary,
                           ),
                         ),
                       ],
@@ -242,7 +273,9 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
               children: [
                 FloatingActionButton.small(
                   heroTag: 'driverZoomIn',
-                  backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
+                  backgroundColor: isDark
+                      ? AppColors.darkSurface
+                      : Colors.white,
                   foregroundColor: AppColors.primaryTeal,
                   onPressed: () {
                     final z = _mapController.camera.zoom + 1;
@@ -253,7 +286,9 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
                 const SizedBox(height: 8),
                 FloatingActionButton.small(
                   heroTag: 'driverZoomOut',
-                  backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
+                  backgroundColor: isDark
+                      ? AppColors.darkSurface
+                      : Colors.white,
                   foregroundColor: AppColors.primaryTeal,
                   onPressed: () {
                     final z = _mapController.camera.zoom - 1;
@@ -313,16 +348,23 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
                           ),
                           Text(
                             '2.8 km · Simulated Arrival 10:48 AM',
-                            style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
                       FilledButton.icon(
-                        style: FilledButton.styleFrom(backgroundColor: AppColors.primaryTeal),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.primaryTeal,
+                        ),
                         icon: const Icon(Icons.assignment_rounded, size: 16),
                         label: const Text('Update Status'),
                         onPressed: () {
-                          if (widget.onNavigateToTab != null) widget.onNavigateToTab!(1);
+                          if (widget.onNavigateToTab != null) {
+                            widget.onNavigateToTab!(1);
+                          }
                         },
                       ),
                     ],

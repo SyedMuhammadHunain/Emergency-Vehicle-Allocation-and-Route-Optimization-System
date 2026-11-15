@@ -34,7 +34,9 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               title: Row(
                 children: [
                   Container(
@@ -43,12 +45,19 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                       color: AppColors.primaryTeal.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.person_add_rounded, color: AppColors.primaryTeal, size: 22),
+                    child: const Icon(
+                      Icons.person_add_rounded,
+                      color: AppColors.primaryTeal,
+                      size: 22,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Text(
                     'Provision Staff Account',
-                    style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
               ),
@@ -61,7 +70,10 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                     children: [
                       Text(
                         'Create an operational staff account for Karachi dispatch or field driver responders. (Admin exclusive)',
-                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
                       ),
                       const SizedBox(height: 14),
 
@@ -71,14 +83,24 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                         decoration: InputDecoration(
                           labelText: 'Operational Role',
                           isDense: true,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                         items: const [
-                          DropdownMenuItem(value: 'dispatcher', child: Text('Dispatcher (Control Room)')),
-                          DropdownMenuItem(value: 'driver', child: Text('Driver (Field Responder)')),
+                          DropdownMenuItem(
+                            value: 'dispatcher',
+                            child: Text('Dispatcher (Control Room)'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'driver',
+                            child: Text('Driver (Field Responder)'),
+                          ),
                         ],
                         onChanged: (val) {
-                          if (val != null) setModalState(() => selectedRole = val);
+                          if (val != null) {
+                            setModalState(() => selectedRole = val);
+                          }
                         },
                       ),
                       const SizedBox(height: 12),
@@ -89,9 +111,13 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                           labelText: 'Full Name',
                           hintText: 'e.g. Asad Siddiqui',
                           isDense: true,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter staff full name' : null,
+                        validator: (v) => (v == null || v.trim().isEmpty)
+                            ? 'Enter staff full name'
+                            : null,
                       ),
                       const SizedBox(height: 12),
 
@@ -102,10 +128,14 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                           labelText: 'Official Email',
                           hintText: 'e.g. asad@resq.com',
                           isDense: true,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                         validator: (v) {
-                          if (v == null || !v.contains('@')) return 'Enter valid email address';
+                          if (v == null || !v.contains('@')) {
+                            return 'Enter valid email address';
+                          }
                           return null;
                         },
                       ),
@@ -118,7 +148,9 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                           labelText: 'Emergency Contact / Phone',
                           hintText: '+92 300 9876543',
                           isDense: true,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -129,9 +161,13 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                         decoration: InputDecoration(
                           labelText: 'Initial Password',
                           isDense: true,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        validator: (v) => (v == null || v.length < 6) ? 'Password must be >= 6 chars' : null,
+                        validator: (v) => (v == null || v.length < 6)
+                            ? 'Password must be >= 6 chars'
+                            : null,
                       ),
                     ],
                   ),
@@ -145,7 +181,9 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                 FilledButton(
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.primaryTeal,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   onPressed: () {
                     if (!formKey.currentState!.validate()) return;
@@ -185,7 +223,8 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
     final repo = context.watch<MockRepository>();
 
     final accounts = repo.accounts.where((u) {
-      if (_selectedRoleFilter != 'ALL' && u.role.toLowerCase() != _selectedRoleFilter.toLowerCase()) {
+      if (_selectedRoleFilter != 'ALL' &&
+          u.role.toLowerCase() != _selectedRoleFilter.toLowerCase()) {
         return false;
       }
       if (_searchQuery.isNotEmpty) {
@@ -228,8 +267,13 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                     hintStyle: GoogleFonts.inter(fontSize: 13),
                     prefixIcon: const Icon(Icons.search_rounded, size: 20),
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -247,11 +291,14 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                         child: ChoiceChip(
                           label: Text('${r.toUpperCase()} ($count)'),
                           selected: isSelected,
-                          onSelected: (_) => setState(() => _selectedRoleFilter = r),
+                          onSelected: (_) =>
+                              setState(() => _selectedRoleFilter = r),
                           selectedColor: AppColors.primaryTeal,
                           labelStyle: TextStyle(
                             color: isSelected ? Colors.white : null,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
                             fontSize: 11,
                           ),
                         ),
@@ -269,7 +316,8 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                 ? const Center(
                     child: EmptyState(
                       'No Accounts Found',
-                      subtitle: 'Try adjusting your search query or role filter.',
+                      subtitle:
+                          'Try adjusting your search query or role filter.',
                       icon: Icons.person_off_rounded,
                     ),
                   )
@@ -278,7 +326,8 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                     itemCount: accounts.length,
                     itemBuilder: (context, index) {
                       final user = accounts[index];
-                      final isStaff = user.role == 'dispatcher' || user.role == 'driver';
+                      final isStaff =
+                          user.role == 'dispatcher' || user.role == 'driver';
                       final isAdmin = user.role == 'admin';
 
                       return Card(
@@ -286,7 +335,9 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                           side: BorderSide(
-                            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : AppColors.lightBorder,
                           ),
                         ),
                         child: Padding(
@@ -296,27 +347,28 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: (isAdmin
-                                          ? AppColors.emergencyPink
-                                          : isStaff
+                                  color:
+                                      (isAdmin
+                                              ? AppColors.emergencyPink
+                                              : isStaff
                                               ? AppColors.primaryTeal
                                               : AppColors.aquaAccent)
-                                      .withValues(alpha: 0.15),
+                                          .withValues(alpha: 0.15),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
                                   isAdmin
                                       ? Icons.security_rounded
                                       : user.role == 'dispatcher'
-                                          ? Icons.headset_mic_rounded
-                                          : user.role == 'driver'
-                                              ? Icons.local_shipping_rounded
-                                              : Icons.person_rounded,
+                                      ? Icons.headset_mic_rounded
+                                      : user.role == 'driver'
+                                      ? Icons.local_shipping_rounded
+                                      : Icons.person_rounded,
                                   color: isAdmin
                                       ? AppColors.emergencyPink
                                       : isStaff
-                                          ? AppColors.primaryTeal
-                                          : AppColors.primaryNavy,
+                                      ? AppColors.primaryTeal
+                                      : AppColors.primaryNavy,
                                   size: 24,
                                 ),
                               ),
@@ -336,10 +388,16 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                         ),
                                         const SizedBox(width: 8),
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 6,
+                                            vertical: 2,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: AppColors.primaryTeal.withValues(alpha: 0.1),
-                                            borderRadius: BorderRadius.circular(6),
+                                            color: AppColors.primaryTeal
+                                                .withValues(alpha: 0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
                                           ),
                                           child: Text(
                                             user.role.toUpperCase(),
@@ -355,12 +413,18 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                     const SizedBox(height: 2),
                                     Text(
                                       user.email,
-                                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
                                     ),
                                     if (user.phone.isNotEmpty)
                                       Text(
                                         'Phone: ${user.phone}',
-                                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
+                                        style: GoogleFonts.inter(
+                                          fontSize: 11,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                   ],
                                 ),
@@ -375,12 +439,15 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                       style: GoogleFonts.inter(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w600,
-                                        color: user.isActive ? AppColors.statusCompleted : Colors.red,
+                                        color: user.isActive
+                                            ? AppColors.statusCompleted
+                                            : Colors.red,
                                       ),
                                     ),
                                     Switch(
                                       value: user.isActive,
-                                      activeThumbColor: AppColors.statusCompleted,
+                                      activeThumbColor:
+                                          AppColors.statusCompleted,
                                       onChanged: (val) {
                                         repo.toggleUserStatus(user.id);
                                       },

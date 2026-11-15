@@ -12,9 +12,13 @@ class AppTheme {
     final isDark = brightness == Brightness.dark;
 
     final bgColor = isDark ? AppColors.darkBg : AppColors.lightBg;
-    final surfaceColor = isDark ? AppColors.darkSurface : AppColors.lightSurface;
+    final surfaceColor = isDark
+        ? AppColors.darkSurface
+        : AppColors.lightSurface;
     final textColor = isDark ? AppColors.darkText : AppColors.lightTextNavy;
-    final secondaryTextColor = isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
+    final secondaryTextColor = isDark
+        ? AppColors.darkTextSecondary
+        : AppColors.lightTextSecondary;
     final borderColor = isDark ? AppColors.darkBorder : AppColors.lightBorder;
     final accentColor = isDark ? AppColors.darkAccent : AppColors.lightAccent;
 
@@ -23,18 +27,66 @@ class AppTheme {
     final inter = GoogleFonts.inter();
 
     final textTheme = TextTheme(
-      displayLarge: poppins.copyWith(fontSize: 32, fontWeight: FontWeight.w800, color: textColor),
-      displayMedium: poppins.copyWith(fontSize: 28, fontWeight: FontWeight.w700, color: textColor),
-      displaySmall: poppins.copyWith(fontSize: 24, fontWeight: FontWeight.w700, color: textColor),
-      headlineMedium: poppins.copyWith(fontSize: 20, fontWeight: FontWeight.w700, color: textColor),
-      headlineSmall: poppins.copyWith(fontSize: 18, fontWeight: FontWeight.w600, color: textColor),
-      titleLarge: poppins.copyWith(fontSize: 16, fontWeight: FontWeight.w600, color: textColor),
-      titleMedium: inter.copyWith(fontSize: 14, fontWeight: FontWeight.w600, color: textColor),
-      titleSmall: inter.copyWith(fontSize: 12, fontWeight: FontWeight.w600, color: secondaryTextColor),
-      bodyLarge: inter.copyWith(fontSize: 15, fontWeight: FontWeight.w400, color: textColor),
-      bodyMedium: inter.copyWith(fontSize: 13, fontWeight: FontWeight.w400, color: secondaryTextColor),
-      bodySmall: inter.copyWith(fontSize: 11, fontWeight: FontWeight.w400, color: secondaryTextColor),
-      labelLarge: inter.copyWith(fontSize: 14, fontWeight: FontWeight.w600, color: textColor),
+      displayLarge: poppins.copyWith(
+        fontSize: 32,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+      ),
+      displayMedium: poppins.copyWith(
+        fontSize: 28,
+        fontWeight: FontWeight.w700,
+        color: textColor,
+      ),
+      displaySmall: poppins.copyWith(
+        fontSize: 24,
+        fontWeight: FontWeight.w700,
+        color: textColor,
+      ),
+      headlineMedium: poppins.copyWith(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: textColor,
+      ),
+      headlineSmall: poppins.copyWith(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+      titleLarge: poppins.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+      titleMedium: inter.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+      titleSmall: inter.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        color: secondaryTextColor,
+      ),
+      bodyLarge: inter.copyWith(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: textColor,
+      ),
+      bodyMedium: inter.copyWith(
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: secondaryTextColor,
+      ),
+      bodySmall: inter.copyWith(
+        fontSize: 11,
+        fontWeight: FontWeight.w400,
+        color: secondaryTextColor,
+      ),
+      labelLarge: inter.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
     );
 
     return ThemeData(
@@ -65,7 +117,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: isDark ? const Color(0xFF162238) : Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: borderColor, width: 1),
@@ -80,10 +135,16 @@ class AppTheme {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.statusMaintenance, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.statusMaintenance,
+            width: 1.5,
+          ),
         ),
         labelStyle: TextStyle(color: secondaryTextColor, fontSize: 13),
-        hintStyle: TextStyle(color: secondaryTextColor.withValues(alpha: 0.7), fontSize: 13),
+        hintStyle: TextStyle(
+          color: secondaryTextColor.withValues(alpha: 0.7),
+          fontSize: 13,
+        ),
       ),
       dividerTheme: DividerThemeData(
         color: borderColor,

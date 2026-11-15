@@ -14,74 +14,80 @@ void main() {
       mockRepo = MockRepository();
     });
 
-    test('checkHealth returns true when backend responds with HTTP 200', () async {
-      final mockClient = MockClient((request) async {
-        if (request.url.path == '/api/health/') {
-          return http.Response(
-            jsonEncode({'status': 'ok', 'road_nodes': 900, 'vehicles': 5}),
-            200,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-        return http.Response('Not Found', 404);
-      });
+    test(
+      'checkHealth returns true when backend responds with HTTP 200',
+      () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path == '/api/health/') {
+            return http.Response(
+              jsonEncode({'status': 'ok', 'road_nodes': 900, 'vehicles': 5}),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+          return http.Response('Not Found', 404);
+        });
 
-      final apiService = ApiService(
-        baseUrl: 'http://test-server:8000',
-        client: mockClient,
-      );
+        final apiService = ApiService(
+          baseUrl: 'http://test-server:8000',
+          client: mockClient,
+        );
 
-      final isHealthy = await apiService.checkHealth();
-      expect(isHealthy, isTrue);
-      expect(apiService.isBackendReachable, isTrue);
-    });
+        final isHealthy = await apiService.checkHealth();
+        expect(isHealthy, isTrue);
+        expect(apiService.isBackendReachable, isTrue);
+      },
+    );
 
-    test('login authenticates with Django REST backend and stores auth token', () async {
-      final mockClient = MockClient((request) async {
-        if (request.url.path == '/api/health/') {
-          return http.Response(jsonEncode({'status': 'ok'}), 200);
-        }
-        if (request.url.path == '/api/auth/login/') {
-          final body = jsonDecode(request.body) as Map<String, dynamic>;
-          expect(body['email'], 'citizen@resq.com');
-          return http.Response(
-            jsonEncode({
-              'token': 'auth-token-test-12345',
-              'role': 'citizen',
-              'user': {
-                'id': 1,
-                'name': 'Demo Citizen',
-                'email': 'citizen@resq.com',
+    test(
+      'login authenticates with Django REST backend and stores auth token',
+      () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path == '/api/health/') {
+            return http.Response(jsonEncode({'status': 'ok'}), 200);
+          }
+          if (request.url.path == '/api/auth/login/') {
+            final body = jsonDecode(request.body) as Map<String, dynamic>;
+            expect(body['email'], 'citizen@resq.com');
+            return http.Response(
+              jsonEncode({
+                'token': 'auth-token-test-12345',
                 'role': 'citizen',
-                'phone': '+92 300 1234567',
-                'is_active': true,
-              },
-            }),
-            200,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-        return http.Response('Not Found', 404);
-      });
+                'user': {
+                  'id': 1,
+                  'name': 'Demo Citizen',
+                  'email': 'citizen@resq.com',
+                  'role': 'citizen',
+                  'phone': '+92 300 1234567',
+                  'is_active': true,
+                },
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+          return http.Response('Not Found', 404);
+        });
 
-      final apiService = ApiService(
-        baseUrl: 'http://test-server:8000',
-        client: mockClient,
-      );
+        final apiService = ApiService(
+          baseUrl: 'http://test-server:8000',
+          client: mockClient,
+        );
 
-      final response = await apiService.login(
-        'citizen@resq.com',
-        'Citizen123',
-        mockRepo: mockRepo,
-      );
+        final response = await apiService.login(
+          'citizen@resq.com',
+          'Citizen123',
+          mockRepo: mockRepo,
+        );
 
-      expect(response.isSuccess, isTrue);
-      expect(response.isFromFallback, isFalse);
-      expect(response.statusCode, 200);
-      expect(response.data?.email, 'citizen@resq.com');
-      expect(response.data?.name, 'Demo Citizen');
-      expect(apiService.authToken, 'auth-token-test-12345');
-    });
+        expect(response.isSuccess, isTrue);
+        expect(response.isFromFallback, isFalse);
+        expect(response.statusCode, 200);
+        expect(response.data?.email, 'citizen@resq.com');
+        expect(response.data?.name, 'Demo Citizen');
+        expect(apiService.authToken, 'auth-token-test-12345');
+      },
+    );
 
     test('getVehicles returns vehicles list from live backend', () async {
       final mockClient = MockClient((request) async {
@@ -132,85 +138,91 @@ void main() {
       expect(response.data?.first.driverName, 'Captain Tariq');
     });
 
-    test('reportEmergency posts emergency and parses created response', () async {
-      final mockClient = MockClient((request) async {
-        if (request.url.path == '/api/health/') {
-          return http.Response(jsonEncode({'status': 'ok'}), 200);
-        }
-        if (request.url.path == '/api/emergencies/') {
-          final body = jsonDecode(request.body) as Map<String, dynamic>;
-          expect(body['category'], 'ACCIDENT');
-          return http.Response(
-            jsonEncode({
-              'id': 42,
-              'code': 'EM-2026-0042',
-              'category': 'ACCIDENT',
-              'description': 'Crash at Nursery',
-              'severity': 4,
-              'urgency': 5,
-              'people_affected': 2,
-            }),
-            201,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-        return http.Response('Not Found', 404);
-      });
+    test(
+      'reportEmergency posts emergency and parses created response',
+      () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path == '/api/health/') {
+            return http.Response(jsonEncode({'status': 'ok'}), 200);
+          }
+          if (request.url.path == '/api/emergencies/') {
+            final body = jsonDecode(request.body) as Map<String, dynamic>;
+            expect(body['category'], 'ACCIDENT');
+            return http.Response(
+              jsonEncode({
+                'id': 42,
+                'code': 'EM-2026-0042',
+                'category': 'ACCIDENT',
+                'description': 'Crash at Nursery',
+                'severity': 4,
+                'urgency': 5,
+                'people_affected': 2,
+              }),
+              201,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+          return http.Response('Not Found', 404);
+        });
 
-      final apiService = ApiService(
-        baseUrl: 'http://test-server:8000',
-        client: mockClient,
-      );
+        final apiService = ApiService(
+          baseUrl: 'http://test-server:8000',
+          client: mockClient,
+        );
 
-      final response = await apiService.reportEmergency(
-        category: 'Accident',
-        severity: 4,
-        urgency: 5,
-        peopleAffected: 2,
-        description: 'Crash at Nursery',
-        location: const LatLng(24.8640, 67.0650),
-        locationLabel: 'Nursery Flyover',
-        userId: 'USR-1',
-        mockRepo: mockRepo,
-      );
+        final response = await apiService.reportEmergency(
+          category: 'Accident',
+          severity: 4,
+          urgency: 5,
+          peopleAffected: 2,
+          description: 'Crash at Nursery',
+          location: const LatLng(24.8640, 67.0650),
+          locationLabel: 'Nursery Flyover',
+          userId: 'USR-1',
+          mockRepo: mockRepo,
+        );
 
-      expect(response.isSuccess, isTrue);
-      expect(response.isFromFallback, isFalse);
-      expect(response.statusCode, 201);
-      expect(response.data?.id, 'EM-2026-0042');
-      expect(response.data?.category, 'Accident');
-    });
+        expect(response.isSuccess, isTrue);
+        expect(response.isFromFallback, isFalse);
+        expect(response.statusCode, 201);
+        expect(response.data?.id, 'EM-2026-0042');
+        expect(response.data?.category, 'Accident');
+      },
+    );
 
-    test('triggerAllocation runs Knapsack optimization and returns assignments', () async {
-      final mockClient = MockClient((request) async {
-        if (request.url.path == '/api/health/') {
-          return http.Response(jsonEncode({'status': 'ok'}), 200);
-        }
-        if (request.url.path == '/api/allocate/') {
-          return http.Response(
-            jsonEncode({
-              'id': 10,
-              'assignments': [
-                {'vehicle_id': 1, 'emergency_id': 42, 'score': 95.5}
-              ],
-            }),
-            200,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-        return http.Response('Not Found', 404);
-      });
+    test(
+      'triggerAllocation runs Knapsack optimization and returns assignments',
+      () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path == '/api/health/') {
+            return http.Response(jsonEncode({'status': 'ok'}), 200);
+          }
+          if (request.url.path == '/api/allocate/') {
+            return http.Response(
+              jsonEncode({
+                'id': 10,
+                'assignments': [
+                  {'vehicle_id': 1, 'emergency_id': 42, 'score': 95.5},
+                ],
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            );
+          }
+          return http.Response('Not Found', 404);
+        });
 
-      final apiService = ApiService(
-        baseUrl: 'http://test-server:8000',
-        client: mockClient,
-      );
+        final apiService = ApiService(
+          baseUrl: 'http://test-server:8000',
+          client: mockClient,
+        );
 
-      final response = await apiService.triggerAllocation();
-      expect(response.isSuccess, isTrue);
-      expect(response.isFromFallback, isFalse);
-      expect(response.data?['assignments'], isNotEmpty);
-    });
+        final response = await apiService.triggerAllocation();
+        expect(response.isSuccess, isTrue);
+        expect(response.isFromFallback, isFalse);
+        expect(response.data?['assignments'], isNotEmpty);
+      },
+    );
   });
 
   group('ApiService - Offline Fallback Tests', () {
@@ -237,64 +249,73 @@ void main() {
       expect(apiService.isBackendReachable, isFalse);
     });
 
-    test('login falls back to MockRepository when backend is unreachable', () async {
-      final mockClient = MockClient((request) async {
-        throw Exception('Network unreachable');
-      });
+    test(
+      'login falls back to MockRepository when backend is unreachable',
+      () async {
+        final mockClient = MockClient((request) async {
+          throw Exception('Network unreachable');
+        });
 
-      final apiService = ApiService(
-        baseUrl: 'http://offline-server:8000',
-        client: mockClient,
-      );
+        final apiService = ApiService(
+          baseUrl: 'http://offline-server:8000',
+          client: mockClient,
+        );
 
-      final response = await apiService.login(
-        'citizen@resq.com',
-        'Citizen123',
-        mockRepo: mockRepo,
-      );
+        final response = await apiService.login(
+          'citizen@resq.com',
+          'Citizen123',
+          mockRepo: mockRepo,
+        );
 
-      expect(response.isSuccess, isTrue);
-      expect(response.isFromFallback, isTrue);
-      expect(response.data?.email, 'citizen@resq.com');
-      expect(response.data?.role, 'citizen');
-    });
+        expect(response.isSuccess, isTrue);
+        expect(response.isFromFallback, isTrue);
+        expect(response.data?.email, 'citizen@resq.com');
+        expect(response.data?.role, 'citizen');
+      },
+    );
 
-    test('login with invalid credentials in offline mode returns error', () async {
-      final mockClient = MockClient((request) async {
-        throw Exception('Network unreachable');
-      });
+    test(
+      'login with invalid credentials in offline mode returns error',
+      () async {
+        final mockClient = MockClient((request) async {
+          throw Exception('Network unreachable');
+        });
 
-      final apiService = ApiService(
-        baseUrl: 'http://offline-server:8000',
-        client: mockClient,
-      );
+        final apiService = ApiService(
+          baseUrl: 'http://offline-server:8000',
+          client: mockClient,
+        );
 
-      final response = await apiService.login(
-        'wrong@resq.com',
-        'WrongPassword',
-        mockRepo: mockRepo,
-      );
+        final response = await apiService.login(
+          'wrong@resq.com',
+          'WrongPassword',
+          mockRepo: mockRepo,
+        );
 
-      expect(response.isSuccess, isFalse);
-      expect(response.isFromFallback, isTrue);
-      expect(response.error, isNotNull);
-    });
+        expect(response.isSuccess, isFalse);
+        expect(response.isFromFallback, isTrue);
+        expect(response.error, isNotNull);
+      },
+    );
 
-    test('getVehicles returns mockRepo vehicles when backend is unreachable', () async {
-      final mockClient = MockClient((request) async {
-        throw Exception('Network unreachable');
-      });
+    test(
+      'getVehicles returns mockRepo vehicles when backend is unreachable',
+      () async {
+        final mockClient = MockClient((request) async {
+          throw Exception('Network unreachable');
+        });
 
-      final apiService = ApiService(
-        baseUrl: 'http://offline-server:8000',
-        client: mockClient,
-      );
+        final apiService = ApiService(
+          baseUrl: 'http://offline-server:8000',
+          client: mockClient,
+        );
 
-      final response = await apiService.getVehicles(mockRepo: mockRepo);
-      expect(response.isSuccess, isTrue);
-      expect(response.isFromFallback, isTrue);
-      expect(response.data?.length, mockRepo.vehicles.length);
-    });
+        final response = await apiService.getVehicles(mockRepo: mockRepo);
+        expect(response.isSuccess, isTrue);
+        expect(response.isFromFallback, isTrue);
+        expect(response.data?.length, mockRepo.vehicles.length);
+      },
+    );
 
     test('reportEmergency saves to mockRepo when backend is offline', () async {
       final mockClient = MockClient((request) async {
