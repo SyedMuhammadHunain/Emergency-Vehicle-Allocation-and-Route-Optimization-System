@@ -300,15 +300,15 @@ Preserve all functional profile settings, theme pickers, identity details, and s
 **Description:** In `lib/features/admin/screens/admin_staff_screen.dart`, remove the hardcoded "Demo Citizen" entry from Staff and Users lists. Show genuine users fetched from backend / repository. When a new citizen registers, they must appear in Admin Users. When Admin creates a new Driver or Dispatcher via `Provision Staff`, save the account via backend / repository so the newly created driver can log in using their email and password. Ensure list refreshes cleanly.
 
 **Acceptance criteria:**
-- [ ] Hardcoded "Demo Citizen" (`USR-CIT-001`) removed from Admin Users/Staff list
-- [ ] Real registered citizens appear in Admin Users list
-- [ ] Admin can provision a new Driver with full name, email, phone, and initial password
-- [ ] Newly provisioned driver account is persisted and can authenticate on login
-- [ ] User list refreshes dynamically
+- [x] Hardcoded "Demo Citizen" (`USR-CIT-001`) removed from Admin Users/Staff list
+- [x] Real registered citizens appear in Admin Users list
+- [x] Admin can provision a new Driver with full name, email, phone, and initial password
+- [x] Newly provisioned driver account is persisted and can authenticate on login
+- [x] User list refreshes dynamically
 
 **Verification:**
-- [ ] Integration test: Admin creates driver -> Driver logs in -> auth succeeds
-- [ ] `flutter test` passes
+- [x] Integration test: Admin creates driver -> Driver logs in -> auth succeeds (`test/admin_users_cleanup_test.dart`)
+- [x] `flutter test` passes
 
 **Dependencies:** Task 1, Task 2, Task 3
 

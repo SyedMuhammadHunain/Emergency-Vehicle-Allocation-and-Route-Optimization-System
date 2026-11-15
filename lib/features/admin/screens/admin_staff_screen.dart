@@ -223,6 +223,12 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
     final repo = context.watch<MockRepository>();
 
     final accounts = repo.accounts.where((u) {
+      // Exclude hardcoded Demo Citizen entry from Admin panel (Requirement 11)
+      if (u.id == 'USR-CIT-001' ||
+          u.name.toLowerCase() == 'demo citizen' ||
+          u.email.toLowerCase() == 'citizen@resq.com') {
+        return false;
+      }
       if (_selectedRoleFilter != 'ALL' &&
           u.role.toLowerCase() != _selectedRoleFilter.toLowerCase()) {
         return false;
@@ -260,21 +266,33 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
             ),
             child: Column(
               children: [
-                TextField(
-                  onChanged: (val) => setState(() => _searchQuery = val),
-                  decoration: InputDecoration(
-                    hintText: 'Search accounts by name, email, or role...',
-                    hintStyle: GoogleFonts.inter(fontSize: 13),
-                    prefixIcon: const Icon(Icons.search_rounded, size: 20),
-                    isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        onChanged: (val) => setState(() => _searchQuery = val),
+                        decoration: InputDecoration(
+                          hintText: 'Search accounts by name, email, or role...',
+                          hintStyle: GoogleFonts.inter(fontSize: 13),
+                          prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    const SizedBox(width: 8),
+                    IconButton.filledTonal(
+                      icon: const Icon(Icons.refresh_rounded),
+                      tooltip: 'Refresh Accounts',
+                      onPressed: () => setState(() {}),
                     ),
-                  ),
+                  ],
                 ),
                 const SizedBox(height: 10),
                 SingleChildScrollView(
@@ -283,8 +301,19 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                     children: _roles.map((r) {
                       final isSelected = _selectedRoleFilter == r;
                       final count = r == 'ALL'
-                          ? repo.accounts.length
-                          : repo.accounts.where((a) => a.role == r).length;
+                          ? repo.accounts
+                              .where((u) =>
+                                  u.id != 'USR-CIT-001' &&
+                                  u.name.toLowerCase() != 'demo citizen' &&
+                                  u.email.toLowerCase() != 'citizen@resq.com')
+                              .length
+                          : repo.accounts
+                              .where((a) =>
+                                  a.role == r &&
+                                  a.id != 'USR-CIT-001' &&
+                                  a.name.toLowerCase() != 'demo citizen' &&
+                                  a.email.toLowerCase() != 'citizen@resq.com')
+                              .length;
 
                       return Padding(
                         padding: const EdgeInsets.only(right: 8),
@@ -312,16 +341,25 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
 
           // Users & Staff List
           Expanded(
-            child: accounts.isEmpty
-                ? const Center(
-                    child: EmptyState(
-                      'No Accounts Found',
-                      subtitle:
-                          'Try adjusting your search query or role filter.',
-                      icon: Icons.person_off_rounded,
-                    ),
-                  )
-                : ListView.builder(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                setState(() {});
+              },
+              child: accounts.isEmpty
+                  ? ListView(
+                      children: const [
+                        SizedBox(height: 100),
+                        Center(
+                          child: EmptyState(
+                            'No Accounts Found',
+                            subtitle:
+                                'Try adjusting your search query or role filter.',
+                            icon: Icons.person_off_rounded,
+                          ),
+                        ),
+                      ],
+                    )
+                  : ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: accounts.length,
                     itemBuilder: (context, index) {
@@ -461,6 +499,7 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                       );
                     },
                   ),
+            ),
           ),
         ],
       ),

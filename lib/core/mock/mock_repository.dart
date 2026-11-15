@@ -48,12 +48,31 @@ class MockRepository extends ChangeNotifier {
 
   int get unreadCount => _notifications.where((n) => !n.isRead).length;
 
-  int get totalCitizensCount =>
-      _accounts.where((u) => u.role == 'citizen').length;
+  int get totalCitizensCount => _accounts
+      .where((u) =>
+          u.role == 'citizen' &&
+          u.id != 'USR-CIT-001' &&
+          u.name.toLowerCase() != 'demo citizen' &&
+          u.email.toLowerCase() != 'citizen@resq.com')
+      .length;
   int get totalDispatchersCount =>
       _accounts.where((u) => u.role == 'dispatcher').length;
   int get totalDriversCount =>
       _accounts.where((u) => u.role == 'driver').length;
+  int get totalRegisteredUsersCount => _accounts
+      .where((u) =>
+          u.id != 'USR-CIT-001' &&
+          u.name.toLowerCase() != 'demo citizen' &&
+          u.email.toLowerCase() != 'citizen@resq.com')
+      .length;
+
+  void addAccount(DemoUserAccount account) {
+    _accounts.removeWhere(
+      (u) => u.email.toLowerCase() == account.email.toLowerCase(),
+    );
+    _accounts.add(account);
+    notifyListeners();
+  }
 
   List<DemoVehicle> get availableVehicles =>
       _vehicles.where((v) => v.status == 'Available').toList();

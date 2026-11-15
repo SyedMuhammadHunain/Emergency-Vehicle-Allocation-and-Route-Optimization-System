@@ -24,7 +24,7 @@ class AdminDashboardScreen extends StatelessWidget {
     final totalVehicles = repo.vehicles.length;
     final availableVehicles = repo.availableVehicles.length;
 
-    final totalUsers = repo.accounts.length;
+    final totalUsers = repo.totalRegisteredUsersCount;
     final citizensCount = repo.totalCitizensCount;
     final staffCount = repo.totalDispatchersCount + repo.totalDriversCount;
 
