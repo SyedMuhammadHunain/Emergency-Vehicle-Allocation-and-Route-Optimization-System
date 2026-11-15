@@ -1,49 +1,56 @@
-# Implementation Plan: Comprehensive App Connectivity & Functionality Verification
+# Implementation Plan: MySQL Backend Migration & Res-Q Showcase Landing Page Deployment
 
 ## Overview
-Decompose and execute end-to-end verification of the ResQ Emergency Route and Resource Management System. Validate database integrity (SQLite tables and seed records), backend services (Django REST APIs, Knapsack allocation, Dijkstra shortest path), Flutter API integration (`ApiService` online mode and offline `MockRepository` fallback), and full frontend functionality (`flutter test`, `flutter analyze`).
+Execute two core objectives for project evaluation and UI enhancement:
+1. Transition the Django backend from SQLite to a local MySQL database (`resq_db`), execute schema migrations, seed demonstration data (Karachi road network, users, vehicles), and verify all 57 algorithm and dispatch test cases.
+2. Reverse-engineer the design aesthetic and interactive layout of `https://guillaumezhu.com/` into a new folder, adapt and populate it with Res-Q emergency system content (removing personal portfolio navigation and unneeded pages), embed a direct "Download APK" button for `app-release.apk`, preserve the legacy landing page accessible under `/legacy/`, and deploy the complete site to `http://res-q.tech/`.
 
 ## Architecture Decisions
-- **Verification Environment**: Test backend on `http://127.0.0.1:8000` using isolated requests and automated integration test harness.
-- **Dual-State Validation**: Test both online state (live HTTP responses from Django) and offline state (graceful fallback to `MockRepository` without crashes).
-- **Automated Verification Harness**: Implement a standalone verification runner (`scripts/verify_system.sh` / `Backend/verify_api.py`) to systematically exercise all endpoints, algorithms, and Flutter test suites.
-- **Strict Read-Only Plan Phase**: No code modifications during planning; capture all tasks, acceptance criteria, and verification commands first.
+- **Database Engine**: Local MySQL server (port 3306), database `resq_db`, user `resq` with password `NewPass123` via `PyMySQL` driver in pure Python, matching `Backend/config/settings.py` and `Backend/.env.example`.
+- **Landing Page Architecture**: New folder `landing-page-showcase/` containing the reconstructed modern aesthetic (dark theme, Mona Sans & Geist typography, fluid interactive canvas/cards, emergency metrics showcase, download CTA).
+- **Legacy Preservation**: Keep the existing landing page files in `landing-page/legacy/` and configure routing in `vercel.json` so `res-q.tech/legacy/` continues to serve the original site, while `res-q.tech/` serves the new showcase.
+- **APK Distribution**: Host `app-release.apk` with Vercel headers (`application/vnd.android.package-archive`, `attachment`) so the "Download APK" button immediately downloads the package without navigation hiccups.
+- **Strict Read-Only Plan Phase**: No code modifications or destructive changes during planning; document tasks, dependencies, acceptance criteria, and verification commands.
 
 ## Task List
 
-### Phase 1: Backend & Database Integrity Verification
-- [x] Task 1: Verify SQLite database schema, seed data, and Django test suite
-- [x] Task 2: Verify live Django REST API endpoints and algorithms via HTTP checks
+### Phase 1: MySQL Database Installation & Backend Connection
+- [ ] Task 1: Provision and configure local MySQL server and `resq_db` database
+- [ ] Task 2: Configure Django environment and apply migrations & seed demo data
+- [ ] Task 3: Verify backend tests and API endpoints against MySQL
 
-### Checkpoint: Backend & Database Operational
-- [x] Database contains valid users, vehicles, Karachi road network, and active allocation
-- [x] All 57 Django algorithm and dispatch unit tests pass cleanly
-- [x] HTTP health, auth, allocation, and routing endpoints respond with HTTP 200/201
+### Checkpoint: Backend Operational on MySQL
+- [ ] Local MySQL daemon running and accepting connections for `resq` user
+- [ ] All Django migrations applied to `resq_db` and Karachi network seeded
+- [ ] 57 algorithm and dispatch tests pass with exit code 0 on MySQL
 
-### Phase 2: Frontend-to-Backend Connectivity & Fallback Verification
-- [x] Task 3: Implement dedicated Flutter `ApiService` online and fallback unit tests
-- [x] Task 4: Run full Flutter widget test suite and static analysis
+### Phase 2: Reverse-Engineer & Build Res-Q Showcase Landing Page
+- [ ] Task 4: Reverse-engineer structural layout and styling of `https://guillaumezhu.com/` in a new showcase directory
+- [ ] Task 5: Populate showcase site with Res-Q content and remove personal portfolio links/pages
+- [ ] Task 6: Implement Download APK section and wire `app-release.apk` asset and download trigger
 
-### Checkpoint: Frontend Integration Validated
-- [x] `ApiService` correctly handles live responses and falls back to `MockRepository` on error/timeout
-- [x] `flutter test` passes 100% of widget and role-based test cases
-- [x] `flutter analyze` reports zero warnings or errors
+### Checkpoint: Showcase Site Functional Locally
+- [ ] Showcase site renders with high-aesthetic styling, animations, and Res-Q content
+- [ ] "Download APK" button triggers valid download of `app-release.apk`
+- [ ] Irrelevant portfolio sections/links removed; responsive across mobile and desktop
 
-### Phase 3: Automated End-to-End System Verification
-- [x] Task 5: Build unified system verification script (`scripts/verify_system.sh`)
-- [x] Task 6: Execute full verification run and produce system connectivity status report
+### Phase 3: Legacy Preservation, Routing & Production Deployment
+- [ ] Task 7: Relocate and configure existing landing page under `/legacy/`
+- [ ] Task 8: Configure Vercel build/routes and deploy to `http://res-q.tech/`
+- [ ] Task 9: End-to-end verification of live `http://res-q.tech/` (new showcase, legacy route, APK download)
 
-### Checkpoint: Final Verification Complete
-- [x] End-to-end verification script exits code 0 with diagnostic breakdown
-- [x] System connectivity report generated at `docs/system_verification.md`
+### Checkpoint: Production Deployment Live & Verified
+- [ ] `http://res-q.tech/` loads the new showcase landing page
+- [ ] `http://res-q.tech/legacy/` serves the preserved original landing page
+- [ ] Live APK download link tested and verified functional
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Port 8000 in use or blocked | Medium | Verify port availability before starting Django dev server or specify alternate port |
-| Host address mismatch (`10.0.2.2` vs `127.0.0.1`) | High | Test `ApiService` both with `127.0.0.1:8000` (host/test runner) and confirm emulator compatibility (`10.0.2.2:8000`) |
-| Unhandled offline exception in UI | High | Verify `ApiService` catch blocks and `isFromFallback` flag across all consumer screens |
-| Accidental remote git push | High | Keep all verification scripts and artifacts local; enforce branch `Hunain` with zero push |
+| Sudo password required for installing MySQL server | High | Provide prompt and script for local installation, or accept root credentials to run `apt install mysql-server` |
+| Asset path collisions between showcase and legacy landing pages | Medium | Isolate legacy assets under `/legacy/assets/` and showcase assets under `/assets/` |
+| Large APK file payload in Vercel deployments | Low | Existing `app-release.apk` (~57MB) is already tracked and deployed on Vercel Hobby tier without issue |
+| Vercel domain alias mismatch | Medium | Verify domain alias `res-q.tech` on project `landing-page` before final production push |
 
 ## Open Questions
-- None. Requirements and architecture are fully established.
+- None. Confirmation received on user requirements and scope.
