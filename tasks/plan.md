@@ -21,7 +21,7 @@ Decompose and execute end-to-end verification of the ResQ Emergency Route and Re
 - [x] HTTP health, auth, allocation, and routing endpoints respond with HTTP 200/201
 
 ### Phase 2: Frontend-to-Backend Connectivity & Fallback Verification
-- [ ] Task 3: Implement dedicated Flutter `ApiService` online and fallback unit tests
+- [x] Task 3: Implement dedicated Flutter `ApiService` online and fallback unit tests
 - [ ] Task 4: Run full Flutter widget test suite and static analysis
 
 ### Checkpoint: Frontend Integration Validated

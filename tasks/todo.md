@@ -58,12 +58,12 @@
 **Description:** Create a comprehensive Flutter unit test suite in `test/api_service_test.dart` to verify `ApiService` against a mock HTTP client, testing both successful HTTP responses and offline network error / timeout scenarios ensuring fallback to `MockRepository`.
 
 **Acceptance criteria:**
-- [ ] `test/api_service_test.dart` created with test cases for `checkHealth`, `login`, `getVehicles`, `reportEmergency`, and `triggerAllocation`
-- [ ] Test validates online mode: parses Django REST JSON response into model objects and sets auth token
-- [ ] Test validates offline fallback: network failure triggers `isFromFallback: true` with data from `MockRepository` without raising uncaught exceptions
+- [x] `test/api_service_test.dart` created with test cases for `checkHealth`, `login`, `getVehicles`, `reportEmergency`, and `triggerAllocation`
+- [x] Test validates online mode: parses Django REST JSON response into model objects and sets auth token
+- [x] Test validates offline fallback: network failure triggers `isFromFallback: true` with data from `MockRepository` without raising uncaught exceptions
 
 **Verification:**
-- [ ] Tests pass: `flutter test test/api_service_test.dart`
+- [x] Tests pass: `flutter test test/api_service_test.dart`
 
 **Dependencies:** Task 2
 

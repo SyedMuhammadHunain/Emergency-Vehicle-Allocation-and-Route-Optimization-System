@@ -227,7 +227,7 @@ class ApiService {
       try {
         final map = jsonDecode(response.body) as Map<String, dynamic>;
         final createdEmergency = DemoEmergency(
-          id: map['tracking_number'] ?? 'EM-${map['id']}',
+          id: map['code'] ?? map['tracking_number'] ?? 'EM-${map['id']}',
           category: category,
           status: EmergencyStatus.reported,
           severity: severity,
