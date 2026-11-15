@@ -44,16 +44,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final repo = context.read<MockRepository>();
       final session = context.read<SessionService>();
 
-      // Registers as citizen in centralized mock repository
-      final account = repo.registerCitizen(
+      // Registers citizen through Django backend API with fallback
+      await session.registerCitizen(
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
-        password: _passwordController.text,
         phone: _phoneController.text.trim(),
+        password: _passwordController.text,
+        repo: repo,
       );
-
-      // Automatically saves session
-      await session.loginAsRegisteredCitizen(account);
 
       if (mounted) {
         // Direct navigation to Citizen Dashboard without re-login
@@ -62,10 +60,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
+        final cleanMsg = e.toString().replaceFirst('Exception: ', '');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: AppColors.statusMaintenance,
-            content: Text('Registration error: $e'),
+            content: Text(cleanMsg),
           ),
         );
       }

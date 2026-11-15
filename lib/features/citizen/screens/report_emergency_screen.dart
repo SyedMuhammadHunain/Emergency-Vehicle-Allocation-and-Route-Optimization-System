@@ -116,28 +116,73 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
     try {
       final repo = context.read<MockRepository>();
       final session = context.read<SessionService>();
+      final desc = _descriptionController.text.trim().isEmpty
+          ? 'Emergency report in $_selectedCategory category.'
+          : _descriptionController.text.trim();
+      final locLabel = _addressController.text.trim().isEmpty
+          ? 'Karachi Grid Location'
+          : _addressController.text.trim();
 
-      final apiService = ApiService();
-      final response = await apiService.reportEmergency(
-        category: _selectedCategory,
+      // Attempt submission via Django backend API
+      final res = await ApiService.instance.createEmergency(
+        category: _selectedCategory.toUpperCase(),
         severity: _severity,
         urgency: _urgency,
         peopleAffected: _peopleAffected,
-        description: _descriptionController.text.trim().isEmpty
-            ? 'Emergency report in $_selectedCategory category.'
-            : _descriptionController.text.trim(),
-        location: _selectedLocation,
-        locationLabel: _addressController.text.trim().isEmpty
-            ? 'Karachi Grid Location'
-            : _addressController.text.trim(),
-        userId: session.userName,
-        mockRepo: repo,
+        description: desc,
+        latitude: _selectedLocation.latitude,
+        longitude: _selectedLocation.longitude,
+        locationLabel: locLabel,
       );
 
-      final newEmergency = response.data ?? repo.emergencies.first;
+      DemoEmergency newEmergency;
+
+      if (res.isSuccess && res.data != null) {
+        final map = res.data!;
+        newEmergency = DemoEmergency(
+          id: map['code'] ?? 'EM-${map['id']}',
+          category: map['category'] ?? _selectedCategory.toUpperCase(),
+          status: map['status'] ?? EmergencyStatus.reported,
+          severity: map['severity'] ?? _severity,
+          urgency: map['urgency'] ?? _urgency,
+          peopleAffected: map['people_affected'] ?? _peopleAffected,
+          description: map['description'] ?? desc,
+          location: LatLng(
+            (map['latitude'] as num?)?.toDouble() ?? _selectedLocation.latitude,
+            (map['longitude'] as num?)?.toDouble() ?? _selectedLocation.longitude,
+          ),
+          locationLabel: map['location_label'] ?? locLabel,
+          reportedAt: DateTime.tryParse(map['created_at'] ?? '') ?? DateTime.now(),
+          reportedByUserId: session.userName,
+          allocationReason: map['allocation_reason'],
+        );
+        // Also reflect in local reactive store
+        repo.emergencies.insert(0, newEmergency);
+      } else if (res.statusCode != null && res.statusCode! > 0) {
+        // Active rejection from backend (validation or permission error)
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: AppColors.statusMaintenance,
+            content: Text(res.error ?? 'Validation failed. Please check inputs.'),
+          ),
+        );
+        return;
+      } else {
+        // Backend offline / connection failure: fallback to local repository
+        newEmergency = repo.reportEmergency(
+          category: _selectedCategory,
+          severity: _severity,
+          urgency: _urgency,
+          peopleAffected: _peopleAffected,
+          description: desc,
+          location: _selectedLocation,
+          locationLabel: locLabel,
+          userId: session.userName,
+        );
+      }
 
       if (!mounted) return;
-
       _showSuccessDialog(newEmergency);
     } finally {
       if (mounted) setState(() => _isSubmitting = false);

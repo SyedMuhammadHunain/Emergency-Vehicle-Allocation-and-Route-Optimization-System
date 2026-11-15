@@ -62,8 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (account == null) {
         setState(() {
-          _errorMessage =
-              'Invalid credentials. Please use the valid DEMO MODE credentials listed below.';
+          _errorMessage = 'Invalid email or password.';
           _isLoading = false;
         });
         return;
@@ -73,8 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
       context.go('/role-shell');
     } catch (e) {
       if (mounted) {
+        final cleanMsg = e.toString().replaceFirst('Exception: ', '');
         setState(() {
-          _errorMessage = 'Authentication error: $e';
+          _errorMessage = cleanMsg;
           _isLoading = false;
         });
       }

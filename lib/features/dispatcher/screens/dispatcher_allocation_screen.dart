@@ -455,7 +455,11 @@ class _DispatcherAllocationScreenState extends State<DispatcherAllocationScreen>
                                 final emergencyIdInt = int.tryParse(
                                   _selectedEmergency!.id.replaceAll(RegExp(r'[^0-9]'), ''),
                                 );
-                                await ApiService().triggerAllocation(emergencyId: emergencyIdInt);
+                                await ApiService.instance.assignVehicleToEmergency(
+          emergencyIdInt ?? 0,
+          int.tryParse(_selectedVehicle!.id.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
+          notes: 'Dispatched via DP allocation assistant to ${_selectedEmergency!.locationLabel}',
+        );
                               } catch (_) {}
 
                               repo.assignVehicleToEmergency(

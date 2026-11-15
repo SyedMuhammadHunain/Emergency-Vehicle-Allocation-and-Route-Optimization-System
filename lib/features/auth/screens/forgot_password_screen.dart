@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/services/api_service.dart';
 import '../../../core/widgets/brand/gradient_header.dart';
 import '../../../core/widgets/buttons/primary_gradient_button.dart';
 import '../../../core/widgets/inputs/custom_text_field.dart';
@@ -86,7 +87,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'A password recovery link has been sent to ${_emailController.text.trim()}. (Simulated Demo)',
+                                  'A password recovery link has been sent to ${_emailController.text.trim()}.',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.inter(fontSize: 13, color: Colors.grey),
                                 ),
@@ -128,9 +129,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 const SizedBox(height: 12),
                                 PrimaryGradientButton(
                                   label: 'Send Recovery Email',
-                                  onPressed: () {
-                                    if (_emailController.text.contains('@')) {
-                                      setState(() => _sent = true);
+                                  onPressed: () async {
+                                    final email = _emailController.text.trim();
+                                    if (email.contains('@')) {
+                                      final res = await ApiService.instance.forgotPassword(email);
+                                      if (!context.mounted) return;
+                                      if (res.isSuccess) {
+                                        setState(() => _sent = true);
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: AppColors.statusMaintenance,
+                                            content: Text(res.error ?? 'Failed to send recovery instructions.'),
+                                          ),
+                                        );
+                                      }
                                     }
                                   },
                                 ),
