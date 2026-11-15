@@ -116,7 +116,7 @@ class ApiService {
     final response = await _request(
       method: 'POST',
       path: '${AppConstants.endpointAuth}login/',
-      jsonBody: {'username': email, 'password': password},
+      jsonBody: {'email': email, 'username': email, 'password': password},
     );
 
     if (response != null && response.statusCode == 200) {
@@ -127,7 +127,7 @@ class ApiService {
 
         final account = DemoUserAccount(
           id: 'USR-${userJson['id']}',
-          name: userJson['full_name'] ?? userJson['username'] ?? 'User',
+          name: userJson['name'] ?? userJson['full_name'] ?? userJson['username'] ?? 'User',
           email: userJson['email'] ?? email,
           password: '',
           role: (userJson['role'] as String? ?? 'citizen').toLowerCase(),
@@ -203,18 +203,22 @@ class ApiService {
     required String userId,
     required MockRepository mockRepo,
   }) async {
+    final catUpper = category.toUpperCase();
+    final normalizedCategory = (catUpper == 'TRAFFIC' || catUpper == 'COLLISION') ? 'ACCIDENT' : catUpper;
     final response = await _request(
       method: 'POST',
       path: AppConstants.endpointEmergencies,
       jsonBody: {
         'title': '$category Emergency at $locationLabel',
         'description': description,
-        'emergency_type': category.toUpperCase(),
+        'category': normalizedCategory,
+        'emergency_type': normalizedCategory,
         'severity': severity,
         'urgency': urgency,
         'people_affected': peopleAffected,
         'latitude': location.latitude,
         'longitude': location.longitude,
+        'location_label': locationLabel,
         'address': locationLabel,
       },
     );

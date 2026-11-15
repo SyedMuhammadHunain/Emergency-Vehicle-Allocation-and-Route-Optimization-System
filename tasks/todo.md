@@ -26,15 +26,15 @@
 **Description:** Spin up a background Django dev server instance and exercise all major REST API endpoints (`/api/health/`, `/api/auth/login/`, `/api/emergencies/`, `/api/vehicles/`, `/api/allocate/`, `/api/route/`, `/api/map/`) with real HTTP requests to verify status codes, payload structures, and algorithm execution.
 
 **Acceptance criteria:**
-- [ ] `GET /api/health/` returns `{"status": "healthy"}` with HTTP 200
-- [ ] `POST /api/auth/login/` returns auth token and user profile for demo credentials
-- [ ] `GET /api/vehicles/` and `GET /api/map/` return valid JSON arrays of Karachi resources
-- [ ] `POST /api/allocate/` executes 0/1 knapsack multi-criteria optimization and returns allocation plan
-- [ ] `GET /api/route/?origin_node=...&destination_node=...` computes dynamic Dijkstra route with distance and travel time
+- [x] `GET /api/health/` returns `{"status": "healthy"}` with HTTP 200
+- [x] `POST /api/auth/login/` returns auth token and user profile for demo credentials
+- [x] `GET /api/vehicles/` and `GET /api/map/` return valid JSON arrays of Karachi resources
+- [x] `POST /api/allocate/` executes 0/1 knapsack multi-criteria optimization and returns allocation plan
+- [x] `GET /api/route/?origin_node=...&destination_node=...` computes dynamic Dijkstra route with distance and travel time
 
 **Verification:**
-- [ ] Script execution: `cd Backend && .venv/bin/python -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8000/api/health/').read().decode())"`
-- [ ] Focused API verification script executing login, allocation, and route calculation
+- [x] Script execution: `cd Backend && .venv/bin/python -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8000/api/health/').read().decode())"`
+- [x] Focused API verification script executing login, allocation, and route calculation
 
 **Dependencies:** Task 1
 
@@ -46,10 +46,10 @@
 ---
 
 ## Checkpoint: Backend & Database Operational
-- [ ] Database contains valid users, vehicles, Karachi road network, and active allocation
-- [ ] All 57 Django algorithm and dispatch unit tests pass cleanly
-- [ ] HTTP health, auth, allocation, and routing endpoints respond with HTTP 200/201
-- [ ] Review backend results before proceeding to frontend verification
+- [x] Database contains valid users, vehicles, Karachi road network, and active allocation
+- [x] All 57 Django algorithm and dispatch unit tests pass cleanly
+- [x] HTTP health, auth, allocation, and routing endpoints respond with HTTP 200/201
+- [x] Review backend results before proceeding to frontend verification
 
 ---
 

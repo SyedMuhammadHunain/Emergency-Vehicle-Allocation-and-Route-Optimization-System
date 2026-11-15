@@ -13,12 +13,12 @@ Decompose and execute end-to-end verification of the ResQ Emergency Route and Re
 
 ### Phase 1: Backend & Database Integrity Verification
 - [x] Task 1: Verify SQLite database schema, seed data, and Django test suite
-- [ ] Task 2: Verify live Django REST API endpoints and algorithms via HTTP checks
+- [x] Task 2: Verify live Django REST API endpoints and algorithms via HTTP checks
 
 ### Checkpoint: Backend & Database Operational
-- [ ] Database contains valid users, vehicles, Karachi road network, and active allocation
-- [ ] All 57 Django algorithm and dispatch unit tests pass cleanly
-- [ ] HTTP health, auth, allocation, and routing endpoints respond with HTTP 200/201
+- [x] Database contains valid users, vehicles, Karachi road network, and active allocation
+- [x] All 57 Django algorithm and dispatch unit tests pass cleanly
+- [x] HTTP health, auth, allocation, and routing endpoints respond with HTTP 200/201
 
 ### Phase 2: Frontend-to-Backend Connectivity & Fallback Verification
 - [ ] Task 3: Implement dedicated Flutter `ApiService` online and fallback unit tests
