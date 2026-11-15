@@ -47,26 +47,26 @@ Implement all 15 requirements to transition ResQ from a prototype to a productio
 - [x] All 6 map screens have working zoom in (+) and zoom out (-) controls
 
 ### Phase 4: Admin Management & Profile Technical Cleanups
-- [ ] Task 10: Remove prototype and technical architecture labels from Dispatcher, Driver, and Admin profiles
-- [ ] Task 11: Admin Staff and User Management: remove hardcoded Demo Citizen, bind live backend/registered users, enable driver account creation
-- [ ] Task 12: Backend API and Data Consistency: verify endpoints (`ApiService` <-> Django REST API) across all 12 operational flows
+- [x] Task 10: Remove prototype and technical architecture labels from Dispatcher, Driver, and Admin profiles
+- [x] Task 11: Admin Staff and User Management: remove hardcoded Demo Citizen, bind live backend/registered users, enable driver account creation
+- [x] Task 12: Backend API and Data Consistency: verify endpoints (`ApiService` <-> Django REST API) across all 12 operational flows
 
 ### Checkpoint: Admin Management & Backend Verification Complete
-- [ ] Dispatcher, Driver, and Admin profiles have all prototype/architecture labels removed
-- [ ] Admin panel shows genuine registered citizens and staff without hardcoded "Demo Citizen"
-- [ ] Admin can create driver accounts that successfully authenticate
-- [ ] All 12 backend flows verified against Django REST endpoints with proper error handling
+- [x] Dispatcher, Driver, and Admin profiles have all prototype/architecture labels removed
+- [x] Admin panel shows genuine registered citizens and staff without hardcoded "Demo Citizen"
+- [x] Admin can create driver accounts that successfully authenticate
+- [x] All 12 backend flows verified against Django REST endpoints with proper error handling
 
 ### Phase 5: Code Quality & Full Build/Test Verification
-- [ ] Task 13: Code quality check, type safety, `dart format lib`, `flutter analyze`, and unit/widget test suite execution (`flutter test`)
-- [ ] Task 14: Web build verification (`flutter build web`) and compilation audit
-- [ ] Task 15: Final comprehensive completion report covering all 15 requirements
+- [x] Task 13: Code quality check, type safety, `dart format lib`, `flutter analyze`, and unit/widget test suite execution (`flutter test`)
+- [x] Task 14: Web build verification (`flutter build web`) and compilation audit
+- [x] Task 15: Final comprehensive completion report covering all 15 requirements
 
 ### Checkpoint: Final Release Ready
-- [ ] `flutter analyze` passes with zero issues
-- [ ] `flutter test` executes cleanly
-- [ ] `flutter build web` compiles successfully
-- [ ] All 15 teammate requirements satisfied and documented
+- [x] `flutter analyze` passes with zero issues
+- [x] `flutter test` executes cleanly (72/72 tests passing)
+- [x] `flutter build web` compiles successfully (`build/web` created)
+- [x] All 15 teammate requirements satisfied and documented
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |
