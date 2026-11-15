@@ -655,14 +655,6 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                   onPressed: _submitReport,
                 ),
 
-                const SizedBox(height: 12),
-
-                Center(
-                  child: Text(
-                    '⚠️ ResQ Frontend Prototype · Simulated Karachi Dispatch Queue',
-                    style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
-                  ),
-                ),
                 const SizedBox(height: 20),
               ],
             ),

@@ -89,15 +89,15 @@
 **Description:** In `lib/features/citizen/screens/citizen_profile_screen.dart`, bind the user identity card to actual registered data (`session.userName`, `session.userEmail`, `session.userPhone`). Remove hardcoded demo email, demo phone, and demo badge. In Medical ID & Emergency Contacts, eliminate all hardcoded/fictional demo data (blood type, allergies, contacts, preferred hospital). Default unentered fields to empty/not-provided states. Provide interactive dialogs to allow citizens to input, edit, and save their actual medical details and emergency contacts.
 
 **Acceptance criteria:**
-- [ ] Citizen profile displays actual registered name, email, and phone number
-- [ ] No hardcoded `'citizen@resq.gov.pk · +92 300 1234567'` or `'VERIFIED CITIZEN (DEMO)'`
-- [ ] Medical ID and Emergency Contact fields default to empty/unspecified when not entered
-- [ ] User can edit and save medical details and emergency contacts; saved data persists and displays on return
-- [ ] Zero fictional demo medical data injected
+- [x] Citizen profile displays actual registered name, email, and phone number
+- [x] No hardcoded `'citizen@resq.gov.pk · +92 300 1234567'` or `'VERIFIED CITIZEN (DEMO)'`
+- [x] Medical ID and Emergency Contact fields default to empty/unspecified when not entered
+- [x] User can edit and save medical details and emergency contacts; saved data persists and displays on return
+- [x] Zero fictional demo medical data injected
 
 **Verification:**
-- [ ] Widget test verifying empty initial medical state and proper binding of registered user data
-- [ ] Test updating medical details and verifying persistent display
+- [x] Widget test verifying empty initial medical state and proper binding of registered user data (`test/citizen_profile_test.dart`)
+- [x] Test updating medical details and verifying persistent display (`test/citizen_profile_test.dart`)
 
 **Dependencies:** Task 3
 
@@ -116,15 +116,15 @@
 **Description:** Make the "Push Notifications" and "Location Permission" options in `lib/features/citizen/screens/citizen_profile_screen.dart` fully functional using `permission_handler` and `geolocator`. Query current permission status on mount, allow user to toggle/request permissions on tap, reflect real status in UI (granted, denied, permanently denied), and open app settings when permanently denied or explain clearly when unsupported.
 
 **Acceptance criteria:**
-- [ ] "Push Notifications" tile is clickable, requests permission, and reflects true system status
-- [ ] Switch does not show "Enabled" unless notifications are genuinely granted
-- [ ] "Location Permission" tile is clickable, triggers device location permission request via `geolocator`/`permission_handler`, and reflects real status
-- [ ] Handles denied and permanently denied states with helpful messages and `openAppSettings()`
-- [ ] Gracefully handles web/desktop environments without throwing unhandled platform exceptions
+- [x] "Push Notifications" tile is clickable, requests permission, and reflects true system status
+- [x] Switch does not show "Enabled" unless notifications are genuinely granted
+- [x] "Location Permission" tile is clickable, triggers device location permission request via `geolocator`/`permission_handler`, and reflects real status
+- [x] Handles denied and permanently denied states with helpful messages and `openAppSettings()`
+- [x] Gracefully handles web/desktop environments without throwing unhandled platform exceptions
 
 **Verification:**
-- [ ] Widget test checking permission state resolution
-- [ ] Platform permission checks pass without crashes on Linux / web
+- [x] Widget test checking permission state resolution (`test/citizen_permissions_test.dart`)
+- [x] Platform permission checks pass without crashes on Linux / web
 
 **Dependencies:** Task 4
 
@@ -141,14 +141,14 @@
 **Description:** Remove the label `Frontend Prototype v1.0.0 (Phase 2)` from `lib/features/citizen/screens/citizen_profile_screen.dart` and `⚠️ ResQ Frontend Prototype · Simulated Karachi Dispatch Queue` from `lib/features/citizen/screens/report_emergency_screen.dart`. Clean any other prototype disclaimer labels at the end of citizen/user pages while strictly preserving titles, descriptions, and functional UI content.
 
 **Acceptance criteria:**
-- [ ] `Frontend Prototype` text completely removed from Citizen Profile screen
-- [ ] `Frontend Prototype` text completely removed from Report Emergency screen
-- [ ] No remaining `Frontend Prototype` labels on citizen/user screens
-- [ ] Useful info, app version, and surrounding UI preserved intact
+- [x] `Frontend Prototype` text completely removed from Citizen Profile screen
+- [x] `Frontend Prototype` text completely removed from Report Emergency screen
+- [x] No remaining `Frontend Prototype` labels on citizen/user screens
+- [x] Useful info, app version, and surrounding UI preserved intact
 
 **Verification:**
-- [ ] `grep -rn "Frontend Prototype" lib/features/citizen/` returns zero occurrences
-- [ ] `flutter analyze` clean
+- [x] `grep -rn "Frontend Prototype" lib/features/citizen/` returns zero occurrences
+- [x] `flutter analyze` clean
 
 **Dependencies:** None
 
@@ -161,10 +161,10 @@
 ---
 
 ## Checkpoint: Citizen Profile & Permissions Functional
-- [ ] Citizen Profile displays actual registered name, email, and contact number
-- [ ] Medical ID and emergency contacts show empty states unless entered and saved by user
-- [ ] Push notification and location permission tiles reflect real device status and handle requests/denials
-- [ ] "Frontend Prototype" labels removed from Citizen screens
+- [x] Citizen Profile displays actual registered name, email, and contact number
+- [x] Medical ID and emergency contacts show empty states unless entered and saved by user
+- [x] Push notification and location permission tiles reflect real device status and handle requests/denials
+- [x] "Frontend Prototype" labels removed from Citizen screens
 
 ---
 

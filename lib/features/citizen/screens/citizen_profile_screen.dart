@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/mock/mock_repository.dart';
@@ -9,8 +12,288 @@ import '../../../core/theme/theme_controller.dart';
 import '../../../core/widgets/brand/resq_wordmark.dart';
 import '../../../data/models/user_profile_model.dart';
 
-class CitizenProfileScreen extends StatelessWidget {
+class CitizenProfileScreen extends StatefulWidget {
   const CitizenProfileScreen({super.key});
+
+  @override
+  State<CitizenProfileScreen> createState() => _CitizenProfileScreenState();
+}
+
+class _CitizenProfileScreenState extends State<CitizenProfileScreen> {
+  bool _notificationsEnabled = false;
+  String _notificationSubtitle = 'Disabled · Tap to enable';
+
+  bool _locationGranted = false;
+  String _locationSubtitle = 'Permission not granted · Tap to enable';
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermissions();
+  }
+
+  Future<void> _checkPermissions() async {
+    await _checkNotificationPermission();
+    await _checkLocationPermission();
+  }
+
+  Future<void> _checkNotificationPermission() async {
+    try {
+      if (kIsWeb) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _notificationsEnabled = false;
+          _notificationSubtitle = 'Browser-managed on Web';
+        });
+        return;
+      }
+      final status = await Permission.notification.status;
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _notificationsEnabled = status.isGranted;
+        if (status.isGranted) {
+          _notificationSubtitle = 'Enabled for dispatch alerts';
+        } else if (status.isPermanentlyDenied) {
+          _notificationSubtitle = 'Permanently denied · Open Settings';
+        } else {
+          _notificationSubtitle = 'Disabled · Tap to enable';
+        }
+      });
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _notificationsEnabled = false;
+        _notificationSubtitle = 'Disabled · Tap to enable';
+      });
+    }
+  }
+
+  Future<void> _toggleNotificationPermission(bool targetValue) async {
+    if (kIsWeb) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Push notifications are managed in browser site settings on Web.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    try {
+      if (targetValue) {
+        final status = await Permission.notification.request();
+        if (!mounted) {
+          return;
+        }
+        if (status.isGranted) {
+          setState(() {
+            _notificationsEnabled = true;
+            _notificationSubtitle = 'Enabled for dispatch alerts';
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: AppColors.statusCompleted,
+              content: Text('Push notifications enabled for dispatch alerts.'),
+            ),
+          );
+        } else if (status.isPermanentlyDenied) {
+          setState(() {
+            _notificationsEnabled = false;
+            _notificationSubtitle = 'Permanently denied · Open Settings';
+          });
+          _showSettingsDialog(
+            title: 'Push Notifications Denied',
+            message:
+                'Notifications are permanently disabled. Please allow notifications in System Settings to receive emergency dispatch alerts.',
+          );
+        } else {
+          setState(() {
+            _notificationsEnabled = false;
+            _notificationSubtitle = 'Disabled · Tap to enable';
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: AppColors.statusMaintenance,
+              content: Text('Notification permission was not granted.'),
+            ),
+          );
+        }
+      } else {
+        setState(() {
+          _notificationsEnabled = false;
+          _notificationSubtitle = 'Disabled · Tap to enable';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Push notifications disabled in ResQ.')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Notification permission error: $e')),
+      );
+    }
+  }
+
+  Future<void> _checkLocationPermission() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _locationGranted = false;
+          _locationSubtitle = 'Location service disabled on device';
+        });
+        return;
+      }
+
+      final permission = await Geolocator.checkPermission();
+      if (!mounted) {
+        return;
+      }
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        setState(() {
+          _locationGranted = true;
+          _locationSubtitle = 'Device GPS active for Karachi region';
+        });
+      } else if (permission == LocationPermission.deniedForever) {
+        setState(() {
+          _locationGranted = false;
+          _locationSubtitle = 'Permanently denied · Tap to open settings';
+        });
+      } else {
+        setState(() {
+          _locationGranted = false;
+          _locationSubtitle = 'Permission denied · Tap to allow GPS';
+        });
+      }
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _locationGranted = false;
+        _locationSubtitle = 'Location unavailable on this device';
+      });
+    }
+  }
+
+  Future<void> _requestLocationPermission() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        if (!mounted) {
+          return;
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: AppColors.statusMaintenance,
+            content: Text(
+              'Location services are disabled on this device. Please turn on device GPS.',
+            ),
+          ),
+        );
+        return;
+      }
+
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.deniedForever) {
+        _showSettingsDialog(
+          title: 'Location Permission Denied',
+          message:
+              'Location permission is permanently denied. Please allow location access in App Settings to optimize emergency routing.',
+        );
+        return;
+      }
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (!mounted) {
+        return;
+      }
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        setState(() {
+          _locationGranted = true;
+          _locationSubtitle = 'Device GPS active for Karachi region';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: AppColors.statusCompleted,
+            content: Text('Location permission granted. Device GPS active.'),
+          ),
+        );
+      } else if (permission == LocationPermission.deniedForever) {
+        setState(() {
+          _locationGranted = false;
+          _locationSubtitle = 'Permanently denied · Tap to open settings';
+        });
+        _showSettingsDialog(
+          title: 'Location Permission Denied',
+          message:
+              'Location permission is permanently denied. Please allow location access in App Settings.',
+        );
+      } else {
+        setState(() {
+          _locationGranted = false;
+          _locationSubtitle = 'Permission denied · Tap to allow GPS';
+        });
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Location permission error: $e')));
+    }
+  }
+
+  void _showSettingsDialog({required String title, required String message}) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          title,
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+        ),
+        content: Text(message, style: GoogleFonts.inter(fontSize: 13)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primaryTeal,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await openAppSettings();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _showThemePicker(BuildContext context) {
     final theme = context.read<ThemeController>();
@@ -554,13 +837,16 @@ class CitizenProfileScreen extends StatelessWidget {
                           ),
                         ),
                         subtitle: Text(
-                          'Enabled for dispatch alerts',
+                          _notificationSubtitle,
                           style: GoogleFonts.inter(fontSize: 12),
                         ),
                         trailing: Switch(
-                          value: true,
+                          value: _notificationsEnabled,
                           activeThumbColor: AppColors.primaryTeal,
-                          onChanged: (_) {},
+                          onChanged: _toggleNotificationPermission,
+                        ),
+                        onTap: () => _toggleNotificationPermission(
+                          !_notificationsEnabled,
                         ),
                       ),
                       const Divider(height: 1),
@@ -577,14 +863,19 @@ class CitizenProfileScreen extends StatelessWidget {
                           ),
                         ),
                         subtitle: Text(
-                          'Device GPS active for Karachi region',
+                          _locationSubtitle,
                           style: GoogleFonts.inter(fontSize: 12),
                         ),
-                        trailing: const Icon(
-                          Icons.check_circle_rounded,
-                          color: AppColors.statusCompleted,
+                        trailing: Icon(
+                          _locationGranted
+                              ? Icons.check_circle_rounded
+                              : Icons.warning_amber_rounded,
+                          color: _locationGranted
+                              ? AppColors.statusCompleted
+                              : AppColors.statusMaintenance,
                           size: 20,
                         ),
+                        onTap: _requestLocationPermission,
                       ),
                     ],
                   ),
@@ -605,14 +896,6 @@ class CitizenProfileScreen extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Frontend Prototype v1.0.0 (Phase 2)',
-                          style: GoogleFonts.inter(
-                            fontSize: 11,
-                            color: Colors.grey,
                           ),
                         ),
                       ],

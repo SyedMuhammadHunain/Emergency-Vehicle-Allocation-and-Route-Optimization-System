@@ -25,15 +25,15 @@ Implement all 15 requirements to transition ResQ from a prototype to a productio
 - [x] Login screen contains no demo credential chips or demo switcher; driver login requires Admin-created account
 
 ### Phase 2: Citizen Profile & Device Permissions
-- [ ] Task 4: Citizen Profile real data binding and empty medical/emergency contacts (zero fake data, profile editing)
-- [ ] Task 5: Functional Push Notification and Location permissions on Citizen Profile using `permission_handler` and `geolocator`
-- [ ] Task 6: Remove "Frontend Prototype" labels from Citizen Profile and Report Emergency screens
+- [x] Task 4: Citizen Profile real data binding and empty medical/emergency contacts (zero fake data, profile editing)
+- [x] Task 5: Functional Push Notification and Location permissions on Citizen Profile using `permission_handler` and `geolocator`
+- [x] Task 6: Remove "Frontend Prototype" labels from Citizen Profile and Report Emergency screens
 
 ### Checkpoint: Citizen Profile & Permissions Functional
-- [ ] Citizen Profile displays actual registered name, email, and contact number
-- [ ] Medical ID and emergency contacts show empty states unless entered and saved by user
-- [ ] Push notification and location permission tiles reflect real device status and handle requests/denials
-- [ ] "Frontend Prototype" labels removed from Citizen screens
+- [x] Citizen Profile displays actual registered name, email, and contact number
+- [x] Medical ID and emergency contacts show empty states unless entered and saved by user
+- [x] Push notification and location permission tiles reflect real device status and handle requests/denials
+- [x] "Frontend Prototype" labels removed from Citizen screens
 
 ### Phase 3: Citizen Reports & Live Tracking Map
 - [ ] Task 7: Citizen Emergency submission & My Reports screen (fetch by current citizen ID, real-time update, loading/empty states)
