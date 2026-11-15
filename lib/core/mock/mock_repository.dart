@@ -5,6 +5,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
+import '../../data/models/user_profile_model.dart';
 import 'demo_data.dart';
 
 class MockRepository extends ChangeNotifier {
@@ -14,6 +15,7 @@ class MockRepository extends ChangeNotifier {
   final List<DemoVehicle> _vehicles = [];
   final List<DemoResource> _resources = [];
   final List<DemoBlockedRoad> _blockedRoads = [];
+  final Map<String, UserProfileModel> _userProfiles = {};
 
   // Default simulated location: Karachi central
   LatLng _userLocation = const LatLng(24.8607, 67.0011);
@@ -85,6 +87,33 @@ class MockRepository extends ChangeNotifier {
       _emergencies.where((e) => e.status == EmergencyStatus.resolved).toList();
 
   List<DemoEmergency> get recentEmergencies => _emergencies.take(5).toList();
+
+  /// User Profile & Medical Details Management
+  UserProfileModel getProfileForUser(
+    String userId, {
+    String? name,
+    String? email,
+    String? phone,
+  }) {
+    return _userProfiles[userId] ??
+        UserProfileModel(
+          id: userId,
+          fullName: name ?? '',
+          phoneNumber: phone ?? '',
+          email: email ?? '',
+          bloodType: '',
+          allergies: const [],
+          medicalConditions: const [],
+          homeAddress: '',
+          preferredHospital: '',
+          emergencyContacts: const [],
+        );
+  }
+
+  void saveUserProfile(UserProfileModel profile) {
+    _userProfiles[profile.id] = profile;
+    notifyListeners();
+  }
 
   // ───────────────────────────────────────────────────────────────────────────
   // AUTHENTICATION & USER MANAGEMENT

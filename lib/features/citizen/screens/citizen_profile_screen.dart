@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/mock/mock_repository.dart';
 import '../../../core/services/session_service.dart';
 import '../../../core/theme/theme_controller.dart';
 import '../../../core/widgets/brand/resq_wordmark.dart';
+import '../../../data/models/user_profile_model.dart';
 
 class CitizenProfileScreen extends StatelessWidget {
   const CitizenProfileScreen({super.key});
@@ -96,15 +98,251 @@ class CitizenProfileScreen extends StatelessWidget {
     );
   }
 
+  void _showEditMedicalDialog(
+    BuildContext context,
+    MockRepository repo,
+    UserProfileModel currentProfile,
+  ) {
+    final formKey = GlobalKey<FormState>();
+    String selectedBloodType = currentProfile.bloodType.isNotEmpty
+        ? currentProfile.bloodType
+        : 'None';
+    final allergiesCtrl = TextEditingController(
+      text: currentProfile.allergies.join(', '),
+    );
+    final contactNameCtrl = TextEditingController(
+      text: currentProfile.emergencyContacts.isNotEmpty
+          ? currentProfile.emergencyContacts.first.name
+          : '',
+    );
+    final contactPhoneCtrl = TextEditingController(
+      text: currentProfile.emergencyContacts.isNotEmpty
+          ? currentProfile.emergencyContacts.first.phoneNumber
+          : '',
+    );
+    final hospitalCtrl = TextEditingController(
+      text: currentProfile.preferredHospital,
+    );
+
+    final bloodTypes = [
+      'None',
+      'A+',
+      'A-',
+      'B+',
+      'B-',
+      'AB+',
+      'AB-',
+      'O+',
+      'O-',
+    ];
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryTeal.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(
+                      Icons.medical_services_rounded,
+                      color: AppColors.primaryTeal,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Edit Medical Details',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              content: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      DropdownButtonFormField<String>(
+                        initialValue: bloodTypes.contains(selectedBloodType)
+                            ? selectedBloodType
+                            : 'None',
+                        decoration: InputDecoration(
+                          labelText: 'Blood Group',
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        items: bloodTypes
+                            .map(
+                              (b) => DropdownMenuItem(
+                                value: b,
+                                child: Text(b == 'None' ? 'Not specified' : b),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (val) {
+                          if (val != null) {
+                            setModalState(() => selectedBloodType = val);
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: allergiesCtrl,
+                        decoration: InputDecoration(
+                          labelText: 'Known Allergies (comma-separated)',
+                          hintText: 'e.g. Penicillin, Pollen',
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: contactNameCtrl,
+                        decoration: InputDecoration(
+                          labelText: 'Emergency Contact Name',
+                          hintText: 'e.g. Fatima Khan',
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: contactPhoneCtrl,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          labelText: 'Emergency Contact Phone',
+                          hintText: '03XXXXXXXXX',
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: hospitalCtrl,
+                        decoration: InputDecoration(
+                          labelText: 'Preferred Hospital',
+                          hintText: 'e.g. Aga Khan Hospital, Karachi',
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Cancel'),
+                ),
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.primaryTeal,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    final rawAllergies = allergiesCtrl.text.trim();
+                    final parsedAllergies = rawAllergies.isNotEmpty
+                        ? rawAllergies
+                              .split(',')
+                              .map((s) => s.trim())
+                              .where((s) => s.isNotEmpty)
+                              .toList()
+                        : <String>[];
+
+                    final contacts = <EmergencyContact>[];
+                    if (contactNameCtrl.text.trim().isNotEmpty ||
+                        contactPhoneCtrl.text.trim().isNotEmpty) {
+                      contacts.add(
+                        EmergencyContact(
+                          id: 'EC-${DateTime.now().millisecondsSinceEpoch}',
+                          name: contactNameCtrl.text.trim(),
+                          relationship: 'Next of Kin',
+                          phoneNumber: contactPhoneCtrl.text.trim(),
+                          isPrimary: true,
+                        ),
+                      );
+                    }
+
+                    final updated = currentProfile.copyWith(
+                      bloodType: selectedBloodType == 'None'
+                          ? ''
+                          : selectedBloodType,
+                      allergies: parsedAllergies,
+                      preferredHospital: hospitalCtrl.text.trim(),
+                      emergencyContacts: contacts,
+                    );
+
+                    repo.saveUserProfile(updated);
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: AppColors.statusCompleted,
+                        content: Text(
+                          'Medical ID and emergency details saved successfully.',
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text('Save Details'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final session = context.watch<SessionService>();
     final theme = context.watch<ThemeController>();
+    final repo = context.watch<MockRepository>();
+    final profile = repo.getProfileForUser(
+      session.userId ?? 'USR-CIT-DEFAULT',
+      name: session.userName,
+      email: session.userEmail,
+      phone: session.userPhone,
+    );
 
     final themeLabel = theme.mode == ThemeMode.system
         ? 'System Default'
         : (theme.mode == ThemeMode.light ? 'Light Mode' : 'Dark Mode');
+
+    final emailText = session.userEmail.isNotEmpty
+        ? session.userEmail
+        : 'No email registered';
+    final phoneText = session.userPhone.isNotEmpty
+        ? session.userPhone
+        : 'No contact registered';
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -155,7 +393,7 @@ class CitizenProfileScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                'citizen@resq.gov.pk · +92 300 1234567',
+                                '$emailText · $phoneText',
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
                                   color: isDark
@@ -176,7 +414,7 @@ class CitizenProfileScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
-                                  'VERIFIED CITIZEN (DEMO)',
+                                  'REGISTERED CITIZEN',
                                   style: GoogleFonts.inter(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
@@ -194,13 +432,34 @@ class CitizenProfileScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Medical Emergency ID Card [DEMO]
-                Text(
-                  'Medical ID & Emergency Contacts',
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
+                // Medical Emergency ID Card
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Medical ID & Emergency Contacts',
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        foregroundColor: AppColors.primaryTeal,
+                      ),
+                      icon: const Icon(Icons.edit_rounded, size: 14),
+                      label: Text(
+                        'Edit Details',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      onPressed: () =>
+                          _showEditMedicalDialog(context, repo, profile),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 8),
                 Card(
@@ -210,28 +469,36 @@ class CitizenProfileScreen extends StatelessWidget {
                       children: [
                         _buildInfoRow(
                           'Blood Group',
-                          'O+ (Positive)',
+                          profile.bloodType.isNotEmpty
+                              ? profile.bloodType
+                              : 'Not specified',
                           Icons.bloodtype_rounded,
                           AppColors.emergencyPink,
                         ),
                         const Divider(height: 16),
                         _buildInfoRow(
                           'Known Allergies',
-                          'Penicillin, Dust',
+                          profile.allergies.isNotEmpty
+                              ? profile.allergies.join(', ')
+                              : 'None recorded',
                           Icons.medical_services_outlined,
                           AppColors.statusPending,
                         ),
                         const Divider(height: 16),
                         _buildInfoRow(
                           'Next of Kin',
-                          'Fatima Khan (+92 321 9876543)',
+                          profile.emergencyContacts.isNotEmpty
+                              ? '${profile.emergencyContacts.first.name} (${profile.emergencyContacts.first.phoneNumber})'
+                              : 'No emergency contact entered',
                           Icons.contact_phone_outlined,
                           AppColors.primaryTeal,
                         ),
                         const Divider(height: 16),
                         _buildInfoRow(
                           'Preferred Hospital',
-                          'Aga Khan University Hospital, Karachi',
+                          profile.preferredHospital.isNotEmpty
+                              ? profile.preferredHospital
+                              : 'Not specified',
                           Icons.local_hospital_outlined,
                           AppColors.infoCyan,
                         ),

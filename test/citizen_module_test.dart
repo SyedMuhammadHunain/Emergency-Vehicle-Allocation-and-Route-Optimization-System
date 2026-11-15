@@ -148,12 +148,12 @@ void main() {
     });
 
     testWidgets(
-      'CitizenProfileScreen displays verified citizen badge and medical ID',
+      'CitizenProfileScreen displays registered citizen badge and medical ID',
       (WidgetTester tester) async {
         await tester.pumpWidget(createTestApp(const CitizenProfileScreen()));
         await tester.pumpAndSettle();
 
-        expect(find.text('VERIFIED CITIZEN (DEMO)'), findsOneWidget);
+        expect(find.text('REGISTERED CITIZEN'), findsOneWidget);
         expect(find.text('Medical ID & Emergency Contacts'), findsOneWidget);
         expect(find.text('Blood Group'), findsOneWidget);
         expect(find.text('Appearance Theme'), findsOneWidget);
