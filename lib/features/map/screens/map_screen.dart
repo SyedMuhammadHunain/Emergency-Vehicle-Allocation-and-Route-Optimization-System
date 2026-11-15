@@ -124,6 +124,8 @@ class MapScreen extends StatelessWidget {
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.resq.emergency.app',
+                maxZoom: 18,
+                panBuffer: 1,
                 tileBuilder: isDark
                     ? (context, tileWidget, tile) {
                         return ColorFiltered(

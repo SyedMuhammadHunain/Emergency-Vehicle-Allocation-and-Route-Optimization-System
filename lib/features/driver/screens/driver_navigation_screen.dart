@@ -88,6 +88,8 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.resq.resq_app',
+                maxZoom: 18,
+                panBuffer: 1,
               ),
               // Route Polylines
               PolylineLayer(

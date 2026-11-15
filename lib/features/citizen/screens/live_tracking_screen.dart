@@ -240,6 +240,8 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.resq.resq_app',
+                maxZoom: 18,
+                panBuffer: 1,
               ),
 
               // Route Polyline only when vehicle is assigned

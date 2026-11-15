@@ -309,6 +309,8 @@ class _EmergencyDetailScreenState extends State<EmergencyDetailScreen> {
                                   urlTemplate:
                                       'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                                   userAgentPackageName: 'com.resq.resq_app',
+                                  maxZoom: 18,
+                                  panBuffer: 1,
                                 ),
                                 MarkerLayer(
                                   markers: [
