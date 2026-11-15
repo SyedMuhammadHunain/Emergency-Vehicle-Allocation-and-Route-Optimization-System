@@ -275,14 +275,14 @@
 Preserve all functional profile settings, theme pickers, identity details, and sign out capabilities.
 
 **Acceptance criteria:**
-- [ ] Dispatcher profile has `Prototype Architecture` and prototype wording removed
-- [ ] Driver profile has `Prototype Driver Engine` and prototype wording removed
-- [ ] Admin profile has `Django REST Framework` tile and `Session Cryptography` row removed
-- [ ] All three profiles retain legitimate account management and settings without layout distortion
+- [x] Dispatcher profile has `Prototype Architecture` and prototype wording removed
+- [x] Driver profile has `Prototype Driver Engine` and prototype wording removed
+- [x] Admin profile has `Django REST Framework` tile and `Session Cryptography` row removed
+- [x] All three profiles retain legitimate account management and settings without layout distortion
 
 **Verification:**
-- [ ] `grep -rnE "Prototype Architecture|Prototype Driver Engine|Session Cryptography" lib/` returns 0 hits
-- [ ] `flutter analyze` clean
+- [x] `grep -rnE "Prototype Architecture|Prototype Driver Engine|Session Cryptography" lib/` returns 0 hits
+- [x] `flutter analyze` clean
 
 **Dependencies:** None
 

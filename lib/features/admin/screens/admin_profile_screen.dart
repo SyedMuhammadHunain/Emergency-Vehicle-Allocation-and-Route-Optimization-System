@@ -235,12 +235,6 @@ class AdminProfileScreen extends StatelessWidget {
                           'Enforced Citizen-Only (Staff Restricted)',
                           isDark,
                         ),
-                        _buildRow(
-                          Icons.lock_rounded,
-                          'Session Cryptography',
-                          'Client Session Token [SIMULATED DEMO]',
-                          isDark,
-                        ),
                       ],
                     ),
                   ),
@@ -294,27 +288,6 @@ class AdminProfileScreen extends StatelessWidget {
                           trailing: const Icon(Icons.chevron_right_rounded),
                           onTap: () => _showThemePicker(context),
                         ),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: const Icon(
-                            Icons.hub_rounded,
-                            color: AppColors.primaryTeal,
-                          ),
-                          title: Text(
-                            'Django REST Framework Client',
-                            style: GoogleFonts.inter(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          subtitle: Text(
-                            'Prepared for future DRF API endpoints and MySQL schema',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -344,7 +317,7 @@ class AdminProfileScreen extends StatelessWidget {
                 const SizedBox(height: 6),
                 Center(
                   child: Text(
-                    'ResQ Emergency Response Platform · Version 1.0.0 (Demo Prototype)',
+                    'ResQ Emergency Response Platform · Version 1.0.0',
                     style: GoogleFonts.inter(fontSize: 10, color: Colors.grey),
                   ),
                 ),
@@ -367,14 +340,18 @@ class AdminProfileScreen extends StatelessWidget {
             label,
             style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
           ),
-          const Spacer(),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: 12,
-              color: isDark
-                  ? AppColors.darkTextSecondary
-                  : AppColors.lightTextSecondary,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.lightTextSecondary,
+              ),
             ),
           ),
         ],

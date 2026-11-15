@@ -294,27 +294,6 @@ class DriverProfileScreen extends StatelessWidget {
                           trailing: const Icon(Icons.chevron_right_rounded),
                           onTap: () => _showThemePicker(context),
                         ),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: const Icon(
-                            Icons.verified_user_rounded,
-                            color: AppColors.primaryTeal,
-                          ),
-                          title: Text(
-                            'Prototype Driver Engine',
-                            style: GoogleFonts.inter(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          subtitle: Text(
-                            'Phase 3 Driver Module · Centralized Mock Sync',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -344,7 +323,7 @@ class DriverProfileScreen extends StatelessWidget {
                 const SizedBox(height: 6),
                 Center(
                   child: Text(
-                    'ResQ Emergency Response Platform · Version 1.0.0 (Demo Prototype)',
+                    'ResQ Emergency Response Platform · Version 1.0.0',
                     style: GoogleFonts.inter(fontSize: 10, color: Colors.grey),
                   ),
                 ),
