@@ -1,69 +1,49 @@
-# Implementation Plan: Complete Project Backend & Integration
+# Implementation Plan: Comprehensive App Connectivity & Functionality Verification
 
 ## Overview
-Complete the ResQ emergency route and resource management system in branch `Hunain`. Initialize the Django REST backend with SQLite and demo Karachi data, verify all algorithms and backend endpoints with tests, wire the Flutter mobile app via an `ApiService` with offline mock fallback, verify release build, and commit all changes locally (strictly no push).
-
-## Dependency Graph
-```
-SQLite Database & Django Migrations
-    │
-    ▼
-Seed Demo Karachi Road Grid & Accounts (accounts + dispatch + algorithms)
-    │
-    ▼
-Automated Algorithm & Dispatch Tests
-    │
-    ▼
-Flutter HTTP Client Integration (ApiService with MockRepository Fallback)
-    │
-    ▼
-Validation & Clean Flutter Analysis
-    │
-    ▼
-Local Git Commits (Branch Hunain - No Push)
-```
+Decompose and execute end-to-end verification of the ResQ Emergency Route and Resource Management System. Validate database integrity (SQLite tables and seed records), backend services (Django REST APIs, Knapsack allocation, Dijkstra shortest path), Flutter API integration (`ApiService` online mode and offline `MockRepository` fallback), and full frontend functionality (`flutter test`, `flutter analyze`).
 
 ## Architecture Decisions
-- **Database Engine**: Use SQLite (`DB_ENGINE=sqlite`) by default for instant, zero-dependency, local execution, preserving full MySQL schema compatibility.
-- **Karachi Road Graph & Demo Data**: Run `python manage.py seed_demo --allocate` to populate realistic arterial roads (Shahrah-e-Faisal, University Road, etc.), demo users matching Flutter credentials, and dynamic allocation records.
-- **Frontend Hybrid Mode**: Implement `ApiService` in Flutter with automatic fallback to `MockRepository` on connection error or timeout, ensuring the app functions seamlessly in both connected and offline demo states.
-- **VCS Boundary**: Commit all changes to local branch `Hunain`. Under no circumstances execute `git push`.
+- **Verification Environment**: Test backend on `http://127.0.0.1:8000` using isolated requests and automated integration test harness.
+- **Dual-State Validation**: Test both online state (live HTTP responses from Django) and offline state (graceful fallback to `MockRepository` without crashes).
+- **Automated Verification Harness**: Implement a standalone verification runner (`scripts/verify_system.sh` / `Backend/verify_api.py`) to systematically exercise all endpoints, algorithms, and Flutter test suites.
+- **Strict Read-Only Plan Phase**: No code modifications during planning; capture all tasks, acceptance criteria, and verification commands first.
 
 ## Task List
 
-### Phase 1: Backend Environment & Database Setup
-- [x] Task 1: Create Python virtual environment and install backend dependencies
-- [x] Task 2: Configure SQLite database and run Django migrations
-- [x] Task 3: Seed Karachi road network, accounts, and demo data (`python manage.py seed_demo --allocate`)
-- [x] Task 4: Run Django algorithm and API test suite (`python manage.py test algorithms dispatch`)
+### Phase 1: Backend & Database Integrity Verification
+- [x] Task 1: Verify SQLite database schema, seed data, and Django test suite
+- [ ] Task 2: Verify live Django REST API endpoints and algorithms via HTTP checks
 
-### Checkpoint: Backend Operational
-- [x] Django runs cleanly on port 8000 with healthy endpoints
-- [x] 100% of algorithm and dispatch tests pass
+### Checkpoint: Backend & Database Operational
+- [ ] Database contains valid users, vehicles, Karachi road network, and active allocation
+- [ ] All 57 Django algorithm and dispatch unit tests pass cleanly
+- [ ] HTTP health, auth, allocation, and routing endpoints respond with HTTP 200/201
 
-### Phase 2: Frontend-Backend API Connection
-- [x] Task 5: Implement Flutter HTTP API client targeting `AppConstants.apiBase` with offline mock fallback
-- [x] Task 6: Wire Authentication flow (`/api/auth/login/`, `/api/auth/me/`) with fallback
-- [x] Task 7: Wire Emergency Reporting & Vehicle Allocation (`/api/allocate/`, `/api/emergencies/`) with fallback
+### Phase 2: Frontend-to-Backend Connectivity & Fallback Verification
+- [ ] Task 3: Implement dedicated Flutter `ApiService` online and fallback unit tests
+- [ ] Task 4: Run full Flutter widget test suite and static analysis
 
-### Checkpoint: End-to-End Integration
-- [ ] Mobile app authenticates and dispatches against backend when running, and gracefully degrades to mock data when backend is stopped
-- [ ] `flutter analyze` passes with zero errors
+### Checkpoint: Frontend Integration Validated
+- [ ] `ApiService` correctly handles live responses and falls back to `MockRepository` on error/timeout
+- [ ] `flutter test` passes 100% of widget and role-based test cases
+- [ ] `flutter analyze` reports zero warnings or errors
 
-### Phase 3: Final Build & Local Commit
-- [x] Task 8: Rebuild Android release APK with backend integration
-- [x] Task 9: Commit all changes locally to branch `Hunain` (Strictly NO push)
+### Phase 3: Automated End-to-End System Verification
+- [ ] Task 5: Build unified system verification script (`scripts/verify_system.sh`)
+- [ ] Task 6: Execute full verification run and produce system connectivity status report
 
-### Checkpoint: Complete Project Delivered
-- [x] Project fully completed and verified locally on branch `Hunain`
+### Checkpoint: Final Verification Complete
+- [ ] End-to-end verification script exits code 0 with diagnostic breakdown
+- [ ] System connectivity report generated at `docs/system_verification.md`
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Python dependency conflicts on Python 3.14 | Low | Pin compatible versions in requirements or use clean isolated venv |
-| Android emulator cannot reach localhost | Med | `AppConstants.apiBase` set to `http://10.0.2.2:8000` |
-| Offline demo failure | High | Automatic fallback to `MockRepository` guarantees app never crashes |
-| Accidental remote push | High | Enforce local `git commit` only; never run `git push` |
+| Port 8000 in use or blocked | Medium | Verify port availability before starting Django dev server or specify alternate port |
+| Host address mismatch (`10.0.2.2` vs `127.0.0.1`) | High | Test `ApiService` both with `127.0.0.1:8000` (host/test runner) and confirm emulator compatibility (`10.0.2.2:8000`) |
+| Unhandled offline exception in UI | High | Verify `ApiService` catch blocks and `isFromFallback` flag across all consumer screens |
+| Accidental remote git push | High | Keep all verification scripts and artifacts local; enforce branch `Hunain` with zero push |
 
 ## Open Questions
-None.
+- None. Requirements and architecture are fully established.
