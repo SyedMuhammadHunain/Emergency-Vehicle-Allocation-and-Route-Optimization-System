@@ -215,56 +215,57 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color:
-                                (isAvailable
-                                        ? AppColors.primaryTeal
-                                        : Colors.red)
-                                    .withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(
-                            item.category.contains('Medical')
-                                ? Icons.medical_services_rounded
-                                : item.category.contains('Fire')
-                                ? Icons.fire_extinguisher_rounded
-                                : item.category.contains('Fuel')
-                                ? Icons.local_gas_station_rounded
-                                : Icons.group_rounded,
-                            color: isAvailable
-                                ? AppColors.primaryTeal
-                                : Colors.red,
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      item.name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.inter(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  StatusChip(status: item.status.toUpperCase()),
-                                ],
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color:
+                                    (isAvailable
+                                            ? AppColors.primaryTeal
+                                            : Colors.red)
+                                        .withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              const SizedBox(height: 2),
-                              Text(
+                              child: Icon(
+                                item.category.contains('Medical')
+                                    ? Icons.medical_services_rounded
+                                    : item.category.contains('Fire')
+                                    ? Icons.fire_extinguisher_rounded
+                                    : item.category.contains('Fuel')
+                                    ? Icons.local_gas_station_rounded
+                                    : Icons.group_rounded,
+                                color: isAvailable
+                                    ? AppColors.primaryTeal
+                                    : Colors.red,
+                                size: 22,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                item.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            StatusChip(status: item.status.toUpperCase()),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
                                 '${item.category} · In Stock: ${item.quantity} ${item.unit}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -275,43 +276,62 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                                       : AppColors.lightTextSecondary,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        // Quick Adjust Quantity Buttons
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.remove_circle_outline_rounded,
-                                size: 22,
-                              ),
-                              tooltip: 'Decrement',
-                              onPressed: item.quantity > 0
-                                  ? () => repo.updateResourceQuantity(
-                                      item.id,
-                                      item.quantity - 1,
-                                    )
-                                  : null,
                             ),
-                            Text(
-                              '${item.quantity}',
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.add_circle_outline_rounded,
-                                size: 22,
-                                color: AppColors.primaryTeal,
-                              ),
-                              tooltip: 'Increment',
-                              onPressed: () => repo.updateResourceQuantity(
-                                item.id,
-                                item.quantity + 1,
-                              ),
+                            const SizedBox(width: 8),
+                            // Quick Adjust Quantity Buttons
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  visualDensity: VisualDensity.compact,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                  ),
+                                  icon: const Icon(
+                                    Icons.remove_circle_outline_rounded,
+                                    size: 22,
+                                  ),
+                                  tooltip: 'Decrement',
+                                  onPressed: item.quantity > 0
+                                      ? () => repo.updateResourceQuantity(
+                                          item.id,
+                                          item.quantity - 1,
+                                        )
+                                      : null,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                  ),
+                                  child: Text(
+                                    '${item.quantity}',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  visualDensity: VisualDensity.compact,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                  ),
+                                  icon: const Icon(
+                                    Icons.add_circle_outline_rounded,
+                                    size: 22,
+                                    color: AppColors.primaryTeal,
+                                  ),
+                                  tooltip: 'Increment',
+                                  onPressed: () => repo.updateResourceQuantity(
+                                    item.id,
+                                    item.quantity + 1,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

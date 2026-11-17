@@ -427,20 +427,19 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Row(
+                                      Wrap(
+                                        spacing: 6,
+                                        runSpacing: 4,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
                                         children: [
-                                          Expanded(
-                                            child: Text(
-                                              user.name,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.inter(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
-                                              ),
+                                          Text(
+                                            user.name,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                          const SizedBox(width: 8),
                                           Container(
                                             padding: const EdgeInsets.symmetric(
                                               horizontal: 6,
@@ -463,7 +462,7 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 2),
+                                      const SizedBox(height: 4),
                                       Text(
                                         user.email,
                                         maxLines: 1,
@@ -489,7 +488,9 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
 
                                 // Active / Inactive Toggle (cannot deactivate root admin)
                                 if (!isAdmin) ...[
+                                  const SizedBox(width: 8),
                                   Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
                                         user.isActive ? 'Active' : 'Inactive',
@@ -501,13 +502,16 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                               : Colors.red,
                                         ),
                                       ),
-                                      Switch(
-                                        value: user.isActive,
-                                        activeThumbColor:
-                                            AppColors.statusCompleted,
-                                        onChanged: (val) {
-                                          repo.toggleUserStatus(user.id);
-                                        },
+                                      Transform.scale(
+                                        scale: 0.85,
+                                        child: Switch(
+                                          value: user.isActive,
+                                          activeThumbColor:
+                                              AppColors.statusCompleted,
+                                          onChanged: (val) {
+                                            repo.toggleUserStatus(user.id);
+                                          },
+                                        ),
                                       ),
                                     ],
                                   ),
