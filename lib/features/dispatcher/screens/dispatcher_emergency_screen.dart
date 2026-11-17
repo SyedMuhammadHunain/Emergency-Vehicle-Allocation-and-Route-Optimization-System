@@ -268,9 +268,10 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
     }).toList();
 
     return Scaffold(
-      body: Column(
-        children: [
-          // Filter & Search Controls Header
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Filter & Search Controls Header
           Container(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
             decoration: BoxDecoration(
@@ -429,6 +430,7 @@ class _DispatcherEmergencyScreenState extends State<DispatcherEmergencyScreen> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

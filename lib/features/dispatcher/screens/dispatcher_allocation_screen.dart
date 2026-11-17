@@ -53,12 +53,13 @@ class _DispatcherAllocationScreenState
     }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1000),
-            child: Column(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // DP Algorithm Simulation Header Banner
@@ -80,27 +81,31 @@ class _DispatcherAllocationScreenState
                     children: [
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.aquaAccent.withValues(
-                                alpha: 0.25,
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
                               ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              'DYNAMIC PROGRAMMING (DP) ALLOCATION ASSISTANT',
-                              style: GoogleFonts.inter(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.aquaAccent,
+                              decoration: BoxDecoration(
+                                color: AppColors.aquaAccent.withValues(
+                                  alpha: 0.25,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'DYNAMIC PROGRAMMING (DP) ALLOCATION ASSISTANT',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.aquaAccent,
+                                ),
                               ),
                             ),
                           ),
-                          const Spacer(),
+                          const SizedBox(width: 8),
                           const Icon(
                             Icons.psychology_alt_rounded,
                             color: Colors.white,
@@ -486,11 +491,15 @@ class _DispatcherAllocationScreenState
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              vehicle.licensePlate,
-                                              style: GoogleFonts.inter(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
+                                            Flexible(
+                                              child: Text(
+                                                vehicle.licensePlate,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
                                               ),
                                             ),
                                             const SizedBox(width: 8),
@@ -503,6 +512,8 @@ class _DispatcherAllocationScreenState
                                         const SizedBox(height: 2),
                                         Text(
                                           '${vehicle.type} · Driver: ${vehicle.driverName ?? "Available Pool"}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.inter(
                                             fontSize: 12,
                                             color: Colors.grey,
@@ -619,11 +630,15 @@ class _DispatcherAllocationScreenState
                               children: [
                                 const Icon(Icons.send_rounded, size: 20),
                                 const SizedBox(width: 8),
-                                Text(
-                                  'Confirm Assignment & Dispatch Unit',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
+                                Flexible(
+                                  child: Text(
+                                    'Confirm Assignment & Dispatch Unit',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -636,7 +651,8 @@ class _DispatcherAllocationScreenState
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   DemoVehicle? _findBestMatchVehicle(

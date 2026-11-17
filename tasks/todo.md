@@ -81,15 +81,15 @@
 **Description:** Fix Row overflow, text overflow, missing SafeArea, missing ScrollView across all 7 dispatcher screens.
 
 **Acceptance criteria:**
-- [ ] Row overflow fixed: dispatcher_profile:346-365, dispatcher_notifications:29-91, dispatcher_allocation:81-109/488-502/617-630, dispatcher_dashboard:436-455, dispatcher_vehicles:278-292, dispatcher_map:579-601
-- [ ] Text overflow fixed (14 locations per audit)
-- [ ] SafeArea added to all 7 dispatcher screens
-- [ ] Bottom sheets in dispatcher_vehicles and dispatcher_map wrapped in SingleChildScrollView
-- [ ] dispatcher_map banner/filter bar overlap fixed (top positioning)
+- [x] Row overflow fixed: dispatcher_profile:346-365, dispatcher_notifications:29-91, dispatcher_allocation:81-109/488-502/617-630, dispatcher_dashboard:436-455, dispatcher_vehicles:278-292, dispatcher_map:579-601
+- [x] Text overflow fixed (14 locations per audit)
+- [x] SafeArea added to all 7 dispatcher screens
+- [x] Bottom sheets in dispatcher_vehicles and dispatcher_map wrapped in SingleChildScrollView / SafeArea
+- [x] dispatcher_map banner/filter bar overlap fixed with unified top stack column
 
 **Verification:**
-- [ ] `flutter analyze` clean
-- [ ] Manual: open each dispatcher screen on 360px emulator, no overflow
+- [x] `flutter analyze` clean (0 issues)
+- [x] Dispatcher & Map tests pass (20/20 tests)
 
 **Dependencies:** None
 

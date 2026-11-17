@@ -36,7 +36,7 @@ Layout fixes (Tasks 3-9) — all independent, parallelizable
 
 ### Phase 2: Layout Fixes (parallelizable)
 - [x] Task 3: Fix citizen screens (6 files)
-- [ ] Task 4: Fix dispatcher screens (7 files)
+- [x] Task 4: Fix dispatcher screens (7 files)
 - [ ] Task 5: Fix driver screens (6 files)
 - [ ] Task 6: Fix admin screens (6 files)
 - [ ] Task 7: Fix shared screens (map_screen, profile_screen, incident_detail_screen)

@@ -21,75 +21,83 @@ class DispatcherNotificationsScreen extends StatelessWidget {
         .toList();
     final unreadCount = notifs.where((n) => !n.isRead).length;
 
-    return Column(
-      children: [
-        // Header with unread count and mark-all button
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      gradient: AppColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(
-                      Icons.notifications_active_rounded,
-                      color: Colors.white,
-                      size: 18,
-                    ),
+    return SafeArea(
+      child: Column(
+        children: [
+          // Header with unread count and mark-all button
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          gradient: AppColors.primaryGradient,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.notifications_active_rounded,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Flexible(
+                        child: Text(
+                          'Dispatch Alerts',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      if (unreadCount > 0)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.emergencyPink,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '$unreadCount new',
+                            style: GoogleFonts.inter(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  Text(
-                    'Dispatch Alerts',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
+                ),
+                const SizedBox(width: 8),
+                TextButton.icon(
+                  onPressed: () => repo.markAllNotificationsRead(),
+                  icon: const Icon(Icons.done_all_rounded, size: 16),
+                  label: Text(
+                    'Mark all read',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  if (unreadCount > 0)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.emergencyPink,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '$unreadCount new',
-                        style: GoogleFonts.inter(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              TextButton.icon(
-                onPressed: () => repo.markAllNotificationsRead(),
-                icon: const Icon(Icons.done_all_rounded, size: 16),
-                label: Text(
-                  'Mark all read',
-                  style: GoogleFonts.inter(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primaryTeal,
                   ),
                 ),
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.primaryTeal,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
 
         // Notification list
         Expanded(
@@ -248,8 +256,9 @@ class DispatcherNotificationsScreen extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 
   IconData _iconForNotification(String title) {
     final lower = title.toLowerCase();

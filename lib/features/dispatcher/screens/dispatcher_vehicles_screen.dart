@@ -38,76 +38,83 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    vehicle.licensePlate,
-                    style: GoogleFonts.inter(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.primaryTeal,
+        return SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  StatusChip(status: vehicle.status.toUpperCase()),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                vehicle.type,
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
                 ),
-              ),
-              const Divider(height: 24),
-              _buildRow(
-                'Assigned Driver',
-                vehicle.driverName ?? 'Available Pool (Unassigned)',
-                Icons.person_rounded,
-              ),
-              _buildRow(
-                'Base Sector',
-                'Karachi Central Depot',
-                Icons.store_mall_directory_rounded,
-              ),
-              _buildRow(
-                'Coordinates',
-                '${vehicle.location.latitude.toStringAsFixed(4)}, ${vehicle.location.longitude.toStringAsFixed(4)} (Simulated)',
-                Icons.location_on_rounded,
-              ),
-              if (vehicle.assignedEmergencyId != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        vehicle.licensePlate,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.primaryTeal,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    StatusChip(status: vehicle.status.toUpperCase()),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  vehicle.type,
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const Divider(height: 24),
                 _buildRow(
-                  'Active Mission',
-                  vehicle.assignedEmergencyId!,
-                  Icons.emergency_rounded,
+                  'Assigned Driver',
+                  vehicle.driverName ?? 'Available Pool (Unassigned)',
+                  Icons.person_rounded,
                 ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  child: const Text('Close'),
+                _buildRow(
+                  'Base Sector',
+                  'Karachi Central Depot',
+                  Icons.store_mall_directory_rounded,
                 ),
-              ),
-            ],
+                _buildRow(
+                  'Coordinates',
+                  '${vehicle.location.latitude.toStringAsFixed(4)}, ${vehicle.location.longitude.toStringAsFixed(4)} (Simulated)',
+                  Icons.location_on_rounded,
+                ),
+                if (vehicle.assignedEmergencyId != null)
+                  _buildRow(
+                    'Active Mission',
+                    vehicle.assignedEmergencyId!,
+                    Icons.emergency_rounded,
+                  ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    child: const Text('Close'),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -152,9 +159,10 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
     }).toList();
 
     return Scaffold(
-      body: Column(
-        children: [
-          // Filter & Search Controls Header
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Filter & Search Controls Header
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -277,11 +285,15 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
-                                            v.licensePlate,
-                                            style: GoogleFonts.inter(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700,
+                                          Flexible(
+                                            child: Text(
+                                              v.licensePlate,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.inter(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(width: 8),
@@ -293,6 +305,8 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
                                       const SizedBox(height: 4),
                                       Text(
                                         '${v.type} · Driver: ${v.driverName ?? "Available Pool"}',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.inter(
                                           fontSize: 12,
                                           color: isDark
@@ -317,6 +331,7 @@ class _DispatcherVehiclesScreenState extends State<DispatcherVehiclesScreen> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

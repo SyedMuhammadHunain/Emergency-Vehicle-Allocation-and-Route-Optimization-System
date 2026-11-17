@@ -245,84 +245,96 @@ class _DispatcherMapScreenState extends State<DispatcherMapScreen> {
           MapZoomControls(
             mapController: _mapController,
             alignment: Alignment.topRight,
-            padding: const EdgeInsets.only(top: 70, right: 16),
+            padding: const EdgeInsets.only(top: 130, right: 16),
           ),
 
-          // Simulation Banner (Top)
+          // Simulation Banner & Filter Floating Bar (Unified Top Stack)
           Positioned(
             top: 12,
             left: 16,
             right: 16,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColors.statusPending.withValues(alpha: 0.6),
-                ),
-              ),
-              child: Row(
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
-                    Icons.info_outline_rounded,
-                    color: AppColors.statusPending,
-                    size: 18,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.8),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.statusPending.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline_rounded,
+                          color: AppColors.statusPending,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'SIMULATED KARACHI DEMO OPERATIONS MAP · Live incidents, vehicle fleet & road blocks',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'SIMULATED KARACHI DEMO OPERATIONS MAP · Live incidents, vehicle fleet & road blocks',
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                  const SizedBox(height: 8),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: (isDark ? AppColors.darkSurface : Colors.white)
+                            .withValues(alpha: 0.94),
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.15),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          _buildFilterPill(
+                            'ALL',
+                            'All Layers (${emergencies.length + vehicles.length})',
+                          ),
+                          _buildFilterPill(
+                            'EMERGENCIES',
+                            'Incidents (${emergencies.length})',
+                          ),
+                          _buildFilterPill(
+                            'VEHICLES',
+                            'Fleet (${vehicles.length})',
+                          ),
+                          _buildFilterPill(
+                            'ROADS',
+                            'Road Blocks (${blockedRoads.where((r) => r.isBlocked).length})',
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-
-          // Filter Floating Bar (Top Below Banner)
-          Positioned(
-            top: 60,
-            left: 16,
-            right: 16,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: (isDark ? AppColors.darkSurface : Colors.white)
-                      .withValues(alpha: 0.94),
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    _buildFilterPill(
-                      'ALL',
-                      'All Layers (${emergencies.length + vehicles.length})',
-                    ),
-                    _buildFilterPill(
-                      'EMERGENCIES',
-                      'Incidents (${emergencies.length})',
-                    ),
-                    _buildFilterPill('VEHICLES', 'Fleet (${vehicles.length})'),
-                    _buildFilterPill(
-                      'ROADS',
-                      'Road Blocks (${blockedRoads.where((r) => r.isBlocked).length})',
-                    ),
-                  ],
-                ),
               ),
             ),
           ),
@@ -380,11 +392,14 @@ class _DispatcherMapScreenState extends State<DispatcherMapScreen> {
               left: 16,
               right: 16,
               bottom: 16,
-              child: _buildEmergencyBottomSheet(
-                context,
-                _selectedEmergency!,
-                repo,
-                isDark,
+              child: SafeArea(
+                top: false,
+                child: _buildEmergencyBottomSheet(
+                  context,
+                  _selectedEmergency!,
+                  repo,
+                  isDark,
+                ),
               ),
             )
           else if (_selectedVehicle != null)
@@ -392,10 +407,13 @@ class _DispatcherMapScreenState extends State<DispatcherMapScreen> {
               left: 16,
               right: 16,
               bottom: 16,
-              child: _buildVehicleBottomSheet(
-                context,
-                _selectedVehicle!,
-                isDark,
+              child: SafeArea(
+                top: false,
+                child: _buildVehicleBottomSheet(
+                  context,
+                  _selectedVehicle!,
+                  isDark,
+                ),
               ),
             ),
         ],
@@ -456,38 +474,46 @@ class _DispatcherMapScreenState extends State<DispatcherMapScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: AppColors.forCategory(
-                        emergency.category,
-                      ).withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.forCategory(
+                          emergency.category,
+                        ).withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        emergency.category == EmergencyCategory.medical
+                            ? Icons.medical_services_rounded
+                            : emergency.category == EmergencyCategory.fire
+                            ? Icons.local_fire_department_rounded
+                            : Icons.car_crash_rounded,
+                        color: AppColors.forCategory(emergency.category),
+                        size: 20,
+                      ),
                     ),
-                    child: Icon(
-                      emergency.category == EmergencyCategory.medical
-                          ? Icons.medical_services_rounded
-                          : emergency.category == EmergencyCategory.fire
-                          ? Icons.local_fire_department_rounded
-                          : Icons.car_crash_rounded,
-                      color: AppColors.forCategory(emergency.category),
-                      size: 20,
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        emergency.id,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.primaryTeal,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    emergency.id,
-                    style: GoogleFonts.inter(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.primaryTeal,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   StatusChip(status: emergency.status),
                   const SizedBox(width: 8),
@@ -579,15 +605,21 @@ class _DispatcherMapScreenState extends State<DispatcherMapScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                vehicle.licensePlate,
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primaryTeal,
+              Expanded(
+                child: Text(
+                  vehicle.licensePlate,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primaryTeal,
+                  ),
                 ),
               ),
+              const SizedBox(width: 8),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   StatusChip(status: vehicle.status.toUpperCase()),
                   const SizedBox(width: 8),
@@ -602,6 +634,8 @@ class _DispatcherMapScreenState extends State<DispatcherMapScreen> {
           const SizedBox(height: 8),
           Text(
             '${vehicle.type} · Driver: ${vehicle.driverName ?? "Available Pool"}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: GoogleFonts.poppins(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -610,6 +644,8 @@ class _DispatcherMapScreenState extends State<DispatcherMapScreen> {
           const SizedBox(height: 4),
           Text(
             'Simulated Location: Karachi Central (${vehicle.location.latitude.toStringAsFixed(4)}, ${vehicle.location.longitude.toStringAsFixed(4)})',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
           ),
         ],

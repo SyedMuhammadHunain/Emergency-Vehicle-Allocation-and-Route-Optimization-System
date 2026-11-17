@@ -109,12 +109,13 @@ class DispatcherProfileScreen extends StatelessWidget {
         : 'Light Mode';
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: Column(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Staff Identity Card
@@ -332,8 +333,9 @@ class DispatcherProfileScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildSettingRow(
     IconData icon,
@@ -347,18 +349,29 @@ class DispatcherProfileScreen extends StatelessWidget {
         children: [
           Icon(icon, size: 18, color: AppColors.primaryTeal),
           const SizedBox(width: 12),
-          Text(
-            label,
-            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+          Expanded(
+            flex: 2,
+            child: Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
           ),
-          const Spacer(),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: 12,
-              color: isDark
-                  ? AppColors.darkTextSecondary
-                  : AppColors.lightTextSecondary,
+          const SizedBox(width: 8),
+          Expanded(
+            flex: 3,
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.lightTextSecondary,
+              ),
             ),
           ),
         ],
