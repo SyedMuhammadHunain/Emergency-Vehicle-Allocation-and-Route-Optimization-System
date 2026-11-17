@@ -27,8 +27,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Column(
           children: [
             GradientHeader(
               height: 180,
@@ -176,6 +178,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 }

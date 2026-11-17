@@ -118,8 +118,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Column(
           children: [
             GradientHeader(
               height: 200,
@@ -318,6 +320,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 }

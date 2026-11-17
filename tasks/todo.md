@@ -195,13 +195,13 @@
 **Description:** Add SafeArea to login, register, forgot_password screens. Bottom padding for gesture bar. Top inset handled by existing GradientHeader padding.
 
 **Acceptance criteria:**
-- [ ] login_screen: SafeArea wrapping body (bottom: true)
-- [ ] register_screen: SafeArea wrapping body (bottom: true)
-- [ ] forgot_password_screen: SafeArea wrapping body (bottom: true)
+- [x] login_screen: SafeArea wrapping body (bottom: true)
+- [x] register_screen: SafeArea wrapping body (bottom: true)
+- [x] forgot_password_screen: SafeArea wrapping body (bottom: true)
 
 **Verification:**
-- [ ] `flutter analyze` clean
-- [ ] Manual: open auth screens, no overlap with status bar or gesture bar
+- [x] `flutter analyze` clean (0 issues)
+- [x] All test suites pass (76/76 tests)
 
 **Dependencies:** None
 

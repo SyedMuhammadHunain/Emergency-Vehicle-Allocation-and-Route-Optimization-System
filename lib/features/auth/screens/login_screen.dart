@@ -79,8 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Column(
           children: [
             // Gradient Header with official ResQ logo and concentric rings
             GradientHeader(
@@ -323,6 +325,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 }
