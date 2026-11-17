@@ -61,11 +61,12 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                   ),
                 ],
               ),
-              content: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+              content: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                     DropdownButtonFormField<String>(
                       initialValue: selectedType,
                       decoration: InputDecoration(
@@ -125,6 +126,7 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                   ],
                 ),
               ),
+            ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),
@@ -235,8 +237,9 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
         label: const Text('Add Vehicle'),
         onPressed: () => _showAddVehicleDialog(context, repo),
       ),
-      body: Column(
-        children: [
+      body: SafeArea(
+        child: Column(
+          children: [
           // Filter & Search Controls Header
           Container(
             padding: const EdgeInsets.all(16),
@@ -367,11 +370,15 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                        Text(
-                                          v.licensePlate,
-                                          style: GoogleFonts.inter(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
+                                        Expanded(
+                                          child: Text(
+                                            v.licensePlate,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(width: 8),
@@ -383,6 +390,8 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                                     const SizedBox(height: 2),
                                     Text(
                                       '${v.type} · Driver: ${v.driverName ?? "Available Pool"}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.inter(
                                         fontSize: 12,
                                         color: Colors.grey,
@@ -391,6 +400,8 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                                     if (v.assignedEmergencyId != null)
                                       Text(
                                         'Mission: ${v.assignedEmergencyId}',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.inter(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600,
@@ -418,6 +429,7 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 }

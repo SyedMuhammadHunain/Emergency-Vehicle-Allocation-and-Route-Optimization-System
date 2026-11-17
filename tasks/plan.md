@@ -38,7 +38,7 @@ Layout fixes (Tasks 3-9) — all independent, parallelizable
 - [x] Task 3: Fix citizen screens (6 files)
 - [x] Task 4: Fix dispatcher screens (7 files)
 - [x] Task 5: Fix driver screens (6 files)
-- [ ] Task 6: Fix admin screens (6 files)
+- [x] Task 6: Fix admin screens (6 files)
 - [ ] Task 7: Fix shared screens (map_screen, profile_screen, incident_detail_screen)
 - [ ] Task 8: Fix auth screens SafeArea (login, register, forgot_password)
 

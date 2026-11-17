@@ -109,9 +109,10 @@ class AdminProfileScreen extends StatelessWidget {
         : 'Light Mode';
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Center(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 800),
             child: Column(
@@ -152,6 +153,8 @@ class AdminProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               session.userName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
@@ -161,6 +164,8 @@ class AdminProfileScreen extends StatelessWidget {
                             const SizedBox(height: 2),
                             Text(
                               session.userEmail,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 color: Colors.white.withValues(alpha: 0.85),
@@ -326,6 +331,7 @@ class AdminProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 

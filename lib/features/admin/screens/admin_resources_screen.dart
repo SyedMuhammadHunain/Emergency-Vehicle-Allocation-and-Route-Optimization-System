@@ -39,11 +39,12 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              content: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+              content: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                     DropdownButtonFormField<String>(
                       initialValue: selectedCategory,
                       decoration: InputDecoration(
@@ -131,6 +132,7 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                   ],
                 ),
               ),
+            ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),
@@ -184,16 +186,17 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
         label: const Text('New Resource'),
         onPressed: () => _showAddResourceDialog(context, repo),
       ),
-      body: resources.isEmpty
-          ? const Center(
-              child: EmptyState(
-                'No Resources Logged',
-                subtitle:
-                    'Add equipment, fuel reserves, or crew assignments to manage inventory.',
-                icon: Icons.inventory_2_outlined,
-              ),
-            )
-          : ListView.builder(
+      body: SafeArea(
+        child: resources.isEmpty
+            ? const Center(
+                child: EmptyState(
+                  'No Resources Logged',
+                  subtitle:
+                      'Add equipment, fuel reserves, or crew assignments to manage inventory.',
+                  icon: Icons.inventory_2_outlined,
+                ),
+              )
+            : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: resources.length,
               itemBuilder: (context, index) {
@@ -245,11 +248,15 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    item.name,
-                                    style: GoogleFonts.inter(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
+                                  Expanded(
+                                    child: Text(
+                                      item.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 8),
@@ -259,6 +266,8 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                               const SizedBox(height: 2),
                               Text(
                                 '${item.category} · In Stock: ${item.quantity} ${item.unit}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
                                   color: isDark
@@ -312,6 +321,7 @@ class _AdminResourcesScreenState extends State<AdminResourcesScreen> {
                 );
               },
             ),
+      ),
     );
   }
 }

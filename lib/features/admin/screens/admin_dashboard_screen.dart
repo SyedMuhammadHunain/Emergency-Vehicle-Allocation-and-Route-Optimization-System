@@ -29,9 +29,10 @@ class AdminDashboardScreen extends StatelessWidget {
     final staffCount = repo.totalDispatchersCount + repo.totalDriversCount;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Center(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1000),
             child: Column(
@@ -78,6 +79,8 @@ class AdminDashboardScreen extends StatelessWidget {
                             const SizedBox(height: 8),
                             Text(
                               'Welcome, ${session.userName}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w800,
@@ -193,7 +196,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         : (width > 380 ? 2 : 1);
                     final double aspectRatio = width > 768
                         ? 1.6
-                        : (width > 380 ? 1.25 : 2.0);
+                        : (width > 380 ? 1.15 : 2.0);
 
                     return GridView.count(
                       crossAxisCount: crossAxisCount,
@@ -336,6 +339,7 @@ class AdminDashboardScreen extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 

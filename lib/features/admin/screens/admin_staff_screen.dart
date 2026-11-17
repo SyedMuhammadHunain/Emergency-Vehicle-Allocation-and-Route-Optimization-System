@@ -251,8 +251,9 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
         label: const Text('Provision Staff'),
         onPressed: () => _showCreateStaffDialog(context, repo),
       ),
-      body: Column(
-        children: [
+      body: SafeArea(
+        child: Column(
+          children: [
           // Filter & Search Controls Header
           Container(
             padding: const EdgeInsets.all(16),
@@ -428,11 +429,15 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
-                                            user.name,
-                                            style: GoogleFonts.inter(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
+                                          Expanded(
+                                            child: Text(
+                                              user.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.inter(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(width: 8),
@@ -461,6 +466,8 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                       const SizedBox(height: 2),
                                       Text(
                                         user.email,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.inter(
                                           fontSize: 12,
                                           color: Colors.grey,
@@ -469,6 +476,8 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
                                       if (user.phone.isNotEmpty)
                                         Text(
                                           'Phone: ${user.phone}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.inter(
                                             fontSize: 11,
                                             color: Colors.grey,
@@ -513,6 +522,7 @@ class _AdminStaffScreenState extends State<AdminStaffScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 }

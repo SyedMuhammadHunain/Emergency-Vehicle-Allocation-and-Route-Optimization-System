@@ -139,14 +139,14 @@
 **Description:** Fix Row overflow, text overflow, missing SafeArea, missing ScrollView in dialogs across all 6 admin screens.
 
 **Acceptance criteria:**
-- [ ] Row overflow fixed: admin_reports:122-154/319-338, admin_resources:246-258, admin_staff:429-460, admin_vehicles:368-382
-- [ ] Text overflow fixed (7 locations per audit)
-- [ ] SafeArea added to all 6 admin screens
-- [ ] Dialog forms in admin_resources and admin_vehicles wrapped in SingleChildScrollView
+- [x] Row overflow fixed: admin_reports:122-154/319-338, admin_resources:246-258, admin_staff:429-460, admin_vehicles:368-382
+- [x] Text overflow fixed (7 locations per audit)
+- [x] SafeArea added to all 6 admin screens
+- [x] Dialog forms in admin_resources and admin_vehicles wrapped in SingleChildScrollView
 
 **Verification:**
-- [ ] `flutter analyze` clean
-- [ ] Manual: open each admin screen on 360px emulator, no overflow
+- [x] `flutter analyze` clean (0 issues)
+- [x] All test suites pass (76/76 tests)
 
 **Dependencies:** None
 
