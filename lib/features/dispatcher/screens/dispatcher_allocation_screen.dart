@@ -568,6 +568,18 @@ class _DispatcherAllocationScreenState
                                 await ApiService().triggerAllocation(
                                   emergencyId: emergencyIdInt,
                                 );
+                                final vehicleIdInt = int.tryParse(
+                                  _selectedVehicle!.id.replaceAll(
+                                    RegExp(r'[^0-9]'),
+                                    '',
+                                  ),
+                                );
+                                await ApiService().assignVehicleToEmergency(
+                                  emergencyIdInt ?? 0,
+                                  vehicleIdInt ?? 0,
+                                  notes:
+                                      'Dispatched via DP allocation assistant to ${_selectedEmergency!.locationLabel}',
+                                );
                               } catch (_) {}
 
                               repo.assignVehicleToEmergency(

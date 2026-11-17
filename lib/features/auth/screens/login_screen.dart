@@ -65,8 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
       context.go('/role-shell');
     } catch (e) {
       if (mounted) {
+        final cleanMsg = e.toString().replaceFirst('Exception: ', '');
         setState(() {
-          _errorMessage = 'Authentication error: $e';
+          _errorMessage = cleanMsg;
           _isLoading = false;
         });
       }

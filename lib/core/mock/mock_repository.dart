@@ -35,6 +35,56 @@ class MockRepository extends ChangeNotifier {
   }
 
   // ───────────────────────────────────────────────────────────────────────────
+  // LIVE API SYNC METHODS (Reactive Cache)
+  // ───────────────────────────────────────────────────────────────────────────
+
+  void addOrUpdateEmergency(DemoEmergency emergency) {
+    final idx = _emergencies.indexWhere((e) => e.id == emergency.id);
+    if (idx != -1) {
+      _emergencies[idx] = emergency;
+    } else {
+      _emergencies.insert(0, emergency);
+    }
+    notifyListeners();
+  }
+
+  void syncEmergencies(List<DemoEmergency> liveList) {
+    _emergencies.clear();
+    _emergencies.addAll(liveList);
+    notifyListeners();
+  }
+
+  void syncVehicles(List<DemoVehicle> liveList) {
+    _vehicles.clear();
+    _vehicles.addAll(liveList);
+    notifyListeners();
+  }
+
+  void syncNotifications(List<DemoNotification> liveList) {
+    _notifications.clear();
+    _notifications.addAll(liveList);
+    notifyListeners();
+  }
+
+  void syncUsers(List<DemoUserAccount> liveList) {
+    _accounts.clear();
+    _accounts.addAll(liveList);
+    notifyListeners();
+  }
+
+  void syncResources(List<DemoResource> liveList) {
+    _resources.clear();
+    _resources.addAll(liveList);
+    notifyListeners();
+  }
+
+  void syncBlockedRoads(List<DemoBlockedRoad> liveList) {
+    _blockedRoads.clear();
+    _blockedRoads.addAll(liveList);
+    notifyListeners();
+  }
+
+  // ───────────────────────────────────────────────────────────────────────────
   // GETTERS
   // ───────────────────────────────────────────────────────────────────────────
   List<DemoUserAccount> get accounts => List.unmodifiable(_accounts);

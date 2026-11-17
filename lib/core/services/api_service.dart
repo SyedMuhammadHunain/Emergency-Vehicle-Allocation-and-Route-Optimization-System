@@ -13,16 +13,23 @@ class ApiResponse<T> {
   final String? error;
   final bool isFromFallback;
   final int? statusCode;
+  final Map<String, dynamic>? validationErrors;
 
   const ApiResponse({
     this.data,
     this.error,
     this.isFromFallback = false,
     this.statusCode,
+    this.validationErrors,
   });
 
   bool get isSuccess => error == null && data != null;
   bool get hasError => error != null;
+  bool get isUnauthorized => statusCode == 401;
+  bool get isForbidden => statusCode == 403;
+  bool get isNotFound => statusCode == 404;
+  bool get isValidationError => statusCode == 400;
+  bool get isServerError => (statusCode ?? 0) >= 500;
 }
 
 /// Service providing unified HTTP access to Django REST backend with
@@ -33,6 +40,13 @@ class ApiService {
   String? _authToken;
   bool _isBackendReachable = false;
   DateTime? _lastHealthCheck;
+
+  static ApiService? _defaultInstance;
+  static ApiService get instance => _defaultInstance ??= ApiService();
+
+  static void initialize({String? baseUrl, http.Client? client}) {
+    _defaultInstance = ApiService(baseUrl: baseUrl, client: client);
+  }
 
   ApiService({String? baseUrl, http.Client? client})
     : baseUrl = baseUrl ?? AppConstants.apiBase,
@@ -128,7 +142,7 @@ class ApiService {
   Future<ApiResponse<DemoUserAccount>> login(
     String email,
     String password, {
-    required MockRepository mockRepo,
+    MockRepository? mockRepo,
   }) async {
     final response = await _request(
       method: 'POST',
@@ -165,9 +179,11 @@ class ApiService {
 
     // Graceful fallback to mock repository
     debugPrint('ApiService: falling back to MockRepository for login.');
-    final mockAccount = mockRepo.authenticate(email, password);
-    if (mockAccount != null) {
-      return ApiResponse(data: mockAccount, isFromFallback: true);
+    if (mockRepo != null) {
+      final mockAccount = mockRepo.authenticate(email, password);
+      if (mockAccount != null) {
+        return ApiResponse(data: mockAccount, isFromFallback: true);
+      }
     }
 
     return const ApiResponse(
@@ -518,7 +534,7 @@ class ApiService {
     required String email,
     required String password,
     required String phone,
-    required MockRepository mockRepo,
+    MockRepository? mockRepo,
   }) async {
     final response = await _request(
       method: 'POST',
@@ -549,31 +565,42 @@ class ApiService {
           createdAt: DateTime.now(),
         );
 
-        mockRepo.addAccount(account);
+        if (mockRepo != null) {
+          mockRepo.addAccount(account);
+        }
         return ApiResponse(data: account, statusCode: response.statusCode);
       } catch (e) {
         debugPrint('ApiService.registerCitizen decode error: $e');
       }
     }
 
-    final localAccount = mockRepo.registerCitizen(
-      name: name,
-      email: email,
-      password: password,
-      phone: phone,
-    );
+    if (mockRepo != null) {
+      final localAccount = mockRepo.registerCitizen(
+        name: name,
+        email: email,
+        password: password,
+        phone: phone,
+      );
+      return ApiResponse(
+        data: localAccount,
+        isFromFallback: true,
+        error: response != null && response.statusCode >= 400
+            ? 'Registration failed (${response.statusCode})'
+            : null,
+      );
+    }
+
     return ApiResponse(
-      data: localAccount,
       isFromFallback: true,
       error: response != null && response.statusCode >= 400
           ? 'Registration failed (${response.statusCode})'
-          : null,
+          : 'Registration failed: Server offline',
     );
   }
 
   /// Fetch own profile via `/api/auth/me/` with fallback to [MockRepository].
   Future<ApiResponse<DemoUserAccount>> getMe({
-    required MockRepository mockRepo,
+    MockRepository? mockRepo,
     String? fallbackEmail,
   }) async {
     final response = await _request(
@@ -600,12 +627,17 @@ class ApiService {
       }
     }
 
-    if (fallbackEmail != null) {
-      final local = mockRepo.accounts.where(
-        (a) => a.email.toLowerCase() == fallbackEmail.toLowerCase(),
-      );
-      if (local.isNotEmpty) {
-        return ApiResponse(data: local.first, isFromFallback: true);
+    if (mockRepo != null) {
+      if (fallbackEmail != null) {
+        final local = mockRepo.accounts.where(
+          (a) => a.email.toLowerCase() == fallbackEmail.toLowerCase(),
+        );
+        if (local.isNotEmpty) {
+          return ApiResponse(data: local.first, isFromFallback: true);
+        }
+      }
+      if (mockRepo.accounts.isNotEmpty) {
+        return ApiResponse(data: mockRepo.accounts.first, isFromFallback: true);
       }
     }
 
@@ -1013,6 +1045,502 @@ class ApiService {
         'active': mockRepo?.activeEmergencies.length ?? 0,
       },
       isFromFallback: true,
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> get(
+    String path, {
+    Map<String, String>? queryParams,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    try {
+      var uri = Uri.parse('$baseUrl$path');
+      if (queryParams != null && queryParams.isNotEmpty) {
+        uri = uri.replace(queryParameters: queryParams);
+      }
+      final response = await _client
+          .get(uri, headers: _buildHeaders())
+          .timeout(timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      return const ApiResponse(error: 'Connection timed out', statusCode: 0);
+    } catch (e) {
+      return ApiResponse(error: 'Connection error: $e', statusCode: 0);
+    }
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> post(
+    String path, {
+    Map<String, dynamic>? body,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl$path');
+      final response = await _client
+          .post(
+            uri,
+            headers: _buildHeaders(),
+            body: body != null ? jsonEncode(body) : null,
+          )
+          .timeout(timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      return const ApiResponse(error: 'Connection timed out', statusCode: 0);
+    } catch (e) {
+      return ApiResponse(error: 'Connection error: $e', statusCode: 0);
+    }
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> put(
+    String path, {
+    Map<String, dynamic>? body,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl$path');
+      final response = await _client
+          .put(
+            uri,
+            headers: _buildHeaders(),
+            body: body != null ? jsonEncode(body) : null,
+          )
+          .timeout(timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      return const ApiResponse(error: 'Connection timed out', statusCode: 0);
+    } catch (e) {
+      return ApiResponse(error: 'Connection error: $e', statusCode: 0);
+    }
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> patch(
+    String path, {
+    Map<String, dynamic>? body,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl$path');
+      final response = await _client
+          .patch(
+            uri,
+            headers: _buildHeaders(),
+            body: body != null ? jsonEncode(body) : null,
+          )
+          .timeout(timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      return const ApiResponse(error: 'Connection timed out', statusCode: 0);
+    } catch (e) {
+      return ApiResponse(error: 'Connection error: $e', statusCode: 0);
+    }
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> delete(
+    String path, {
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl$path');
+      final response = await _client
+          .delete(uri, headers: _buildHeaders())
+          .timeout(timeout);
+      return _handleResponse(response);
+    } on TimeoutException {
+      return const ApiResponse(error: 'Connection timed out', statusCode: 0);
+    } catch (e) {
+      return ApiResponse(error: 'Connection error: $e', statusCode: 0);
+    }
+  }
+
+  ApiResponse<Map<String, dynamic>> _handleResponse(http.Response response) {
+    final statusCode = response.statusCode;
+
+    // Try to parse body as JSON map or list
+    Map<String, dynamic>? bodyMap;
+    try {
+      if (response.body.isNotEmpty) {
+        final decoded = jsonDecode(response.body);
+        if (decoded is Map<String, dynamic>) {
+          bodyMap = decoded;
+        } else if (decoded is List) {
+          bodyMap = {'results': decoded};
+        }
+      }
+    } catch (_) {
+      bodyMap = {'raw': response.body};
+    }
+
+    if (statusCode >= 200 && statusCode < 300) {
+      return ApiResponse(data: bodyMap ?? {}, statusCode: statusCode);
+    }
+
+    // Error mapping
+    String errorMessage;
+    Map<String, dynamic>? validationErrors;
+
+    switch (statusCode) {
+      case 400:
+        errorMessage = _extractErrorMessage(bodyMap, 'Validation error');
+        validationErrors = bodyMap;
+        break;
+      case 401:
+        errorMessage = _extractErrorMessage(
+          bodyMap,
+          'Unauthorized – please log in again',
+        );
+        break;
+      case 403:
+        errorMessage = _extractErrorMessage(
+          bodyMap,
+          'Forbidden – insufficient permissions',
+        );
+        break;
+      case 404:
+        errorMessage = _extractErrorMessage(bodyMap, 'Resource not found');
+        break;
+      case 500:
+      case 502:
+      case 503:
+        errorMessage = _extractErrorMessage(
+          bodyMap,
+          'Server error – please try again later',
+        );
+        break;
+      default:
+        errorMessage = _extractErrorMessage(
+          bodyMap,
+          'Request failed (HTTP $statusCode)',
+        );
+    }
+
+    return ApiResponse(
+      error: errorMessage,
+      statusCode: statusCode,
+      validationErrors: validationErrors,
+    );
+  }
+
+  String _extractErrorMessage(Map<String, dynamic>? body, String fallback) {
+    if (body == null) return fallback;
+    // Django REST framework common error keys
+    if (body.containsKey('detail')) return body['detail'].toString();
+    if (body.containsKey('error')) return body['error'].toString();
+    if (body.containsKey('message')) return body['message'].toString();
+    if (body.containsKey('non_field_errors')) {
+      final nfe = body['non_field_errors'];
+      if (nfe is List && nfe.isNotEmpty) return nfe.first.toString();
+      return nfe.toString();
+    }
+    // Specific field errors, e.g. {"email": ["This field is required."]}
+    for (final key in body.keys) {
+      final val = body[key];
+      if (val is List && val.isNotEmpty) {
+        return '$key: ${val.first}';
+      } else if (val is String) {
+        return '$key: $val';
+      }
+    }
+    return fallback;
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> logout() async {
+    final res = await post(AppConstants.endpointAuthLogout);
+    clearAuthToken();
+    return res;
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> changePassword(
+    String oldPassword,
+    String newPassword,
+  ) async {
+    return post(
+      AppConstants.endpointAuthChangePassword,
+      body: {'old_password': oldPassword, 'new_password': newPassword},
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> forgotPassword(String email) async {
+    return post(
+      AppConstants.endpointAuthForgotPassword,
+      body: {'email': email.trim().toLowerCase()},
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> register({
+    required String name,
+    required String email,
+    required String phone,
+    required String password,
+  }) async {
+    final res = await post(
+      AppConstants.endpointAuthRegister,
+      body: {
+        'name': name.trim(),
+        'email': email.trim().toLowerCase(),
+        'phone': phone.trim(),
+        'password': password,
+      },
+    );
+    if (res.isSuccess && res.data != null) {
+      _authToken = res.data!['token'] as String?;
+    }
+    return res;
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getEmergency(int id) async {
+    return get('${AppConstants.endpointEmergencies}$id/');
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> createEmergency({
+    required String category,
+    required int severity,
+    required int urgency,
+    required int peopleAffected,
+    required String description,
+    required double latitude,
+    required double longitude,
+    required String locationLabel,
+  }) async {
+    return post(
+      AppConstants.endpointEmergencies,
+      body: {
+        'category': category.toUpperCase(),
+        'severity': severity,
+        'urgency': urgency,
+        'people_affected': peopleAffected,
+        'description': description,
+        'latitude': latitude,
+        'longitude': longitude,
+        'location_label': locationLabel,
+      },
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> assignVehicleToEmergency(
+    int emergencyId,
+    int vehicleId, {
+    String? notes,
+  }) async {
+    final body = <String, dynamic>{'vehicle_id': vehicleId};
+    if (notes != null && notes.isNotEmpty) body['notes'] = notes;
+    return post(
+      '${AppConstants.endpointEmergencies}$emergencyId/assign/',
+      body: body,
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getEmergencyCandidates(
+    int id,
+  ) async {
+    return get('${AppConstants.endpointEmergencies}$id/candidates/');
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getVehicle(int id) async {
+    return get('${AppConstants.endpointVehicles}$id/');
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> createVehicle({
+    required String licensePlate,
+    required String type,
+    int? driverId,
+    String? stationName,
+    int? crewRequired,
+    int? fuelLevel,
+    List<String>? capabilities,
+  }) async {
+    final body = <String, dynamic>{
+      'license_plate': licensePlate.trim().toUpperCase(),
+      'type': type,
+    };
+    if (driverId != null) body['driver'] = driverId;
+    if (stationName != null) body['station_name'] = stationName;
+    if (crewRequired != null) body['crew_required'] = crewRequired;
+    if (fuelLevel != null) body['fuel_level'] = fuelLevel;
+    if (capabilities != null) body['capabilities'] = capabilities;
+    return post(AppConstants.endpointVehicles, body: body);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> updateVehicleLocation(
+    int id,
+    double lat,
+    double lng, {
+    String? status,
+    int? fuelLevel,
+  }) async {
+    final body = <String, dynamic>{'latitude': lat, 'longitude': lng};
+    if (status != null) body['status'] = status;
+    if (fuelLevel != null) body['fuel_level'] = fuelLevel;
+    return post('${AppConstants.endpointVehicles}$id/location/', body: body);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> createResource({
+    required String name,
+    required String category,
+    required int quantity,
+    required String unit,
+    int? vehicleId,
+  }) async {
+    final body = <String, dynamic>{
+      'name': name.trim(),
+      'category': category,
+      'quantity': quantity,
+      'unit': unit,
+    };
+    if (vehicleId != null) body['vehicle'] = vehicleId;
+    return post(AppConstants.endpointResources, body: body);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> updateResource(
+    int id, {
+    int? quantity,
+    String? status,
+  }) async {
+    final body = <String, dynamic>{};
+    if (quantity != null) body['quantity'] = quantity;
+    if (status != null) body['status'] = status;
+    return patch('${AppConstants.endpointResources}$id/', body: body);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getResourceSummary() async {
+    return get('${AppConstants.endpointResources}summary/');
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getRoads({
+    bool? blocked,
+    int? limit,
+    int? offset,
+  }) async {
+    final qp = <String, String>{};
+    if (blocked != null) qp['blocked'] = blocked.toString();
+    if (limit != null) qp['limit'] = limit.toString();
+    if (offset != null) qp['offset'] = offset.toString();
+    return get(
+      AppConstants.endpointRoads,
+      queryParams: qp.isNotEmpty ? qp : null,
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getRoadNodes() async {
+    return get(AppConstants.endpointRoadNodes);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> toggleRoadBlock(
+    int id,
+    bool isBlocked, {
+    String? reason,
+  }) async {
+    final body = <String, dynamic>{'is_blocked': isBlocked};
+    if (reason != null && reason.isNotEmpty) body['reason'] = reason;
+    return post('${AppConstants.endpointRoads}$id/block/', body: body);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getMapData() async {
+    return get(AppConstants.endpointMap);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> allocate({
+    bool dryRun = false,
+  }) async {
+    final body = <String, dynamic>{};
+    if (dryRun) body['dry_run'] = true;
+    return post(
+      AppConstants.endpointAllocate,
+      body: body.isNotEmpty ? body : null,
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getPlanCurrent() async {
+    return get(AppConstants.endpointPlanCurrent);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> recalculatePlan(
+    String reason,
+  ) async {
+    return post(AppConstants.endpointPlanRecalculate, body: {'reason': reason});
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getPlanHistory({
+    int limit = 20,
+  }) async {
+    return get(
+      AppConstants.endpointPlanHistory,
+      queryParams: {'limit': limit.toString()},
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> calculateRoute({
+    int? vehicleId,
+    int? emergencyId,
+    double? fromLat,
+    double? fromLng,
+    double? toLat,
+    double? toLng,
+  }) async {
+    final body = <String, dynamic>{};
+    if (vehicleId != null) body['vehicle_id'] = vehicleId;
+    if (emergencyId != null) body['emergency_id'] = emergencyId;
+    if (fromLat != null) body['from_lat'] = fromLat;
+    if (fromLng != null) body['from_lng'] = fromLng;
+    if (toLat != null) body['to_lat'] = toLat;
+    if (toLng != null) body['to_lng'] = toLng;
+    return post(AppConstants.endpointRoute, body: body);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getDriverHistory() async {
+    return get(AppConstants.endpointDriverHistory);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getAssignments() async {
+    return get(AppConstants.endpointAssignments);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> completeAssignment(int id) async {
+    return post('${AppConstants.endpointAssignments}$id/complete/');
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> markNotificationRead(int id) async {
+    return post('${AppConstants.endpointNotifications}$id/read/');
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> markAllNotificationsRead() async {
+    return post(AppConstants.endpointNotificationsReadAll);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> createStaffUser({
+    required String name,
+    required String email,
+    required String phone,
+    required String password,
+    required String role,
+  }) async {
+    return post(
+      AppConstants.endpointUsers,
+      body: {
+        'name': name.trim(),
+        'email': email.trim().toLowerCase(),
+        'phone': phone.trim(),
+        'password': password,
+        'role': role.toLowerCase(),
+      },
+    );
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> toggleUserActive(int id) async {
+    return post('${AppConstants.endpointUsers}$id/toggle-active/');
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getUserCounts() async {
+    return get(AppConstants.endpointUserCounts);
+  }
+
+  Future<ApiResponse<Map<String, dynamic>>> getAuditLogs({
+    String? event,
+  }) async {
+    final qp = <String, String>{};
+    if (event != null && event.isNotEmpty) qp['event'] = event;
+    return get(
+      AppConstants.endpointAuditLogs,
+      queryParams: qp.isNotEmpty ? qp : null,
     );
   }
 }

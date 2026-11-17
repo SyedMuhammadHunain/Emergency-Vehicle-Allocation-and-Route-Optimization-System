@@ -190,6 +190,50 @@ class DemoBlockedRoad {
 // DEMO: Emergency Model
 // ─────────────────────────────────────────────────────────────────────────────
 class DemoEmergency {
+  // Factory to create from backend JSON
+  factory DemoEmergency.fromJson(Map<String, dynamic> json) {
+    return DemoEmergency(
+      id: json['id'] as String,
+      category: json['category'] as String,
+      status: json['status'] as String,
+      severity: json['severity'] as int,
+      urgency: json['urgency'] as int,
+      peopleAffected: json['people_affected'] as int,
+      description: json['description'] as String,
+      location: json['location'] != null && json['location'] is Map
+          ? LatLng(
+              (json['location']['lat'] as num).toDouble(),
+              (json['location']['lng'] as num).toDouble(),
+            )
+          : const LatLng(0, 0),
+      locationLabel: json['location_label'] as String,
+      reportedAt: json['reported_at'] != null
+          ? DateTime.parse(json['reported_at'] as String)
+          : DateTime.now(),
+      reportedByUserId: json['reported_by'] as String,
+      assignedVehicle:
+          json['assigned_vehicle'] != null && json['assigned_vehicle'] is Map
+          ? DemoVehicle(
+              id: json['assigned_vehicle']['id'] as String,
+              licensePlate: json['assigned_vehicle']['license_plate'] as String,
+              type: json['assigned_vehicle']['type'] as String,
+              status: json['assigned_vehicle']['status'] as String,
+              location:
+                  json['assigned_vehicle']['location'] != null &&
+                      json['assigned_vehicle']['location'] is Map
+                  ? LatLng(
+                      (json['assigned_vehicle']['location']['lat'] as num)
+                          .toDouble(),
+                      (json['assigned_vehicle']['location']['lng'] as num)
+                          .toDouble(),
+                    )
+                  : const LatLng(0, 0),
+            )
+          : null,
+      allocationReason: json['allocation_reason'] as String?,
+    );
+  }
+
   final String id;
   final String category;
   String status;
