@@ -44,18 +44,20 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
 
     if (mission == null) {
       return Scaffold(
-        body: Center(
-          child: EmptyState(
-            'Navigation Inactive',
-            subtitle:
-                'No emergency destination is currently assigned to your vehicle.',
-            icon: Icons.navigation_outlined,
-            action: widget.onNavigateToTab != null
-                ? OutlinedButton(
-                    onPressed: () => widget.onNavigateToTab!(0),
-                    child: const Text('Back to Dashboard'),
-                  )
-                : null,
+        body: SafeArea(
+          child: Center(
+            child: EmptyState(
+              'Navigation Inactive',
+              subtitle:
+                  'No emergency destination is currently assigned to your vehicle.',
+              icon: Icons.navigation_outlined,
+              action: widget.onNavigateToTab != null
+                  ? OutlinedButton(
+                      onPressed: () => widget.onNavigateToTab!(0),
+                      child: const Text('Back to Dashboard'),
+                    )
+                  : null,
+            ),
           ),
         ),
       );
@@ -175,97 +177,110 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
           MapZoomControls(
             mapController: _mapController,
             alignment: Alignment.topRight,
-            padding: const EdgeInsets.only(top: 70, right: 16),
+            padding: const EdgeInsets.only(top: 180, right: 16),
           ),
 
-          // Simulation Banner (Top)
+          // Top Guidance and Simulation Stack
           Positioned(
-            top: 12,
+            top: 0,
             left: 16,
             right: 16,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.82),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColors.statusPending.withValues(alpha: 0.7),
-                ),
-              ),
-              child: Row(
+            child: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.info_outline_rounded,
-                    color: AppColors.statusPending,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'SIMULATED NAVIGATION · Shortest path estimated via Dijkstra graph search',
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                  const SizedBox(height: 8),
+                  // Simulation Banner
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.82),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.statusPending.withValues(alpha: 0.7),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Turn-by-Turn Guidance Card (Top)
-          Positioned(
-            top: 60,
-            left: 16,
-            right: 16,
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.15),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryTeal.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.turn_right_rounded,
-                      color: AppColors.primaryTeal,
-                      size: 26,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text(
-                          'In 250m, turn right onto Main Boulevard',
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
+                        const Icon(
+                          Icons.info_outline_rounded,
+                          color: AppColors.statusPending,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'SIMULATED NAVIGATION · Shortest path estimated via Dijkstra graph search',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        Text(
-                          'Continuing towards ${mission.locationLabel}',
-                          style: GoogleFonts.inter(
-                            fontSize: 11,
-                            color: isDark
-                                ? AppColors.darkTextSecondary
-                                : AppColors.lightTextSecondary,
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Turn-by-Turn Guidance Card
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: isDark ? AppColors.darkSurface : Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryTeal.withValues(
+                              alpha: 0.15,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.turn_right_rounded,
+                            color: AppColors.primaryTeal,
+                            size: 26,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'In 250m, turn right onto Main Boulevard',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                'Continuing towards ${mission.locationLabel}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  fontSize: 11,
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.lightTextSecondary,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -276,48 +291,18 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
             ),
           ),
 
-          // Map Controls (Right Side)
+          // Map Recenter Control (Right Side)
           Positioned(
             right: 16,
-            bottom: 170,
-            child: Column(
-              children: [
-                FloatingActionButton.small(
-                  heroTag: 'driverZoomIn',
-                  backgroundColor: isDark
-                      ? AppColors.darkSurface
-                      : Colors.white,
-                  foregroundColor: AppColors.primaryTeal,
-                  onPressed: () {
-                    final z = _mapController.camera.zoom + 1;
-                    _mapController.move(_mapController.camera.center, z);
-                  },
-                  child: const Icon(Icons.add),
-                ),
-                const SizedBox(height: 8),
-                FloatingActionButton.small(
-                  heroTag: 'driverZoomOut',
-                  backgroundColor: isDark
-                      ? AppColors.darkSurface
-                      : Colors.white,
-                  foregroundColor: AppColors.primaryTeal,
-                  onPressed: () {
-                    final z = _mapController.camera.zoom - 1;
-                    _mapController.move(_mapController.camera.center, z);
-                  },
-                  child: const Icon(Icons.remove),
-                ),
-                const SizedBox(height: 8),
-                FloatingActionButton.small(
-                  heroTag: 'driverRecenter',
-                  backgroundColor: AppColors.primaryTeal,
-                  foregroundColor: Colors.white,
-                  onPressed: () {
-                    _mapController.move(vehicleLocation, 15.0);
-                  },
-                  child: const Icon(Icons.my_location_rounded),
-                ),
-              ],
+            bottom: 120,
+            child: FloatingActionButton.small(
+              heroTag: 'driverRecenter',
+              backgroundColor: AppColors.primaryTeal,
+              foregroundColor: Colors.white,
+              onPressed: () {
+                _mapController.move(vehicleLocation, 15.0);
+              },
+              child: const Icon(Icons.my_location_rounded),
             ),
           ),
 
@@ -326,61 +311,69 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
             left: 16,
             right: 16,
             bottom: 16,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 16,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '~6 MIN',
-                            style: GoogleFonts.poppins(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.primaryTeal,
-                            ),
+            child: SafeArea(
+              top: false,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.darkSurface : Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '~6 MIN',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.primaryTeal,
+                                ),
+                              ),
+                              Text(
+                                '2.8 km · Simulated Arrival 10:48 AM',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  fontSize: 11,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            '2.8 km · Simulated Arrival 10:48 AM',
-                            style: GoogleFonts.inter(
-                              fontSize: 11,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      FilledButton.icon(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.primaryTeal,
                         ),
-                        icon: const Icon(Icons.assignment_rounded, size: 16),
-                        label: const Text('Update Status'),
-                        onPressed: () {
-                          if (widget.onNavigateToTab != null) {
-                            widget.onNavigateToTab!(1);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(width: 8),
+                        FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColors.primaryTeal,
+                          ),
+                          icon: const Icon(Icons.assignment_rounded, size: 16),
+                          label: const Text('Update Status'),
+                          onPressed: () {
+                            if (widget.onNavigateToTab != null) {
+                              widget.onNavigateToTab!(1);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

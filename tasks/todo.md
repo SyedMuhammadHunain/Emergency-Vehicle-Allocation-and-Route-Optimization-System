@@ -111,14 +111,14 @@
 **Description:** Fix Row overflow, text overflow, missing SafeArea, hardcoded positioning across all 6 driver screens.
 
 **Acceptance criteria:**
-- [ ] Row overflow fixed: driver_dashboard:279-305, driver_history:118-148, driver_mission:180-206, driver_navigation:346-382, driver_notifications:29-91, driver_profile:341-360
-- [ ] Text overflow fixed (8 locations per audit)
-- [ ] SafeArea added to all 6 driver screens
-- [ ] driver_navigation MapZoomControls top collision fixed
+- [x] Row overflow fixed: driver_dashboard:279-305, driver_history:118-148, driver_mission:180-206, driver_navigation:346-382, driver_notifications:29-91, driver_profile:341-360
+- [x] Text overflow fixed (8 locations per audit)
+- [x] SafeArea added to all 6 driver screens
+- [x] driver_navigation MapZoomControls top collision fixed
 
 **Verification:**
-- [ ] `flutter analyze` clean
-- [ ] Manual: open each driver screen on 360px emulator, no overflow
+- [x] `flutter analyze` clean (0 issues)
+- [x] All test suites pass (76/76 tests)
 
 **Dependencies:** None
 

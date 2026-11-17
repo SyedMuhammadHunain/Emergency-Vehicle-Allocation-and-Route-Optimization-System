@@ -22,9 +22,10 @@ class DriverHistoryScreen extends StatelessWidget {
     final history = repo.getMissionHistoryForDriver(session.userName);
 
     return Scaffold(
-      body: history.isEmpty
-          ? Center(
-              child: EmptyState(
+      body: SafeArea(
+        child: history.isEmpty
+            ? Center(
+                child: EmptyState(
                 'No Completed Missions Yet',
                 subtitle:
                     'Missions you complete and resolve will appear in this historical record log.',
@@ -118,27 +119,37 @@ class DriverHistoryScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.check_circle_rounded,
-                                  size: 16,
-                                  color: AppColors.statusCompleted,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  'Successfully resolved on site',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
+                            Flexible(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.check_circle_rounded,
+                                    size: 16,
+                                    color: AppColors.statusCompleted,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 6),
+                                  Flexible(
+                                    child: Text(
+                                      'Successfully resolved on site',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
+                            const SizedBox(width: 8),
                             Text(
                               item.reportedAt.toLocal().toString().split(
                                 '.',
                               )[0],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(
                                 fontSize: 11,
                                 color: Colors.grey,
@@ -152,6 +163,7 @@ class DriverHistoryScreen extends StatelessWidget {
                 );
               },
             ),
+      ),
     );
   }
 }

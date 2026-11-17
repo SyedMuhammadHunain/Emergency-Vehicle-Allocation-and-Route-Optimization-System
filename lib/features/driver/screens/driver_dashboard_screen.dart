@@ -29,12 +29,13 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
     final history = repo.getMissionHistoryForDriver(session.userName);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: Column(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Driver Header & Duty Toggle
@@ -279,28 +280,33 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.forCategory(
-                                  activeMission.category,
-                                ).withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                activeMission.category,
-                                style: GoogleFonts.inter(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800,
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
                                   color: AppColors.forCategory(
                                     activeMission.category,
+                                  ).withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  activeMission.category,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.forCategory(
+                                      activeMission.category,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
+                            const SizedBox(width: 8),
                             StatusChip(status: activeMission.status),
                           ],
                         ),
@@ -432,8 +438,9 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildQuickAction({
     required IconData icon,
@@ -468,6 +475,8 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
               const SizedBox(height: 12),
               Text(
                 title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -475,6 +484,8 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
               ),
               Text(
                 subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.inter(
                   fontSize: 11,
                   color: isDark

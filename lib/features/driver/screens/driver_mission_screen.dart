@@ -54,19 +54,21 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
 
     if (mission == null) {
       return Scaffold(
-        body: Center(
-          child: EmptyState(
-            'No Active Mission',
-            subtitle:
-                'You are currently standing by at Karachi Central Depot. Ready for incoming dispatch triage.',
-            icon: Icons.assignment_turned_in_rounded,
-            action: widget.onNavigateToTab != null
-                ? OutlinedButton.icon(
-                    icon: const Icon(Icons.history_rounded),
-                    label: const Text('View Completed History'),
-                    onPressed: () => widget.onNavigateToTab!(3),
-                  )
-                : null,
+        body: SafeArea(
+          child: Center(
+            child: EmptyState(
+              'No Active Mission',
+              subtitle:
+                  'You are currently standing by at Karachi Central Depot. Ready for incoming dispatch triage.',
+              icon: Icons.assignment_turned_in_rounded,
+              action: widget.onNavigateToTab != null
+                  ? OutlinedButton.icon(
+                      icon: const Icon(Icons.history_rounded),
+                      label: const Text('View Completed History'),
+                      onPressed: () => widget.onNavigateToTab!(3),
+                    )
+                  : null,
+            ),
           ),
         ),
       );
@@ -79,9 +81,10 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
     final isOnScene = mission.status == EmergencyStatus.onScene;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Center(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 800),
             child: Column(
@@ -131,6 +134,8 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                             const SizedBox(height: 2),
                             Text(
                               '${mission.id} · ${mission.category}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
@@ -139,6 +144,8 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
                             ),
                             Text(
                               'Target: ${mission.locationLabel}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 color: Colors.white.withValues(alpha: 0.9),
@@ -416,6 +423,7 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 
@@ -449,6 +457,8 @@ class _DriverMissionScreenState extends State<DriverMissionScreen> {
         const SizedBox(height: 4),
         Text(
           label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: GoogleFonts.inter(
             fontSize: 9,
             fontWeight: isActive ? FontWeight.w800 : FontWeight.w500,
