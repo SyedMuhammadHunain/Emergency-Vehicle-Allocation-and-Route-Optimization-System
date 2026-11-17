@@ -27,12 +27,12 @@ Layout fixes (Tasks 3-9) — all independent, parallelizable
 
 ### Phase 1: Map Category Markers
 - [x] Task 1: Add `getEmergenciesByCategory()` to MockRepository
-- [ ] Task 2: Render category-filtered markers on Report Emergency map
+- [x] Task 2: Render category-filtered markers on Report Emergency map
 
 ### Checkpoint: Map Markers
-- [ ] Selecting any category shows matching markers on report map
-- [ ] User pin stays visible and tappable
-- [ ] `flutter analyze` clean
+- [x] Selecting any category shows matching markers on report map
+- [x] User pin stays visible and tappable
+- [x] `flutter analyze` clean
 
 ### Phase 2: Layout Fixes (parallelizable)
 - [ ] Task 3: Fix citizen screens (6 files)

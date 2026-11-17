@@ -272,6 +272,9 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final repo = context.watch<MockRepository>();
+    final categoryEmergencies =
+        repo.getEmergenciesByCategory(_selectedCategory);
 
     final content = SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -410,6 +413,43 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                           ),
                           MarkerLayer(
                             markers: [
+                              // Existing emergency markers matching selected category
+                              ...categoryEmergencies.map(
+                                (e) => Marker(
+                                  point: e.location,
+                                  width: 28,
+                                  height: 28,
+                                  child: Tooltip(
+                                    message:
+                                        '${e.id} (${e.category})\n${e.locationLabel}',
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: _getCategoryColor(e.category),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 1.5,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.3,
+                                            ),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Icon(
+                                        _getCategoryIcon(e.category),
+                                        color: Colors.white,
+                                        size: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // User's selected emergency pin
                               Marker(
                                 point: _selectedLocation,
                                 width: 44,
@@ -461,7 +501,9 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            'Karachi Map · Tap to relocate pin',
+                            categoryEmergencies.isNotEmpty
+                                ? 'Karachi Map · ${categoryEmergencies.length} ${_selectedCategory.toLowerCase()} active · Tap to set pin'
+                                : 'Karachi Map · Tap to relocate pin',
                             style: GoogleFonts.inter(
                               fontSize: 10,
                               color: Colors.white,
@@ -769,6 +811,36 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
         return AppColors.statusAssigned;
       default:
         return AppColors.statusCompleted;
+    }
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category.trim().toUpperCase()) {
+      case EmergencyCategory.medical:
+        return AppColors.infoCyan;
+      case EmergencyCategory.fire:
+        return const Color(0xFFE65100);
+      case EmergencyCategory.accident:
+        return AppColors.emergencyPink;
+      case EmergencyCategory.rescue:
+        return AppColors.emergencyPurple;
+      default:
+        return AppColors.primaryTeal;
+    }
+  }
+
+  IconData _getCategoryIcon(String category) {
+    switch (category.trim().toUpperCase()) {
+      case EmergencyCategory.medical:
+        return Icons.medical_services_rounded;
+      case EmergencyCategory.fire:
+        return Icons.local_fire_department_rounded;
+      case EmergencyCategory.accident:
+        return Icons.car_crash_rounded;
+      case EmergencyCategory.rescue:
+        return Icons.support_rounded;
+      default:
+        return Icons.warning_rounded;
     }
   }
 }

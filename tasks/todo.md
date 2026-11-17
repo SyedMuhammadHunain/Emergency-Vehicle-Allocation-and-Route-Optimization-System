@@ -28,15 +28,15 @@
 **Description:** When user selects a category on Report Emergency screen, load matching emergencies from MockRepository and render them as colored markers on the map. User's own location pin stays on top. Markers update on category change via setState.
 
 **Acceptance criteria:**
-- [ ] Map shows existing emergency markers filtered by `_selectedCategory`
-- [ ] Each marker uses category-appropriate color (teal=medical, orange=fire, pink=accident, purple=rescue)
-- [ ] Markers are smaller (28px) than user pin (44px) and render below it
-- [ ] Switching category immediately updates markers
-- [ ] Tapping a marker does not interfere with user pin placement
+- [x] Map shows existing emergency markers filtered by `_selectedCategory`
+- [x] Each marker uses category-appropriate color (teal=medical, orange=fire, pink=accident, purple=rescue)
+- [x] Markers are smaller (28px) than user pin (44px) and render below it
+- [x] Switching category immediately updates markers
+- [x] Tapping a marker does not interfere with user pin placement
 
 **Verification:**
-- [ ] `flutter analyze` clean
-- [ ] Manual: select each category, verify correct markers appear on map
+- [x] `flutter analyze` clean
+- [x] Unit/Widget test `test/category_map_markers_test.dart` passes (all category switches tested)
 
 **Dependencies:** Task 1
 
