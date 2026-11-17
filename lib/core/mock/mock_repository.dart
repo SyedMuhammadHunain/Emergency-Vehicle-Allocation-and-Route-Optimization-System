@@ -195,6 +195,13 @@ class MockRepository extends ChangeNotifier {
     }).toList();
   }
 
+  List<DemoEmergency> getEmergenciesByCategory(String category) {
+    final cleanCategory = category.trim().toUpperCase();
+    return _emergencies
+        .where((e) => e.category.trim().toUpperCase() == cleanCategory)
+        .toList();
+  }
+
   /// User Profile & Medical Details Management
   UserProfileModel getProfileForUser(
     String userId, {
