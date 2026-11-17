@@ -2,7 +2,7 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ "Hunain" ]
+    branches: [ "Hunain", "main" ]
   workflow_dispatch:
 
 jobs:

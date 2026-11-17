@@ -312,14 +312,21 @@ class SessionService extends ChangeNotifier {
       await prefs.setBool(_prefIsDemoModeKey, _isDemoMode);
 
       if (_isLoggedIn) {
-        if (_userId != null) await prefs.setString(_prefUserIdKey, _userId!);
-        if (_role != null) await prefs.setString(_prefRoleKey, _role!);
-        if (_userName != null)
+        if (_userId != null) {
+          await prefs.setString(_prefUserIdKey, _userId!);
+        }
+        if (_role != null) {
+          await prefs.setString(_prefRoleKey, _role!);
+        }
+        if (_userName != null) {
           await prefs.setString(_prefUserNameKey, _userName!);
-        if (_userEmail != null)
+        }
+        if (_userEmail != null) {
           await prefs.setString(_prefUserEmailKey, _userEmail!);
-        if (_userPhone != null)
+        }
+        if (_userPhone != null) {
           await prefs.setString(_prefUserPhoneKey, _userPhone!);
+        }
         if (_authToken != null) {
           await prefs.setString(_prefTokenKey, _authToken!);
         } else {

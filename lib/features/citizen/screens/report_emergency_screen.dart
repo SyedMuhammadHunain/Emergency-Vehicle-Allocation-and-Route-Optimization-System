@@ -404,7 +404,7 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                           TileLayer(
                             urlTemplate:
                                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            userAgentPackageName: 'com.resq.resq_app',
+                            userAgentPackageName: AppConstants.packageName,
                             maxZoom: 18,
                             panBuffer: 1,
                           ),

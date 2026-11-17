@@ -6,6 +6,7 @@ class AppConstants {
 
   static const String appName = 'ResQ';
   static const String appTagline = 'Closer to Help, Closer to Hope.';
+  static const String packageName = 'com.resq.resq';
 
   // Default Map Coordinates: Karachi Central Metropolis
   static const LatLng karachiLocation = LatLng(24.8607, 67.0011);

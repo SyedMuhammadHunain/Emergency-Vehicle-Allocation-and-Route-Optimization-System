@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/mock/demo_data.dart';
 import '../../../core/mock/mock_repository.dart';
 import '../../../core/services/api_service.dart';
@@ -239,7 +240,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.resq.resq_app',
+                userAgentPackageName: AppConstants.packageName,
                 maxZoom: 18,
                 panBuffer: 1,
               ),
