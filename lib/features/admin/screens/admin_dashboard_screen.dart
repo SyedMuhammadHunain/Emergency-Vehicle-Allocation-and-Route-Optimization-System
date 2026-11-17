@@ -24,7 +24,7 @@ class AdminDashboardScreen extends StatelessWidget {
     final totalVehicles = repo.vehicles.length;
     final availableVehicles = repo.availableVehicles.length;
 
-    final totalUsers = repo.accounts.length;
+    final totalUsers = repo.totalRegisteredUsersCount;
     final citizensCount = repo.totalCitizensCount;
     final staffCount = repo.totalDispatchersCount + repo.totalDriversCount;
 
@@ -58,7 +58,10 @@ class AdminDashboardScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(10),
@@ -114,8 +117,11 @@ class AdminDashboardScreen extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final width = constraints.maxWidth;
-                    final int crossAxisCount = width > 768 ? 4 : (width > 340 ? 2 : 1);
-                    final cardWidth = (width - ((crossAxisCount - 1) * 12)) / crossAxisCount;
+                    final int crossAxisCount = width > 768
+                        ? 4
+                        : (width > 340 ? 2 : 1);
+                    final cardWidth =
+                        (width - ((crossAxisCount - 1) * 12)) / crossAxisCount;
 
                     return Wrap(
                       spacing: 12,
@@ -128,7 +134,8 @@ class AdminDashboardScreen extends StatelessWidget {
                             value: '$totalUsers',
                             icon: Icons.people_rounded,
                             iconColor: AppColors.primaryTeal,
-                            subtitle: '$citizensCount citizens · $staffCount staff',
+                            subtitle:
+                                '$citizensCount citizens · $staffCount staff',
                           ),
                         ),
                         SizedBox(
@@ -148,7 +155,8 @@ class AdminDashboardScreen extends StatelessWidget {
                             value: '$availableVehicles / $totalVehicles',
                             icon: Icons.local_shipping_rounded,
                             iconColor: AppColors.statusCompleted,
-                            subtitle: '${totalVehicles - availableVehicles} in operation',
+                            subtitle:
+                                '${totalVehicles - availableVehicles} in operation',
                           ),
                         ),
                         SizedBox(
@@ -171,14 +179,21 @@ class AdminDashboardScreen extends StatelessWidget {
                 // Quick Navigation Cards
                 Text(
                   'Administrative Modules',
-                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final width = constraints.maxWidth;
-                    final int crossAxisCount = width > 768 ? 4 : (width > 380 ? 2 : 1);
-                    final double aspectRatio = width > 768 ? 1.6 : (width > 380 ? 1.25 : 2.0);
+                    final int crossAxisCount = width > 768
+                        ? 4
+                        : (width > 380 ? 2 : 1);
+                    final double aspectRatio = width > 768
+                        ? 1.6
+                        : (width > 380 ? 1.25 : 2.0);
 
                     return GridView.count(
                       crossAxisCount: crossAxisCount,
@@ -239,7 +254,11 @@ class AdminDashboardScreen extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                    side: BorderSide(
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -248,20 +267,32 @@ class AdminDashboardScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.dns_rounded, color: AppColors.primaryTeal, size: 20),
+                            const Icon(
+                              Icons.dns_rounded,
+                              color: AppColors.primaryTeal,
+                              size: 20,
+                            ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 'System Health & Infrastructure Telemetry',
-                                style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             const SizedBox(width: 6),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
                               decoration: BoxDecoration(
-                                color: AppColors.statusCompleted.withValues(alpha: 0.15),
+                                color: AppColors.statusCompleted.withValues(
+                                  alpha: 0.15,
+                                ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -276,10 +307,26 @@ class AdminDashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const Divider(height: 20),
-                        _buildHealthRow('Central Dispatch Hub', 'Active · Latency: 4ms [SIMULATED]', true),
-                        _buildHealthRow('Dynamic Programming Engine', 'Ready for batch allocation [SIMULATED]', true),
-                        _buildHealthRow('OpenStreetMap Tile Cache', 'Karachi Metropolitan sector cached', true),
-                        _buildHealthRow('Backend Django Integration Layer', 'Ready for REST API Client hook', true),
+                        _buildHealthRow(
+                          'Central Dispatch Hub',
+                          'Active · Latency: 4ms [SIMULATED]',
+                          true,
+                        ),
+                        _buildHealthRow(
+                          'Dynamic Programming Engine',
+                          'Ready for batch allocation [SIMULATED]',
+                          true,
+                        ),
+                        _buildHealthRow(
+                          'OpenStreetMap Tile Cache',
+                          'Karachi Metropolitan sector cached',
+                          true,
+                        ),
+                        _buildHealthRow(
+                          'Backend Django Integration Layer',
+                          'Ready for REST API Client hook',
+                          true,
+                        ),
                       ],
                     ),
                   ),
@@ -303,7 +350,9 @@ class AdminDashboardScreen extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+        side: BorderSide(
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+        ),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -326,7 +375,10 @@ class AdminDashboardScreen extends StatelessWidget {
                     child: Icon(icon, color: AppColors.primaryTeal, size: 20),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primaryNavy.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
@@ -350,7 +402,10 @@ class AdminDashboardScreen extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 2),
                   Text(
@@ -359,7 +414,9 @@ class AdminDashboardScreen extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
                       fontSize: 11,
-                      color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                      color: isDark
+                          ? AppColors.darkTextSecondary
+                          : AppColors.lightTextSecondary,
                       height: 1.25,
                     ),
                   ),
@@ -384,7 +441,9 @@ class AdminDashboardScreen extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      isHealthy ? Icons.check_circle_rounded : Icons.error_rounded,
+                      isHealthy
+                          ? Icons.check_circle_rounded
+                          : Icons.error_rounded,
                       size: 14,
                       color: isHealthy ? AppColors.statusCompleted : Colors.red,
                     ),
@@ -392,7 +451,10 @@ class AdminDashboardScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         label,
-                        style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -419,7 +481,10 @@ class AdminDashboardScreen extends StatelessWidget {
                 flex: 5,
                 child: Text(
                   label,
-                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

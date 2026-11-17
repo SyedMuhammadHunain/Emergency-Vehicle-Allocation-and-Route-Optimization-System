@@ -15,7 +15,10 @@ class DispatcherProfileScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Appearance Theme', style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
+        title: Text(
+          'Appearance Theme',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -62,15 +65,22 @@ class DispatcherProfileScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Sign Out', style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
-        content: const Text('Are you sure you want to end your active dispatch session and sign out?'),
+        title: Text(
+          'Sign Out',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+        ),
+        content: const Text(
+          'Are you sure you want to end your active dispatch session and sign out?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text('Cancel'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.statusMaintenance),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.statusMaintenance,
+            ),
             onPressed: () async {
               Navigator.pop(ctx);
               final session = context.read<SessionService>();
@@ -95,8 +105,8 @@ class DispatcherProfileScreen extends StatelessWidget {
     final themeLabel = theme.mode == ThemeMode.system
         ? 'System Default'
         : theme.mode == ThemeMode.dark
-            ? 'Dark Mode'
-            : 'Light Mode';
+        ? 'Dark Mode'
+        : 'Light Mode';
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -158,7 +168,10 @@ class DispatcherProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.aquaAccent,
                                 borderRadius: BorderRadius.circular(8),
@@ -186,7 +199,9 @@ class DispatcherProfileScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
                     ),
                   ),
                   child: Padding(
@@ -196,13 +211,36 @@ class DispatcherProfileScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Operations Console Details',
-                          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const Divider(height: 20),
-                        _buildSettingRow(Icons.badge_rounded, 'Staff ID', 'STF-DSP-042', isDark),
-                        _buildSettingRow(Icons.place_rounded, 'Operations Sector', 'Karachi Central Operations Room', isDark),
-                        _buildSettingRow(Icons.router_rounded, 'Triage Authority', 'Level 2 Dispatch Controller', isDark),
-                        _buildSettingRow(Icons.verified_user_rounded, 'Security Clearance', 'Active Operational Staff', isDark),
+                        _buildSettingRow(
+                          Icons.badge_rounded,
+                          'Staff ID',
+                          'STF-DSP-042',
+                          isDark,
+                        ),
+                        _buildSettingRow(
+                          Icons.place_rounded,
+                          'Operations Sector',
+                          'Karachi Central Operations Room',
+                          isDark,
+                        ),
+                        _buildSettingRow(
+                          Icons.router_rounded,
+                          'Triage Authority',
+                          'Level 2 Dispatch Controller',
+                          isDark,
+                        ),
+                        _buildSettingRow(
+                          Icons.verified_user_rounded,
+                          'Security Clearance',
+                          'Active Operational Staff',
+                          isDark,
+                        ),
                       ],
                     ),
                   ),
@@ -215,7 +253,9 @@ class DispatcherProfileScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
                     ),
                   ),
                   child: Padding(
@@ -225,22 +265,34 @@ class DispatcherProfileScreen extends StatelessWidget {
                       children: [
                         Text(
                           'System & Preferences',
-                          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const Divider(height: 20),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.palette_rounded, color: AppColors.primaryTeal),
-                          title: Text('Display Theme', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
-                          subtitle: Text(themeLabel, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                          leading: const Icon(
+                            Icons.palette_rounded,
+                            color: AppColors.primaryTeal,
+                          ),
+                          title: Text(
+                            'Display Theme',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          subtitle: Text(
+                            themeLabel,
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
                           trailing: const Icon(Icons.chevron_right_rounded),
                           onTap: () => _showThemePicker(context),
-                        ),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.info_outline_rounded, color: AppColors.primaryTeal),
-                          title: Text('Prototype Architecture', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
-                          subtitle: Text('Phase 3 Dispatcher Frontend · Mock Centralized State', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
                         ),
                       ],
                     ),
@@ -255,7 +307,9 @@ class DispatcherProfileScreen extends StatelessWidget {
                     foregroundColor: AppColors.statusMaintenance,
                     side: const BorderSide(color: AppColors.statusMaintenance),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   icon: const Icon(Icons.logout_rounded),
                   label: const Text('End Session & Sign Out'),
@@ -265,13 +319,11 @@ class DispatcherProfileScreen extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 // Footer branding
-                const Center(
-                  child: ResQWordmark(fontSize: 18),
-                ),
+                const Center(child: ResQWordmark(fontSize: 18)),
                 const SizedBox(height: 6),
                 Center(
                   child: Text(
-                    'ResQ Emergency Response Platform · Version 1.0.0 (Demo Prototype)',
+                    'ResQ Emergency Response Platform · Version 1.0.0',
                     style: GoogleFonts.inter(fontSize: 10, color: Colors.grey),
                   ),
                 ),
@@ -283,20 +335,30 @@ class DispatcherProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingRow(IconData icon, String label, String value, bool isDark) {
+  Widget _buildSettingRow(
+    IconData icon,
+    String label,
+    String value,
+    bool isDark,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Icon(icon, size: 18, color: AppColors.primaryTeal),
           const SizedBox(width: 12),
-          Text(label, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(
+            label,
+            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+          ),
           const Spacer(),
           Text(
             value,
             style: GoogleFonts.inter(
               fontSize: 12,
-              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.lightTextSecondary,
             ),
           ),
         ],

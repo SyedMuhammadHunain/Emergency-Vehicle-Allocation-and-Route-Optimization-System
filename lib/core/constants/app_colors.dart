@@ -61,11 +61,11 @@ class AppColors {
   static const Color darkTextSecondary = Color(0xFF8DA4C4);
 
   // Status & Operational Colors
-  static const Color statusPending = Color(0xFFFF8F00);     // Amber
-  static const Color statusAssigned = Color(0xFF0A6E9E);    // Cyan Blue
-  static const Color statusOnTheWay = Color(0xFF1D4ED8);    // Deep Blue
-  static const Color statusArrived = Color(0xFF7B1FA2);     // Purple
-  static const Color statusCompleted = Color(0xFF10B981);   // Green
+  static const Color statusPending = Color(0xFFFF8F00); // Amber
+  static const Color statusAssigned = Color(0xFF0A6E9E); // Cyan Blue
+  static const Color statusOnTheWay = Color(0xFF1D4ED8); // Deep Blue
+  static const Color statusArrived = Color(0xFF7B1FA2); // Purple
+  static const Color statusCompleted = Color(0xFF10B981); // Green
   static const Color statusAvailable = Color(0xFF10B981);
   static const Color statusBusy = Color(0xFFF59E0B);
   static const Color statusMaintenance = Color(0xFFEF4444); // Red

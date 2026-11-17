@@ -80,7 +80,8 @@ class AppConstants {
 
   // Notifications
   static const String endpointNotifications = '/api/notifications/';
-  static const String endpointNotificationsReadAll = '/api/notifications/read-all/';
+  static const String endpointNotificationsReadAll =
+      '/api/notifications/read-all/';
 
   // Driver
   static const String endpointDriverMission = '/api/driver/mission/';

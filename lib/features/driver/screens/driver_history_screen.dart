@@ -26,7 +26,8 @@ class DriverHistoryScreen extends StatelessWidget {
           ? Center(
               child: EmptyState(
                 'No Completed Missions Yet',
-                subtitle: 'Missions you complete and resolve will appear in this historical record log.',
+                subtitle:
+                    'Missions you complete and resolve will appear in this historical record log.',
                 icon: Icons.history_toggle_off_rounded,
                 action: onNavigateToTab != null
                     ? OutlinedButton(
@@ -47,7 +48,9 @@ class DriverHistoryScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
                     ),
                   ),
                   child: Padding(
@@ -63,15 +66,18 @@ class DriverHistoryScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(6),
                                   decoration: BoxDecoration(
-                                    color: AppColors.forCategory(item.category).withValues(alpha: 0.15),
+                                    color: AppColors.forCategory(
+                                      item.category,
+                                    ).withValues(alpha: 0.15),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
                                     item.category == EmergencyCategory.medical
                                         ? Icons.medical_services_rounded
-                                        : item.category == EmergencyCategory.fire
-                                            ? Icons.local_fire_department_rounded
-                                            : Icons.car_crash_rounded,
+                                        : item.category ==
+                                              EmergencyCategory.fire
+                                        ? Icons.local_fire_department_rounded
+                                        : Icons.car_crash_rounded,
                                     color: AppColors.forCategory(item.category),
                                     size: 18,
                                   ),
@@ -93,14 +99,19 @@ class DriverHistoryScreen extends StatelessWidget {
                         const SizedBox(height: 10),
                         Text(
                           item.locationLabel,
-                          style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           item.description,
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.lightTextSecondary,
                           ),
                         ),
                         const Divider(height: 20),
@@ -109,17 +120,29 @@ class DriverHistoryScreen extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.check_circle_rounded, size: 16, color: AppColors.statusCompleted),
+                                const Icon(
+                                  Icons.check_circle_rounded,
+                                  size: 16,
+                                  color: AppColors.statusCompleted,
+                                ),
                                 const SizedBox(width: 6),
                                 Text(
                                   'Successfully resolved on site',
-                                  style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ],
                             ),
                             Text(
-                              item.reportedAt.toLocal().toString().split('.')[0],
-                              style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
+                              item.reportedAt.toLocal().toString().split(
+                                '.',
+                              )[0],
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                color: Colors.grey,
+                              ),
                             ),
                           ],
                         ),

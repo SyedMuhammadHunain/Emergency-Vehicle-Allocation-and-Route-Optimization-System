@@ -23,6 +23,7 @@ class UserProfileModel {
   final List<String> allergies;
   final List<String> medicalConditions;
   final String homeAddress;
+  final String preferredHospital;
   final List<EmergencyContact> emergencyContacts;
 
   const UserProfileModel({
@@ -34,6 +35,7 @@ class UserProfileModel {
     required this.allergies,
     required this.medicalConditions,
     required this.homeAddress,
+    this.preferredHospital = '',
     required this.emergencyContacts,
   });
 
@@ -46,6 +48,7 @@ class UserProfileModel {
     List<String>? allergies,
     List<String>? medicalConditions,
     String? homeAddress,
+    String? preferredHospital,
     List<EmergencyContact>? emergencyContacts,
   }) {
     return UserProfileModel(
@@ -57,6 +60,7 @@ class UserProfileModel {
       allergies: allergies ?? this.allergies,
       medicalConditions: medicalConditions ?? this.medicalConditions,
       homeAddress: homeAddress ?? this.homeAddress,
+      preferredHospital: preferredHospital ?? this.preferredHospital,
       emergencyContacts: emergencyContacts ?? this.emergencyContacts,
     );
   }

@@ -33,14 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _fillDemoCredentials(String email, String password) {
-    setState(() {
-      _emailController.text = email;
-      _passwordController.text = password;
-      _errorMessage = null;
-    });
-  }
-
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() {
@@ -62,7 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (account == null) {
         setState(() {
-          _errorMessage = 'Invalid email or password.';
+          _errorMessage =
+              'Invalid email or password. Please verify your credentials and try again.';
           _isLoading = false;
         });
         return;
@@ -145,7 +138,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
@@ -178,10 +174,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppColors.statusMaintenance.withValues(alpha: 0.12),
+                                  color: AppColors.statusMaintenance.withValues(
+                                    alpha: 0.12,
+                                  ),
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: AppColors.statusMaintenance.withValues(alpha: 0.4),
+                                    color: AppColors.statusMaintenance
+                                        .withValues(alpha: 0.4),
                                   ),
                                 ),
                                 child: Row(
@@ -256,10 +255,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                         value: _rememberMe,
                                         activeColor: AppColors.primaryTeal,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
                                         ),
-                                        onChanged: (val) =>
-                                            setState(() => _rememberMe = val ?? true),
+                                        onChanged: (val) => setState(
+                                          () => _rememberMe = val ?? true,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 6),
@@ -270,11 +272,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ],
                                 ),
                                 TextButton(
-                                  onPressed: () => context.push('/forgot-password'),
+                                  onPressed: () =>
+                                      context.push('/forgot-password'),
                                   style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                    ),
                                     minimumSize: Size.zero,
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
                                   child: Text(
                                     'Forgot Password?',
@@ -306,73 +312,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               label: "Don't have an account? Sign Up (Citizen)",
                               onPressed: () => context.push('/register'),
                             ),
-
-                            const SizedBox(height: 24),
-
-                            // DEMO ACCOUNTS QUICK-FILL SECTION (Strictly labeled DEMO MODE)
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: (isDark
-                                        ? AppColors.darkBg
-                                        : AppColors.lightBg)
-                                    .withValues(alpha: 0.8),
-                                borderRadius: BorderRadius.circular(14),
-                                border: Border.all(
-                                  color: isDark
-                                      ? AppColors.darkBorder
-                                      : AppColors.lightBorder,
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 8,
-                                        height: 8,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.statusPending,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        'DEMO MODE CREDENTIALS',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w800,
-                                          letterSpacing: 0.8,
-                                          color: AppColors.statusPending,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    'Tap any role below to prefill its credentials, then tap "Sign In":',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 11,
-                                      color: isDark
-                                          ? AppColors.darkTextSecondary
-                                          : AppColors.lightTextSecondary,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Wrap(
-                                    spacing: 8,
-                                    runSpacing: 8,
-                                    children: [
-                                      _buildDemoChip('Citizen', 'citizen@resq.com', 'Citizen123', Icons.person_rounded),
-                                      _buildDemoChip('Dispatcher', 'dispatcher@resq.com', 'Dispatch123', Icons.headset_mic_rounded),
-                                      _buildDemoChip('Driver', 'driver@resq.com', 'Driver123', Icons.directions_car_rounded),
-                                      _buildDemoChip('Admin', 'admin@resq.com', 'Admin123', Icons.admin_panel_settings_rounded),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -384,26 +323,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildDemoChip(String roleName, String email, String password, IconData icon) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return ActionChip(
-      avatar: Icon(icon, size: 16, color: AppColors.primaryTeal),
-      label: Text(
-        '$roleName ($email)',
-        style: GoogleFonts.inter(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
-      side: BorderSide(
-        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-      ),
-      onPressed: () => _fillDemoCredentials(email, password),
     );
   }
 }

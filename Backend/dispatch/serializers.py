@@ -150,6 +150,24 @@ class EmergencySerializer(LatLngMixin, serializers.ModelSerializer):
     assigned_vehicle = serializers.SerializerMethodField()
     assignments = serializers.SerializerMethodField()
 
+    def to_internal_value(self, data):
+        data = data.copy() if hasattr(data, "copy") else dict(data)
+        if "emergency_type" in data and "category" not in data:
+            cat = str(data["emergency_type"]).upper()
+            if cat in ("TRAFFIC", "ACCIDENT", "COLLISION"):
+                cat = "ACCIDENT"
+            elif cat not in EmergencyCategory.values:
+                cat = "MEDICAL"
+            data["category"] = cat
+        elif "category" in data:
+            cat = str(data["category"]).upper()
+            if cat in ("TRAFFIC", "ACCIDENT", "COLLISION"):
+                cat = "ACCIDENT"
+            data["category"] = cat
+        if "address" in data and "location_label" not in data:
+            data["location_label"] = data["address"]
+        return super().to_internal_value(data)
+
     class Meta:
         model = Emergency
         fields = [

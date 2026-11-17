@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
   final String? hint;
+  final String? helperText;
   final IconData? prefixIcon;
   final bool isPassword;
   final TextInputType keyboardType;
@@ -12,12 +14,15 @@ class CustomTextField extends StatefulWidget {
   final int maxLines;
   final bool readOnly;
   final VoidCallback? onTap;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
 
   const CustomTextField({
     super.key,
     required this.controller,
     required this.label,
     this.hint,
+    this.helperText,
     this.prefixIcon,
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
@@ -25,6 +30,8 @@ class CustomTextField extends StatefulWidget {
     this.maxLines = 1,
     this.readOnly = false,
     this.onTap,
+    this.inputFormatters,
+    this.maxLength,
   });
 
   @override
@@ -47,10 +54,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       children: [
         Text(
           widget.label,
-          style: GoogleFonts.inter(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
+          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 6),
         TextFormField(
@@ -58,12 +62,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
           obscureText: _obscured,
           keyboardType: widget.keyboardType,
           validator: widget.validator,
+          inputFormatters: widget.inputFormatters,
+          maxLength: widget.maxLength,
+          buildCounter: widget.maxLength != null
+              ? (_, {required currentLength, required isFocused, maxLength}) =>
+                    null
+              : null,
           maxLines: widget.maxLines,
           readOnly: widget.readOnly,
           onTap: widget.onTap,
           style: GoogleFonts.inter(fontSize: 14),
           decoration: InputDecoration(
             hintText: widget.hint,
+            helperText: widget.helperText,
+            helperStyle: GoogleFonts.inter(fontSize: 11),
             prefixIcon: widget.prefixIcon != null
                 ? Icon(widget.prefixIcon, size: 20)
                 : null,

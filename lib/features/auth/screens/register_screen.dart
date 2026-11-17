@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/mock/mock_repository.dart';
-import '../../../core/services/session_service.dart';
 import '../../../core/widgets/brand/gradient_header.dart';
 import '../../../core/widgets/brand/resq_wordmark.dart';
 import '../../../core/widgets/buttons/primary_gradient_button.dart';
@@ -42,29 +42,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       final repo = context.read<MockRepository>();
-      final session = context.read<SessionService>();
+      final phone = _phoneController.text.trim();
 
-      // Registers citizen through Django backend API with fallback
-      await session.registerCitizen(
+      // Enforce Pakistani mobile format before any submission
+      if (phone.length != 11 ||
+          !phone.startsWith('03') ||
+          !RegExp(r'^\d{11}$').hasMatch(phone)) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: AppColors.statusMaintenance,
+            content: Text(
+              'Invalid contact number. Must be exactly 11 digits starting with 03 (03XXXXXXXXX).',
+            ),
+          ),
+        );
+        return;
+      }
+
+      // Check if email already registered
+      final cleanEmail = _emailController.text.trim().toLowerCase();
+      if (repo.accounts.any((a) => a.email.toLowerCase() == cleanEmail)) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: AppColors.statusMaintenance,
+            content: Text('An account with this email address already exists.'),
+          ),
+        );
+        return;
+      }
+
+      // Registers as citizen in repository
+      repo.registerCitizen(
         name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
-        phone: _phoneController.text.trim(),
+        email: cleanEmail,
         password: _passwordController.text,
-        repo: repo,
+        phone: phone,
       );
 
-      if (mounted) {
-        // Direct navigation to Citizen Dashboard without re-login
-        context.go('/role-shell');
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      // Return user to the Login screen with success confirmation
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: AppColors.statusCompleted,
+          content: Text(
+            'Account registered successfully! Please sign in with your credentials.',
+          ),
+        ),
+      );
+
+      // Return user to Login screen
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        context.go('/login');
       }
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        final cleanMsg = e.toString().replaceFirst('Exception: ', '');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: AppColors.statusMaintenance,
-            content: Text(cleanMsg),
+            content: Text('Registration error: $e'),
           ),
         );
       }
@@ -87,7 +129,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Align(
                     alignment: Alignment.topLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                      icon: const Icon(
+                        Icons.arrow_back_rounded,
+                        color: Colors.white,
+                      ),
                       tooltip: 'Back to Sign In',
                       onPressed: () {
                         if (context.canPop()) {
@@ -122,7 +167,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
@@ -156,7 +204,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               hint: 'e.g., Ali Khan',
                               prefixIcon: Icons.badge_outlined,
                               validator: (val) =>
-                                  val == null || val.trim().isEmpty ? 'Required' : null,
+                                  val == null || val.trim().isEmpty
+                                  ? 'Required'
+                                  : null,
                             ),
 
                             CustomTextField(
@@ -166,17 +216,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               prefixIcon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
                               validator: (val) =>
-                                  val == null || !val.contains('@') ? 'Enter a valid email' : null,
+                                  val == null || !val.contains('@')
+                                  ? 'Enter a valid email'
+                                  : null,
                             ),
 
                             CustomTextField(
                               controller: _phoneController,
-                              label: 'Phone Number',
-                              hint: 'e.g., +92 300 1234567',
+                              label:
+                                  'Contact Number (Pakistani Mobile: 03XXXXXXXXX)',
+                              hint: '03XXXXXXXXX',
+                              helperText:
+                                  'Expected format: 03XXXXXXXXX (11 digits, digits only)',
                               prefixIcon: Icons.phone_outlined,
-                              keyboardType: TextInputType.phone,
-                              validator: (val) =>
-                                  val == null || val.trim().isEmpty ? 'Required' : null,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(11),
+                              ],
+                              maxLength: 11,
+                              validator: (val) {
+                                if (val == null || val.trim().isEmpty) {
+                                  return 'Contact number is required';
+                                }
+                                final clean = val.trim();
+                                if (!RegExp(r'^\d+$').hasMatch(clean)) {
+                                  return 'Digits only allowed';
+                                }
+                                if (!clean.startsWith('03')) {
+                                  return 'Must start with 03 (e.g., 03001234567)';
+                                }
+                                if (clean.length != 11) {
+                                  return 'Must be exactly 11 digits (e.g., 03001234567)';
+                                }
+                                return null;
+                              },
                             ),
 
                             CustomTextField(
@@ -185,8 +259,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               hint: 'Create a secure password',
                               prefixIcon: Icons.lock_outline_rounded,
                               isPassword: true,
-                              validator: (val) =>
-                                  val == null || val.length < 6 ? 'Minimum 6 characters' : null,
+                              validator: (val) => val == null || val.length < 6
+                                  ? 'Minimum 6 characters'
+                                  : null,
                             ),
 
                             CustomTextField(

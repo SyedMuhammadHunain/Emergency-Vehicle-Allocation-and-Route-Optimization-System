@@ -39,7 +39,10 @@ class IncidentListScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         onPressed: () => context.push('/incidents/new'),
         icon: const Icon(Icons.add_alert_rounded),
-        label: const Text('Report Incident', style: TextStyle(fontWeight: FontWeight.bold)),
+        label: const Text(
+          'Report Incident',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Column(
         children: [
@@ -76,26 +79,36 @@ class IncidentListScreen extends StatelessWidget {
                 _StatusFilterChip(
                   label: 'Reported',
                   color: AppColors.warning,
-                  isSelected: incidentProvider.filterStatus == IncidentStatus.reported,
-                  onTap: () => incidentProvider.setFilterStatus(IncidentStatus.reported),
+                  isSelected:
+                      incidentProvider.filterStatus == IncidentStatus.reported,
+                  onTap: () =>
+                      incidentProvider.setFilterStatus(IncidentStatus.reported),
                 ),
                 _StatusFilterChip(
                   label: 'Dispatched',
                   color: AppColors.info,
-                  isSelected: incidentProvider.filterStatus == IncidentStatus.dispatched,
-                  onTap: () => incidentProvider.setFilterStatus(IncidentStatus.dispatched),
+                  isSelected:
+                      incidentProvider.filterStatus ==
+                      IncidentStatus.dispatched,
+                  onTap: () => incidentProvider.setFilterStatus(
+                    IncidentStatus.dispatched,
+                  ),
                 ),
                 _StatusFilterChip(
                   label: 'On Scene',
                   color: AppColors.primary,
-                  isSelected: incidentProvider.filterStatus == IncidentStatus.onScene,
-                  onTap: () => incidentProvider.setFilterStatus(IncidentStatus.onScene),
+                  isSelected:
+                      incidentProvider.filterStatus == IncidentStatus.onScene,
+                  onTap: () =>
+                      incidentProvider.setFilterStatus(IncidentStatus.onScene),
                 ),
                 _StatusFilterChip(
                   label: 'Resolved',
                   color: AppColors.success,
-                  isSelected: incidentProvider.filterStatus == IncidentStatus.resolved,
-                  onTap: () => incidentProvider.setFilterStatus(IncidentStatus.resolved),
+                  isSelected:
+                      incidentProvider.filterStatus == IncidentStatus.resolved,
+                  onTap: () =>
+                      incidentProvider.setFilterStatus(IncidentStatus.resolved),
                 ),
               ],
             ),
@@ -120,7 +133,10 @@ class IncidentListScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           const Text(
                             'No Incidents Found',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 6),
                           Text(
@@ -203,8 +219,8 @@ class _StatusFilterChip extends StatelessWidget {
               color: isSelected
                   ? Colors.white
                   : (isDark
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight),
+                        ? AppColors.textPrimaryDark
+                        : AppColors.textPrimaryLight),
             ),
           ),
         ),

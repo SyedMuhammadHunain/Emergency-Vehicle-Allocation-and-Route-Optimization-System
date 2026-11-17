@@ -11,7 +11,9 @@ import '../../features/citizen/screens/report_emergency_screen.dart';
 import '../../features/shell/screens/role_shell.dart';
 import '../services/session_service.dart';
 
-final GlobalKey<NavigatorState> _rootNavKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _rootNavKey = GlobalKey<NavigatorState>(
+  debugLabel: 'root',
+);
 
 GoRouter createRouter(SessionService session) {
   return GoRouter(
@@ -19,7 +21,8 @@ GoRouter createRouter(SessionService session) {
     initialLocation: '/',
     refreshListenable: session,
     redirect: (context, state) {
-      final isAuthRoute = state.matchedLocation == '/login' ||
+      final isAuthRoute =
+          state.matchedLocation == '/login' ||
           state.matchedLocation == '/register' ||
           state.matchedLocation == '/forgot-password' ||
           state.matchedLocation == '/';
@@ -31,21 +34,16 @@ GoRouter createRouter(SessionService session) {
 
       // 2. If already logged in and on login/register, go directly to role dashboard
       if (session.isLoggedIn &&
-          (state.matchedLocation == '/login' || state.matchedLocation == '/register')) {
+          (state.matchedLocation == '/login' ||
+              state.matchedLocation == '/register')) {
         return '/role-shell';
       }
 
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
@@ -58,10 +56,7 @@ GoRouter createRouter(SessionService session) {
         path: '/role-shell',
         builder: (context, state) {
           final role = session.role ?? 'citizen';
-          return RoleShell(
-            key: ValueKey(role),
-            initialRole: role,
-          );
+          return RoleShell(key: ValueKey(role), initialRole: role);
         },
       ),
       GoRoute(

@@ -11,31 +11,36 @@ class SessionService extends ChangeNotifier {
   static const String _prefLoggedInKey = 'resq_is_logged_in';
   static const String _prefUserNameKey = 'resq_user_name';
   static const String _prefUserEmailKey = 'resq_user_email';
+  static const String _prefUserPhoneKey = 'resq_user_phone';
   static const String _prefTokenKey = 'resq_auth_token';
   static const String _prefUserJsonKey = 'resq_user_json';
   static const String _prefUserIdKey = 'resq_user_id';
   static const String _prefIsDemoModeKey = 'resq_is_demo_mode';
 
+  String? _userId;
   String? _role;
   String? _userName;
   String? _userEmail;
+  String? _userPhone;
   String? _authToken;
   bool _isLoggedIn = false;
   bool _isBackendOnline = false;
   bool _isDemoMode = false;
-  int? _userId;
   Map<String, dynamic>? _userJson;
   DemoUserAccount? _currentUser;
 
   // ---- getters ----
+  String? get userId => _userId;
+  int? get numericUserId =>
+      int.tryParse(_userId?.replaceAll(RegExp(r'[^0-9]'), '') ?? '');
   String? get role => _role;
   String get userName => _userName ?? 'User';
   String get userEmail => _userEmail ?? '';
+  String get userPhone => _userPhone ?? '';
   String? get authToken => _authToken;
   bool get isLoggedIn => _isLoggedIn;
   bool get isBackendOnline => _isBackendOnline;
   bool get isDemoMode => _isDemoMode;
-  int? get userId => _userId;
   Map<String, dynamic>? get userJson => _userJson;
   DemoUserAccount? get currentUser => _currentUser;
 
@@ -56,11 +61,12 @@ class SessionService extends ChangeNotifier {
       }
 
       // Restore persisted fields
+      _userId = prefs.getString(_prefUserIdKey);
       _role = prefs.getString(_prefRoleKey) ?? 'citizen';
-      _userName = prefs.getString(_prefUserNameKey);
-      _userEmail = prefs.getString(_prefUserEmailKey);
+      _userName = prefs.getString(_prefUserNameKey) ?? 'User';
+      _userEmail = prefs.getString(_prefUserEmailKey) ?? '';
+      _userPhone = prefs.getString(_prefUserPhoneKey) ?? '';
       _authToken = prefs.getString(_prefTokenKey);
-      _userId = prefs.getInt(_prefUserIdKey);
 
       final userJsonStr = prefs.getString(_prefUserJsonKey);
       if (userJsonStr != null) {
@@ -79,16 +85,27 @@ class SessionService extends ChangeNotifier {
           if (meRes.isSuccess && meRes.data != null) {
             // Token is valid — refresh user info from backend
             _isBackendOnline = true;
-            _applyUserData(meRes.data!);
+            final acc = meRes.data!;
+            _userName = acc.name;
+            _userEmail = acc.email;
+            _userPhone = acc.phone;
+            _userId = acc.id;
+            _role = acc.role;
+            _currentUser = acc;
             await _syncToPrefs();
           } else if (meRes.isUnauthorized) {
             // Token expired — clear session
-            debugPrint('SessionService.restore: token expired on backend, clearing session');
-            await _fullClear();
+            debugPrint(
+              'SessionService.restore: token expired on backend, clearing session',
+            );
+            await logout();
+            return;
           } else {
             // Connection error — keep local data, mark backend offline
             _isBackendOnline = false;
-            debugPrint('SessionService.restore: backend offline, using cached session');
+            debugPrint(
+              'SessionService.restore: backend offline, using cached session',
+            );
           }
         } catch (e) {
           _isBackendOnline = false;
@@ -112,57 +129,31 @@ class SessionService extends ChangeNotifier {
     String email,
     String password, [
     MockRepository? repo,
+    ApiService? apiService,
   ]) async {
+    final api = apiService ?? ApiService.instance;
     final cleanEmail = email.trim().toLowerCase();
-    final res = await ApiService.instance.login(cleanEmail, password);
 
-    if (res.isSuccess && res.data != null) {
-      final data = res.data!;
-      _authToken = data['token'] as String?;
-      _role = (data['role'] as String?)?.toLowerCase() ?? 'citizen';
-
-      final userMap = data['user'] is Map<String, dynamic>
-          ? data['user'] as Map<String, dynamic>
-          : data;
-
-      _applyUserData(userMap);
-      _isLoggedIn = true;
-      _isBackendOnline = true;
-      _isDemoMode = false;
-
-      ApiService.instance.setAuthToken(_authToken);
-      _rebuildCurrentUser();
-      notifyListeners();
-      await _syncToPrefs();
-
-      return _currentUser;
+    final apiResponse = await api.login(cleanEmail, password, mockRepo: repo);
+    final account = apiResponse.data;
+    if (account == null) {
+      return null;
     }
 
-    // Backend actively rejected credentials (400, 401, 403)
-    if (res.statusCode != null && res.statusCode! > 0) {
-      throw Exception(res.error ?? 'Invalid email or password.');
-    }
+    _userId = account.id;
+    _role = account.role.toLowerCase();
+    _userName = account.name;
+    _userEmail = account.email;
+    _userPhone = account.phone;
+    _authToken = api.authToken;
+    _isLoggedIn = true;
+    _isBackendOnline = !apiResponse.isFromFallback;
+    _isDemoMode = apiResponse.isFromFallback;
+    _currentUser = account;
+    notifyListeners();
+    await _syncToPrefs();
 
-    // Backend is unreachable (connection error/timeout)
-    // Only fall back to local mock repository if an explicit repo was provided (e.g. offline dev/testing)
-    if (repo != null) {
-      final mock = repo.authenticate(cleanEmail, password);
-      if (mock != null) {
-        _role = mock.role.toLowerCase();
-        _userName = mock.name;
-        _userEmail = mock.email;
-        _authToken = null;
-        _isLoggedIn = true;
-        _isBackendOnline = false;
-        _isDemoMode = true;
-        _currentUser = mock;
-        notifyListeners();
-        await _syncToPrefs();
-        return mock;
-      }
-    }
-
-    throw Exception(res.error ?? 'Backend server unreachable. Please check connection.');
+    return account;
   }
 
   // ======================================================================
@@ -177,41 +168,37 @@ class SessionService extends ChangeNotifier {
     MockRepository? repo,
   }) async {
     final cleanEmail = email.trim().toLowerCase();
-    final res = await ApiService.instance.register(
+    final api = ApiService.instance;
+
+    final res = await api.registerCitizen(
       name: name,
       email: cleanEmail,
       phone: phone,
       password: password,
+      mockRepo: repo,
     );
 
     if (res.isSuccess && res.data != null) {
-      final data = res.data!;
-      _authToken = data['token'] as String?;
-      _role = (data['role'] as String?)?.toLowerCase() ?? 'citizen';
-
-      final userMap = data['user'] is Map<String, dynamic>
-          ? data['user'] as Map<String, dynamic>
-          : data;
-
-      _applyUserData(userMap);
+      final account = res.data!;
+      _userId = account.id;
+      _role = account.role.toLowerCase();
+      _userName = account.name;
+      _userEmail = account.email;
+      _userPhone = account.phone;
+      _authToken = api.authToken;
       _isLoggedIn = true;
-      _isBackendOnline = true;
-      _isDemoMode = false;
-
-      ApiService.instance.setAuthToken(_authToken);
-      _rebuildCurrentUser();
+      _isBackendOnline = !res.isFromFallback;
+      _isDemoMode = res.isFromFallback;
+      _currentUser = account;
       notifyListeners();
       await _syncToPrefs();
-
-      return _currentUser;
+      return account;
     }
 
-    // Backend actively rejected registration (e.g. duplicate email, short password)
-    if (res.statusCode != null && res.statusCode! > 0) {
-      throw Exception(res.error ?? 'Registration failed.');
+    if (res.error != null && !res.isFromFallback) {
+      throw Exception(res.error);
     }
 
-    // Backend is unreachable: fallback to mock repo if provided
     if (repo != null) {
       final mock = repo.registerCitizen(
         name: name,
@@ -223,14 +210,16 @@ class SessionService extends ChangeNotifier {
       return mock;
     }
 
-    throw Exception(res.error ?? 'Backend server unreachable.');
+    throw Exception(res.error ?? 'Registration failed.');
   }
 
   /// Automatically activates session for newly registered citizen (offline / mock)
   Future<void> loginAsRegisteredCitizen(DemoUserAccount account) async {
+    _userId = account.id;
     _role = 'citizen';
     _userName = account.name;
     _userEmail = account.email;
+    _userPhone = account.phone;
     _authToken = null;
     _isLoggedIn = true;
     _isDemoMode = true;
@@ -244,15 +233,18 @@ class SessionService extends ChangeNotifier {
     _role = targetRole.toLowerCase();
     _isLoggedIn = true;
     _isDemoMode = true;
+    _userId = 'USR-${_role!.toUpperCase()}-DEMO';
     _userName = 'Demo ${_role![0].toUpperCase()}${_role!.substring(1)}';
     _userEmail = '$_role@resq.com';
+    _userPhone = '03001234567';
     _authToken = null;
     _currentUser = DemoUserAccount(
-      id: 'USR-${_role!.substring(0, 3).toUpperCase()}-001',
+      id: _userId!,
       name: _userName!,
       email: _userEmail!,
       password: '',
       role: _role!,
+      phone: _userPhone!,
       createdAt: DateTime.now(),
     );
     notifyListeners();
@@ -272,39 +264,30 @@ class SessionService extends ChangeNotifier {
       // Even if network fails, proceed with local logout
     }
     ApiService.instance.clearAuthToken();
-    await _fullClear();
+    _isLoggedIn = false;
+    _isBackendOnline = false;
+    _isDemoMode = false;
+    _clearLocal();
     notifyListeners();
+    await _syncToPrefs();
   }
 
   // ======================================================================
   // Internal helpers
   // ======================================================================
 
-  void _applyUserData(Map<String, dynamic> user) {
-    _userName = user['name'] as String? ??
-        user['full_name'] as String? ??
-        user['username'] as String? ??
-        _userName;
-    _userEmail = user['email'] as String? ?? _userEmail;
-    _userId = user['id'] is int ? user['id'] as int : _userId;
-    if (user['role'] is String) {
-      _role = (user['role'] as String).toLowerCase();
-    }
-    _userJson = user;
-    _rebuildCurrentUser();
-  }
-
   void _rebuildCurrentUser() {
     if (_isLoggedIn) {
       _currentUser = DemoUserAccount(
-        id: _userJson?['code'] ?? 'USR-${_userId ?? 0}',
+        id: _userId ?? _userJson?['code'] ?? 'USR-001',
         name: _userName ?? 'User',
         email: _userEmail ?? '',
         password: '',
         role: _role ?? 'citizen',
-        phone: _userJson?['phone'] ?? '',
+        phone: _userPhone ?? _userJson?['phone'] ?? '',
         isActive: _userJson?['is_active'] ?? true,
-        createdAt: DateTime.tryParse(_userJson?['created_at'] ?? '') ?? DateTime.now(),
+        createdAt:
+            DateTime.tryParse(_userJson?['created_at'] ?? '') ?? DateTime.now(),
       );
     } else {
       _currentUser = null;
@@ -312,21 +295,14 @@ class SessionService extends ChangeNotifier {
   }
 
   void _clearLocal() {
+    _userId = null;
     _role = null;
     _userName = null;
     _userEmail = null;
+    _userPhone = null;
     _authToken = null;
-    _userId = null;
     _userJson = null;
     _currentUser = null;
-  }
-
-  Future<void> _fullClear() async {
-    _isLoggedIn = false;
-    _isBackendOnline = false;
-    _isDemoMode = false;
-    _clearLocal();
-    await _syncToPrefs();
   }
 
   Future<void> _syncToPrefs() async {
@@ -336,24 +312,29 @@ class SessionService extends ChangeNotifier {
       await prefs.setBool(_prefIsDemoModeKey, _isDemoMode);
 
       if (_isLoggedIn) {
+        if (_userId != null) await prefs.setString(_prefUserIdKey, _userId!);
         if (_role != null) await prefs.setString(_prefRoleKey, _role!);
-        if (_userName != null) await prefs.setString(_prefUserNameKey, _userName!);
-        if (_userEmail != null) await prefs.setString(_prefUserEmailKey, _userEmail!);
+        if (_userName != null)
+          await prefs.setString(_prefUserNameKey, _userName!);
+        if (_userEmail != null)
+          await prefs.setString(_prefUserEmailKey, _userEmail!);
+        if (_userPhone != null)
+          await prefs.setString(_prefUserPhoneKey, _userPhone!);
         if (_authToken != null) {
           await prefs.setString(_prefTokenKey, _authToken!);
         } else {
           await prefs.remove(_prefTokenKey);
         }
-        if (_userId != null) await prefs.setInt(_prefUserIdKey, _userId!);
         if (_userJson != null) {
           await prefs.setString(_prefUserJsonKey, jsonEncode(_userJson));
         }
       } else {
+        await prefs.remove(_prefUserIdKey);
         await prefs.remove(_prefRoleKey);
         await prefs.remove(_prefUserNameKey);
         await prefs.remove(_prefUserEmailKey);
+        await prefs.remove(_prefUserPhoneKey);
         await prefs.remove(_prefTokenKey);
-        await prefs.remove(_prefUserIdKey);
         await prefs.remove(_prefUserJsonKey);
       }
     } catch (_) {}

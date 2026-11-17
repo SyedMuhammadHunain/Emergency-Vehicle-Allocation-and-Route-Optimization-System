@@ -75,9 +75,14 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                                 Row(
                                   children: [
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.2),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.2,
+                                        ),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
@@ -122,13 +127,17 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                                 width: 10,
                                 height: 10,
                                 decoration: BoxDecoration(
-                                  color: _isOnDuty ? AppColors.statusCompleted : AppColors.statusMaintenance,
+                                  color: _isOnDuty
+                                      ? AppColors.statusCompleted
+                                      : AppColors.statusMaintenance,
                                   shape: BoxShape.circle,
                                 ),
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                _isOnDuty ? 'STATUS: ON DUTY' : 'STATUS: OFF DUTY',
+                                _isOnDuty
+                                    ? 'STATUS: ON DUTY'
+                                    : 'STATUS: OFF DUTY',
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
@@ -145,7 +154,11 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   duration: const Duration(seconds: 1),
-                                  content: Text(val ? 'You are now ON DUTY.' : 'You are now OFF DUTY.'),
+                                  content: Text(
+                                    val
+                                        ? 'You are now ON DUTY.'
+                                        : 'You are now OFF DUTY.',
+                                  ),
                                 ),
                               );
                             },
@@ -166,8 +179,12 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                         title: 'Active Mission',
                         value: activeMission != null ? '1 Active' : 'None',
                         icon: Icons.emergency_rounded,
-                        iconColor: activeMission != null ? AppColors.emergencyPink : AppColors.primaryTeal,
-                        subtitle: activeMission != null ? activeMission.category : 'Standing By',
+                        iconColor: activeMission != null
+                            ? AppColors.emergencyPink
+                            : AppColors.primaryTeal,
+                        subtitle: activeMission != null
+                            ? activeMission.category
+                            : 'Standing By',
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -188,7 +205,10 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                 // Current Active Mission Card
                 Text(
                   'Current Active Mission',
-                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 8),
 
@@ -199,16 +219,25 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                       color: isDark ? AppColors.darkSurface : Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : AppColors.lightBorder,
                       ),
                     ),
                     child: Column(
                       children: [
-                        const Icon(Icons.check_circle_outline_rounded, size: 48, color: AppColors.statusCompleted),
+                        const Icon(
+                          Icons.check_circle_outline_rounded,
+                          size: 48,
+                          color: AppColors.statusCompleted,
+                        ),
                         const SizedBox(height: 12),
                         Text(
                           'No Active Emergency Assigned',
-                          style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -216,7 +245,9 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                           textAlign: TextAlign.center,
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.lightTextSecondary,
                           ),
                         ),
                       ],
@@ -228,10 +259,15 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                     decoration: BoxDecoration(
                       color: isDark ? AppColors.darkSurface : Colors.white,
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: AppColors.emergencyPink, width: 2),
+                      border: Border.all(
+                        color: AppColors.emergencyPink,
+                        width: 2,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.emergencyPink.withValues(alpha: 0.15),
+                          color: AppColors.emergencyPink.withValues(
+                            alpha: 0.15,
+                          ),
                           blurRadius: 10,
                           offset: const Offset(0, 3),
                         ),
@@ -244,9 +280,14 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
-                                color: AppColors.forCategory(activeMission.category).withValues(alpha: 0.15),
+                                color: AppColors.forCategory(
+                                  activeMission.category,
+                                ).withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -254,7 +295,9 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w800,
-                                  color: AppColors.forCategory(activeMission.category),
+                                  color: AppColors.forCategory(
+                                    activeMission.category,
+                                  ),
                                 ),
                               ),
                             ),
@@ -273,7 +316,10 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                         const SizedBox(height: 4),
                         Text(
                           activeMission.locationLabel,
-                          style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 6),
                         Text(
@@ -291,11 +337,19 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                                 children: [
                                   Text(
                                     'Severity: ${activeMission.severity}/5 · ${activeMission.peopleAffected} Affected',
-                                    style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey),
+                                    style: GoogleFonts.inter(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                   Text(
                                     'Simulated ETA: ~6 mins (2.8 km)',
-                                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primaryTeal),
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.primaryTeal,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -303,14 +357,25 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                             FilledButton.icon(
                               style: FilledButton.styleFrom(
                                 backgroundColor: AppColors.primaryTeal,
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              icon: const Icon(Icons.navigation_rounded, size: 16),
-                              label: const Text('Open Mission', style: TextStyle(fontSize: 12)),
+                              icon: const Icon(
+                                Icons.navigation_rounded,
+                                size: 16,
+                              ),
+                              label: const Text(
+                                'Open Mission',
+                                style: TextStyle(fontSize: 12),
+                              ),
                               onPressed: () {
                                 if (widget.onNavigateToTab != null) {
-                                  widget.onNavigateToTab!(1); // Navigate to Mission tab
+                                  widget.onNavigateToTab!(
+                                    1,
+                                  ); // Navigate to Mission tab
                                 }
                               },
                             ),
@@ -325,7 +390,10 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                 // Quick Navigation Tiles
                 Text(
                   'Quick Actions',
-                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -336,7 +404,9 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                         title: 'Navigation',
                         subtitle: 'Karachi Route Map',
                         onTap: () {
-                          if (widget.onNavigateToTab != null) widget.onNavigateToTab!(2);
+                          if (widget.onNavigateToTab != null) {
+                            widget.onNavigateToTab!(2);
+                          }
                         },
                         isDark: isDark,
                       ),
@@ -348,7 +418,9 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                         title: 'Mission History',
                         subtitle: 'Resolved Calls',
                         onTap: () {
-                          if (widget.onNavigateToTab != null) widget.onNavigateToTab!(3);
+                          if (widget.onNavigateToTab != null) {
+                            widget.onNavigateToTab!(3);
+                          }
                         },
                         isDark: isDark,
                       ),
@@ -373,7 +445,9 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+        side: BorderSide(
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+        ),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
@@ -392,12 +466,20 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                 child: Icon(icon, color: AppColors.primaryTeal, size: 24),
               ),
               const SizedBox(height: 12),
-              Text(title, style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700)),
+              Text(
+                title,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               Text(
                 subtitle,
                 style: GoogleFonts.inter(
                   fontSize: 11,
-                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.lightTextSecondary,
                 ),
               ),
             ],

@@ -18,21 +18,38 @@ class AdminReportsScreen extends StatelessWidget {
     final emergencies = repo.emergencies;
     final total = emergencies.isNotEmpty ? emergencies.length : 1;
 
-    final medicalCount = emergencies.where((e) => e.category == EmergencyCategory.medical).length;
-    final fireCount = emergencies.where((e) => e.category == EmergencyCategory.fire).length;
-    final accidentCount = emergencies.where((e) => e.category == EmergencyCategory.accident).length;
-    final rescueCount = emergencies.where((e) => e.category == EmergencyCategory.rescue).length;
+    final medicalCount = emergencies
+        .where((e) => e.category == EmergencyCategory.medical)
+        .length;
+    final fireCount = emergencies
+        .where((e) => e.category == EmergencyCategory.fire)
+        .length;
+    final accidentCount = emergencies
+        .where((e) => e.category == EmergencyCategory.accident)
+        .length;
+    final rescueCount = emergencies
+        .where((e) => e.category == EmergencyCategory.rescue)
+        .length;
 
-    final reportedCount = emergencies.where((e) => e.status == EmergencyStatus.reported).length;
-    final inProgressCount = emergencies.where((e) =>
-        e.status == EmergencyStatus.assigned ||
-        e.status == EmergencyStatus.enRoute ||
-        e.status == EmergencyStatus.onScene).length;
-    final resolvedCount = emergencies.where((e) => e.status == EmergencyStatus.resolved).length;
+    final reportedCount = emergencies
+        .where((e) => e.status == EmergencyStatus.reported)
+        .length;
+    final inProgressCount = emergencies
+        .where(
+          (e) =>
+              e.status == EmergencyStatus.assigned ||
+              e.status == EmergencyStatus.enRoute ||
+              e.status == EmergencyStatus.onScene,
+        )
+        .length;
+    final resolvedCount = emergencies
+        .where((e) => e.status == EmergencyStatus.resolved)
+        .length;
 
     final totalVehicles = repo.vehicles.isNotEmpty ? repo.vehicles.length : 1;
     final availableVehicles = repo.availableVehicles.length;
-    final fleetUtilization = (((totalVehicles - availableVehicles) / totalVehicles) * 100).toInt();
+    final fleetUtilization =
+        (((totalVehicles - availableVehicles) / totalVehicles) * 100).toInt();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -65,21 +82,36 @@ class AdminReportsScreen extends StatelessWidget {
                           children: [
                             Text(
                               'OPERATIONAL PERFORMANCE & AUDIT',
-                              style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.white),
+                              style: GoogleFonts.inter(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               'Karachi Sector Emergency Telemetry',
-                              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white),
+                              style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
                             ),
                             Text(
                               '[SIMULATED DEMO] Aggregate metrics calculated from live centralized repository.',
-                              style: GoogleFonts.inter(fontSize: 11, color: Colors.white.withValues(alpha: 0.88)),
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                color: Colors.white.withValues(alpha: 0.88),
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      const Icon(Icons.analytics_rounded, color: Colors.white, size: 36),
+                      const Icon(
+                        Icons.analytics_rounded,
+                        color: Colors.white,
+                        size: 36,
+                      ),
                     ],
                   ),
                 ),
@@ -127,7 +159,11 @@ class AdminReportsScreen extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                    side: BorderSide(
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(18),
@@ -136,13 +172,36 @@ class AdminReportsScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Incidents by Emergency Category',
-                          style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 16),
-                        _buildProgressBar('Medical Emergencies', medicalCount, total, AppColors.forCategory(EmergencyCategory.medical)),
-                        _buildProgressBar('Fire & Structural Hazards', fireCount, total, AppColors.forCategory(EmergencyCategory.fire)),
-                        _buildProgressBar('Vehicular Accidents', accidentCount, total, AppColors.forCategory(EmergencyCategory.accident)),
-                        _buildProgressBar('Rescue & Disaster Ops', rescueCount, total, AppColors.forCategory(EmergencyCategory.rescue)),
+                        _buildProgressBar(
+                          'Medical Emergencies',
+                          medicalCount,
+                          total,
+                          AppColors.forCategory(EmergencyCategory.medical),
+                        ),
+                        _buildProgressBar(
+                          'Fire & Structural Hazards',
+                          fireCount,
+                          total,
+                          AppColors.forCategory(EmergencyCategory.fire),
+                        ),
+                        _buildProgressBar(
+                          'Vehicular Accidents',
+                          accidentCount,
+                          total,
+                          AppColors.forCategory(EmergencyCategory.accident),
+                        ),
+                        _buildProgressBar(
+                          'Rescue & Disaster Ops',
+                          rescueCount,
+                          total,
+                          AppColors.forCategory(EmergencyCategory.rescue),
+                        ),
                       ],
                     ),
                   ),
@@ -154,7 +213,11 @@ class AdminReportsScreen extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                    side: BorderSide(
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(18),
@@ -163,12 +226,30 @@ class AdminReportsScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Triage Status Distribution',
-                          style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 16),
-                        _buildProgressBar('Pending Dispatch Review', reportedCount, total, AppColors.statusPending),
-                        _buildProgressBar('Active / En Route / On Scene', inProgressCount, total, AppColors.statusAssigned),
-                        _buildProgressBar('Resolved & Closed', resolvedCount, total, AppColors.statusCompleted),
+                        _buildProgressBar(
+                          'Pending Dispatch Review',
+                          reportedCount,
+                          total,
+                          AppColors.statusPending,
+                        ),
+                        _buildProgressBar(
+                          'Active / En Route / On Scene',
+                          inProgressCount,
+                          total,
+                          AppColors.statusAssigned,
+                        ),
+                        _buildProgressBar(
+                          'Resolved & Closed',
+                          resolvedCount,
+                          total,
+                          AppColors.statusCompleted,
+                        ),
                       ],
                     ),
                   ),
@@ -191,7 +272,9 @@ class AdminReportsScreen extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+        side: BorderSide(
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -202,7 +285,10 @@ class AdminReportsScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               value,
-              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w800),
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             Text(
               label,
@@ -210,7 +296,9 @@ class AdminReportsScreen extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.inter(
                 fontSize: 11,
-                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.lightTextSecondary,
               ),
             ),
           ],
@@ -231,8 +319,21 @@ class AdminReportsScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label, style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600)),
-              Text('$count calls ($percent%)', style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: color)),
+              Text(
+                label,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                '$count calls ($percent%)',
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 6),

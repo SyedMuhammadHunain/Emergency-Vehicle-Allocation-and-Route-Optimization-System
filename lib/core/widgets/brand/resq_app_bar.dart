@@ -24,7 +24,7 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = false,
     this.onBackPressed,
     this.customActions,
-    this.showRoleSwitcher = true,
+    this.showRoleSwitcher = false,
     this.showNotifications = true,
   });
 
@@ -98,7 +98,9 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
                   'Switch simulation role (frontend prototype mode):',
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.lightTextSecondary,
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -119,7 +121,10 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     child: ListTile(
                       dense: true,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 0,
+                      ),
                       leading: Icon(
                         role.icon,
                         color: isSelected ? AppColors.primaryTeal : Colors.grey,
@@ -129,14 +134,24 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
                         role.displayName,
                         style: GoogleFonts.poppins(
                           fontSize: 14,
-                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                          fontWeight: isSelected
+                              ? FontWeight.w700
+                              : FontWeight.w500,
                           color: isSelected
-                              ? (isDark ? Colors.white : AppColors.lightTextNavy)
-                              : (isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
+                              ? (isDark
+                                    ? Colors.white
+                                    : AppColors.lightTextNavy)
+                              : (isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.lightTextSecondary),
                         ),
                       ),
                       trailing: isSelected
-                          ? const Icon(Icons.check_circle_rounded, color: AppColors.primaryTeal, size: 20)
+                          ? const Icon(
+                              Icons.check_circle_rounded,
+                              color: AppColors.primaryTeal,
+                              size: 20,
+                            )
                           : null,
                       onTap: () {
                         session.demoLogin(role.nameId);
@@ -218,14 +233,17 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
                             child: Text(
                               'No notifications yet',
                               style: GoogleFonts.inter(
-                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.lightTextSecondary,
                               ),
                             ),
                           )
                         : ListView.separated(
                             controller: scrollController,
                             itemCount: notifs.length,
-                            separatorBuilder: (_, _) => const Divider(height: 12),
+                            separatorBuilder: (_, _) =>
+                                const Divider(height: 12),
                             itemBuilder: (context, idx) {
                               final n = notifs[idx];
                               return ListTile(
@@ -236,27 +254,35 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   decoration: BoxDecoration(
                                     color: n.isRead
                                         ? Colors.grey.withValues(alpha: 0.1)
-                                        : AppColors.primaryTeal.withValues(alpha: 0.15),
+                                        : AppColors.primaryTeal.withValues(
+                                            alpha: 0.15,
+                                          ),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
                                     Icons.notifications_active_rounded,
                                     size: 18,
-                                    color: n.isRead ? Colors.grey : AppColors.primaryTeal,
+                                    color: n.isRead
+                                        ? Colors.grey
+                                        : AppColors.primaryTeal,
                                   ),
                                 ),
                                 title: Text(
                                   n.title,
                                   style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    fontWeight: n.isRead ? FontWeight.w500 : FontWeight.w700,
+                                    fontWeight: n.isRead
+                                        ? FontWeight.w500
+                                        : FontWeight.w700,
                                   ),
                                 ),
                                 subtitle: Text(
                                   n.message,
                                   style: GoogleFonts.inter(
                                     fontSize: 11,
-                                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                    color: isDark
+                                        ? AppColors.darkTextSecondary
+                                        : AppColors.lightTextSecondary,
                                   ),
                                 ),
                                 trailing: !n.isRead
@@ -324,16 +350,15 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ResQWordmark(
-            fontSize: 18,
-            isLightBackground: !isDark,
-          ),
+          ResQWordmark(fontSize: 18, isLightBackground: !isDark),
           if (subtitle != null && subtitle!.isNotEmpty) ...[
             const SizedBox(width: 6),
             Text(
               '·',
               style: TextStyle(
-                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.lightTextSecondary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -377,7 +402,10 @@ class ResQAppBar extends StatelessWidget implements PreferredSizeWidget {
                         color: AppColors.emergencyPink,
                         shape: BoxShape.circle,
                       ),
-                      constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
+                      constraints: const BoxConstraints(
+                        minWidth: 14,
+                        minHeight: 14,
+                      ),
                       child: Center(
                         child: Text(
                           unreadCount > 9 ? '9+' : '$unreadCount',

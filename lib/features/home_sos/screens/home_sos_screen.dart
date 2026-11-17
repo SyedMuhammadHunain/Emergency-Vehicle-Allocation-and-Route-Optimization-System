@@ -21,7 +21,8 @@ class HomeSosScreen extends StatelessWidget {
         final sosIncident = IncidentModel(
           id: 'SOS-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
           title: '🚨 Citizen Distress Signal (SOS Activated)',
-          description: 'Emergency panic button triggered by citizen. Immediate response required.',
+          description:
+              'Emergency panic button triggered by citizen. Immediate response required.',
           type: EmergencyType.medical,
           status: IncidentStatus.dispatched,
           severity: IncidentSeverity.critical,
@@ -67,12 +68,19 @@ class HomeSosScreen extends StatelessWidget {
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.shield_rounded, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.shield_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
             const SizedBox(width: 10),
             const Text(
               'ResQ',
-              style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: -0.5),
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.5,
+              ),
             ),
           ],
         ),
@@ -83,7 +91,9 @@ class HomeSosScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.success.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.success.withValues(alpha: 0.3)),
+              border: Border.all(
+                color: AppColors.success.withValues(alpha: 0.3),
+              ),
             ),
             child: const Row(
               mainAxisSize: MainAxisSize.min,
@@ -127,7 +137,11 @@ class HomeSosScreen extends StatelessWidget {
                   children: [
                     const Row(
                       children: [
-                        Icon(Icons.warning_amber_rounded, color: Colors.white, size: 28),
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.white,
+                          size: 28,
+                        ),
                         SizedBox(width: 12),
                         Expanded(
                           child: Text(
@@ -157,7 +171,9 @@ class HomeSosScreen extends StatelessWidget {
                       onPressed: () {
                         emergencyProvider.cancelActiveEmergency();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Emergency beacon cancelled.')),
+                          const SnackBar(
+                            content: Text('Emergency beacon cancelled.'),
+                          ),
                         );
                       },
                       icon: const Icon(Icons.cancel_outlined, size: 18),
@@ -173,22 +189,34 @@ class HomeSosScreen extends StatelessWidget {
               // Safety Status Bar
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: isDark ? AppColors.surfaceDark : Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                    color: isDark
+                        ? AppColors.borderDark
+                        : AppColors.borderLight,
                   ),
                 ),
                 child: const Row(
                   children: [
-                    Icon(Icons.verified_user_rounded, color: AppColors.success, size: 20),
+                    Icon(
+                      Icons.verified_user_rounded,
+                      color: AppColors.success,
+                      size: 20,
+                    ),
                     SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         'Emergency Network Operational • 4 Units Nearby',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -257,7 +285,8 @@ class HomeSosScreen extends StatelessWidget {
                       number: '911',
                       icon: Icons.local_fire_department_rounded,
                       color: AppColors.fire,
-                      onTap: () => _showCallDialog(context, 'Fire Department (911)'),
+                      onTap: () =>
+                          _showCallDialog(context, 'Fire Department (911)'),
                     ),
                   ),
                 ],
@@ -447,10 +476,7 @@ class _CategoryCard extends StatelessWidget {
   final EmergencyType type;
   final VoidCallback onTap;
 
-  const _CategoryCard({
-    required this.type,
-    required this.onTap,
-  });
+  const _CategoryCard({required this.type, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

@@ -38,7 +38,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   Align(
                     alignment: Alignment.topLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                      icon: const Icon(
+                        Icons.arrow_back_rounded,
+                        color: Colors.white,
+                      ),
                       onPressed: () {
                         if (context.canPop()) {
                           context.pop();
@@ -65,7 +68,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
@@ -89,7 +95,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 Text(
                                   'A password recovery link has been sent to ${_emailController.text.trim()}.',
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.inter(fontSize: 13, color: Colors.grey),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 13,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                                 const SizedBox(height: 24),
                                 PrimaryGradientButton(
@@ -117,7 +126,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 const SizedBox(height: 6),
                                 Text(
                                   'Enter your registered email address and we will send you recovery instructions.',
-                                  style: GoogleFonts.inter(fontSize: 13, color: Colors.grey),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 13,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                                 const SizedBox(height: 20),
                                 CustomTextField(
@@ -132,15 +144,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   onPressed: () async {
                                     final email = _emailController.text.trim();
                                     if (email.contains('@')) {
-                                      final res = await ApiService.instance.forgotPassword(email);
+                                      final res = await ApiService.instance
+                                          .forgotPassword(email);
                                       if (!context.mounted) return;
                                       if (res.isSuccess) {
                                         setState(() => _sent = true);
                                       } else {
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
                                           SnackBar(
-                                            backgroundColor: AppColors.statusMaintenance,
-                                            content: Text(res.error ?? 'Failed to send recovery instructions.'),
+                                            backgroundColor:
+                                                AppColors.statusMaintenance,
+                                            content: Text(
+                                              res.error ??
+                                                  'Failed to send recovery instructions.',
+                                            ),
                                           ),
                                         );
                                       }

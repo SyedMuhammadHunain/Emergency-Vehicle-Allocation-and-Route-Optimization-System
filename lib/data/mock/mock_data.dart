@@ -9,7 +9,8 @@ class MockData {
     IncidentModel(
       id: 'INC-2026-081',
       title: 'Multi-Vehicle Highway Collision',
-      description: 'Two cars involved in high-speed collision on Interstate ramp. Minor injuries reported, lane blocked.',
+      description:
+          'Two cars involved in high-speed collision on Interstate ramp. Minor injuries reported, lane blocked.',
       type: EmergencyType.accident,
       status: IncidentStatus.dispatched,
       severity: IncidentSeverity.high,
@@ -24,7 +25,8 @@ class MockData {
     IncidentModel(
       id: 'INC-2026-082',
       title: 'Sudden Cardiac Distress in Commercial Center',
-      description: '60yo male experiencing severe chest pains and shortness of breath inside supermarket.',
+      description:
+          '60yo male experiencing severe chest pains and shortness of breath inside supermarket.',
       type: EmergencyType.medical,
       status: IncidentStatus.onScene,
       severity: IncidentSeverity.critical,
@@ -39,7 +41,8 @@ class MockData {
     IncidentModel(
       id: 'INC-2026-083',
       title: 'Commercial Kitchen Structure Smoke',
-      description: 'Grease fire reported in ventilation system of restaurant kitchen. Evacuation underway.',
+      description:
+          'Grease fire reported in ventilation system of restaurant kitchen. Evacuation underway.',
       type: EmergencyType.fire,
       status: IncidentStatus.reported,
       severity: IncidentSeverity.high,
@@ -54,7 +57,8 @@ class MockData {
     IncidentModel(
       id: 'INC-2026-084',
       title: 'Pedestrian Hit by Scooter',
-      description: 'Pedestrian suffered bruised arm and scrapes after collision with motorized scooter. Conscious.',
+      description:
+          'Pedestrian suffered bruised arm and scrapes after collision with motorized scooter. Conscious.',
       type: EmergencyType.rescue,
       status: IncidentStatus.resolved,
       severity: IncidentSeverity.low,
@@ -62,7 +66,9 @@ class MockData {
       longitude: -122.4310,
       address: 'Dolores Park West Entrance',
       reporterName: 'Park Ranger',
-      reportedAt: DateTime.now().subtract(const Duration(hours: 1, minutes: 10)),
+      reportedAt: DateTime.now().subtract(
+        const Duration(hours: 1, minutes: 10),
+      ),
       assignedResponderUnit: 'Patrol 18',
       estimatedArrivalMinutes: 0,
     ),

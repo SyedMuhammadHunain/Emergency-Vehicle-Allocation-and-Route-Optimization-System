@@ -33,7 +33,8 @@ class LocationService {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         return const LocationResult(
-          error: 'Location services are disabled on this device. Using Karachi default.',
+          error:
+              'Location services are disabled on this device. Using Karachi default.',
         );
       }
 
@@ -42,7 +43,8 @@ class LocationService {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           return const LocationResult(
-            error: 'Location permission was denied. You can select your position manually on the map.',
+            error:
+                'Location permission was denied. You can select your position manually on the map.',
             isPermissionDenied: true,
           );
         }
@@ -50,7 +52,8 @@ class LocationService {
 
       if (permission == LocationPermission.deniedForever) {
         return const LocationResult(
-          error: 'Location permissions are permanently denied. Please select location manually on the map.',
+          error:
+              'Location permissions are permanently denied. Please select location manually on the map.',
           isPermissionDenied: true,
         );
       }
@@ -62,15 +65,14 @@ class LocationService {
         ),
       );
 
-      return LocationResult(
-        position: LatLng(pos.latitude, pos.longitude),
-      );
+      return LocationResult(position: LatLng(pos.latitude, pos.longitude));
     } catch (e) {
       if (kDebugMode) {
         print('LocationService error: $e');
       }
       return LocationResult(
-        error: 'Could not detect device GPS ($e). Please pick location manually.',
+        error:
+            'Could not detect device GPS ($e). Please pick location manually.',
       );
     }
   }

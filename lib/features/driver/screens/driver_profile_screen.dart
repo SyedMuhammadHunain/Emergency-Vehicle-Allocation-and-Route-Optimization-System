@@ -15,7 +15,10 @@ class DriverProfileScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Appearance Theme', style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
+        title: Text(
+          'Appearance Theme',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -62,15 +65,22 @@ class DriverProfileScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Sign Out', style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
-        content: const Text('Are you sure you want to end your active driver shift and sign out?'),
+        title: Text(
+          'Sign Out',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+        ),
+        content: const Text(
+          'Are you sure you want to end your active driver shift and sign out?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text('Cancel'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.statusMaintenance),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.statusMaintenance,
+            ),
             onPressed: () async {
               Navigator.pop(ctx);
               final session = context.read<SessionService>();
@@ -95,8 +105,8 @@ class DriverProfileScreen extends StatelessWidget {
     final themeLabel = theme.mode == ThemeMode.system
         ? 'System Default'
         : theme.mode == ThemeMode.dark
-            ? 'Dark Mode'
-            : 'Light Mode';
+        ? 'Dark Mode'
+        : 'Light Mode';
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -158,7 +168,10 @@ class DriverProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.aquaAccent,
                                 borderRadius: BorderRadius.circular(8),
@@ -186,7 +199,9 @@ class DriverProfileScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
                     ),
                   ),
                   child: Padding(
@@ -196,13 +211,36 @@ class DriverProfileScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Vehicle Assignment & Duty',
-                          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const Divider(height: 20),
-                        _buildRow(Icons.badge_rounded, 'Driver ID', 'DRV-KHI-019', isDark),
-                        _buildRow(Icons.local_shipping_rounded, 'Assigned Unit', 'Ambulance (KHI-1122-AMB)', isDark),
-                        _buildRow(Icons.schedule_rounded, 'Current Shift', 'Shift A: 08:00 - 16:00 PKT', isDark),
-                        _buildRow(Icons.place_rounded, 'Station Depot', 'Saddar Sector Station, Karachi', isDark),
+                        _buildRow(
+                          Icons.badge_rounded,
+                          'Driver ID',
+                          'DRV-KHI-019',
+                          isDark,
+                        ),
+                        _buildRow(
+                          Icons.local_shipping_rounded,
+                          'Assigned Unit',
+                          'Ambulance (KHI-1122-AMB)',
+                          isDark,
+                        ),
+                        _buildRow(
+                          Icons.schedule_rounded,
+                          'Current Shift',
+                          'Shift A: 08:00 - 16:00 PKT',
+                          isDark,
+                        ),
+                        _buildRow(
+                          Icons.place_rounded,
+                          'Station Depot',
+                          'Saddar Sector Station, Karachi',
+                          isDark,
+                        ),
                       ],
                     ),
                   ),
@@ -215,7 +253,9 @@ class DriverProfileScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
                     ),
                   ),
                   child: Padding(
@@ -225,22 +265,34 @@ class DriverProfileScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Preferences & System',
-                          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700),
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const Divider(height: 20),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.palette_rounded, color: AppColors.primaryTeal),
-                          title: Text('Display Theme', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
-                          subtitle: Text(themeLabel, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                          leading: const Icon(
+                            Icons.palette_rounded,
+                            color: AppColors.primaryTeal,
+                          ),
+                          title: Text(
+                            'Display Theme',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          subtitle: Text(
+                            themeLabel,
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
                           trailing: const Icon(Icons.chevron_right_rounded),
                           onTap: () => _showThemePicker(context),
-                        ),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.verified_user_rounded, color: AppColors.primaryTeal),
-                          title: Text('Prototype Driver Engine', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
-                          subtitle: Text('Phase 3 Driver Module · Centralized Mock Sync', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
                         ),
                       ],
                     ),
@@ -255,7 +307,9 @@ class DriverProfileScreen extends StatelessWidget {
                     foregroundColor: AppColors.statusMaintenance,
                     side: const BorderSide(color: AppColors.statusMaintenance),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   icon: const Icon(Icons.logout_rounded),
                   label: const Text('End Shift & Sign Out'),
@@ -265,13 +319,11 @@ class DriverProfileScreen extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 // Footer branding
-                const Center(
-                  child: ResQWordmark(fontSize: 18),
-                ),
+                const Center(child: ResQWordmark(fontSize: 18)),
                 const SizedBox(height: 6),
                 Center(
                   child: Text(
-                    'ResQ Emergency Response Platform · Version 1.0.0 (Demo Prototype)',
+                    'ResQ Emergency Response Platform · Version 1.0.0',
                     style: GoogleFonts.inter(fontSize: 10, color: Colors.grey),
                   ),
                 ),
@@ -290,13 +342,18 @@ class DriverProfileScreen extends StatelessWidget {
         children: [
           Icon(icon, size: 18, color: AppColors.primaryTeal),
           const SizedBox(width: 12),
-          Text(label, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(
+            label,
+            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+          ),
           const Spacer(),
           Text(
             value,
             style: GoogleFonts.inter(
               fontSize: 12,
-              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.lightTextSecondary,
             ),
           ),
         ],

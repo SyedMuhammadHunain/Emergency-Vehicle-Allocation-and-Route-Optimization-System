@@ -14,6 +14,7 @@ import '../../../core/services/session_service.dart';
 import '../../../core/widgets/brand/resq_app_bar.dart';
 import '../../../core/widgets/buttons/primary_gradient_button.dart';
 import '../../../core/widgets/inputs/custom_text_field.dart';
+import '../../../core/widgets/map/map_zoom_controls.dart';
 
 class ReportEmergencyScreen extends StatefulWidget {
   final String? initialCategory;
@@ -83,7 +84,8 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
       setState(() {
         _isDetectingGps = false;
         _gpsStatusMessage =
-            result.error ?? 'Location unavailable. You can tap anywhere on the map to place your pin manually.';
+            result.error ??
+            'Location unavailable. You can tap anywhere on the map to place your pin manually.';
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -109,83 +111,55 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
   }
 
   Future<void> _submitReport() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     setState(() => _isSubmitting = true);
 
     try {
       final repo = context.read<MockRepository>();
       final session = context.read<SessionService>();
-      final desc = _descriptionController.text.trim().isEmpty
-          ? 'Emergency report in $_selectedCategory category.'
-          : _descriptionController.text.trim();
-      final locLabel = _addressController.text.trim().isEmpty
-          ? 'Karachi Grid Location'
-          : _addressController.text.trim();
+      final effectiveUserId =
+          (session.userId != null && session.userId!.isNotEmpty)
+          ? session.userId!
+          : (session.userEmail.isNotEmpty
+                ? session.userEmail
+                : session.userName);
 
-      // Attempt submission via Django backend API
-      final res = await ApiService.instance.createEmergency(
-        category: _selectedCategory.toUpperCase(),
+      final apiService = ApiService();
+      final response = await apiService.reportEmergency(
+        category: _selectedCategory,
         severity: _severity,
         urgency: _urgency,
         peopleAffected: _peopleAffected,
-        description: desc,
-        latitude: _selectedLocation.latitude,
-        longitude: _selectedLocation.longitude,
-        locationLabel: locLabel,
+        description: _descriptionController.text.trim().isEmpty
+            ? 'Emergency report in $_selectedCategory category.'
+            : _descriptionController.text.trim(),
+        location: _selectedLocation,
+        locationLabel: _addressController.text.trim().isEmpty
+            ? 'Karachi Grid Location'
+            : _addressController.text.trim(),
+        userId: effectiveUserId,
+        mockRepo: repo,
       );
 
-      DemoEmergency newEmergency;
+      final newEmergency =
+          response.data ??
+          repo.emergencies.firstWhere(
+            (e) => e.reportedByUserId == effectiveUserId,
+            orElse: () => repo.emergencies.first,
+          );
 
-      if (res.isSuccess && res.data != null) {
-        final map = res.data!;
-        newEmergency = DemoEmergency(
-          id: map['code'] ?? 'EM-${map['id']}',
-          category: map['category'] ?? _selectedCategory.toUpperCase(),
-          status: map['status'] ?? EmergencyStatus.reported,
-          severity: map['severity'] ?? _severity,
-          urgency: map['urgency'] ?? _urgency,
-          peopleAffected: map['people_affected'] ?? _peopleAffected,
-          description: map['description'] ?? desc,
-          location: LatLng(
-            (map['latitude'] as num?)?.toDouble() ?? _selectedLocation.latitude,
-            (map['longitude'] as num?)?.toDouble() ?? _selectedLocation.longitude,
-          ),
-          locationLabel: map['location_label'] ?? locLabel,
-          reportedAt: DateTime.tryParse(map['created_at'] ?? '') ?? DateTime.now(),
-          reportedByUserId: session.userName,
-          allocationReason: map['allocation_reason'],
-        );
-        // Also reflect in local reactive store
-        repo.emergencies.insert(0, newEmergency);
-      } else if (res.statusCode != null && res.statusCode! > 0) {
-        // Active rejection from backend (validation or permission error)
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: AppColors.statusMaintenance,
-            content: Text(res.error ?? 'Validation failed. Please check inputs.'),
-          ),
-        );
+      if (!mounted) {
         return;
-      } else {
-        // Backend offline / connection failure: fallback to local repository
-        newEmergency = repo.reportEmergency(
-          category: _selectedCategory,
-          severity: _severity,
-          urgency: _urgency,
-          peopleAffected: _peopleAffected,
-          description: desc,
-          location: _selectedLocation,
-          locationLabel: locLabel,
-          userId: session.userName,
-        );
       }
 
-      if (!mounted) return;
       _showSuccessDialog(newEmergency);
     } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
     }
   }
 
@@ -205,13 +179,20 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                 color: AppColors.primaryTeal,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.check_rounded, color: Colors.white, size: 24),
+              child: const Icon(
+                Icons.check_rounded,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 'Report Dispatched!',
-                style: GoogleFonts.poppins(fontSize: 17, fontWeight: FontWeight.w700),
+                style: GoogleFonts.poppins(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],
@@ -250,7 +231,9 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
               'Your emergency has been received by Karachi Dispatch. [DEMO SIMULATION]',
               style: GoogleFonts.inter(
                 fontSize: 12,
-                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.lightTextSecondary,
               ),
             ),
           ],
@@ -259,19 +242,25 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              if (widget.isStandalone && context.canPop()) {
-                context.pop();
-              } else {
-                context.go('/role-shell');
-              }
+              try {
+                if (widget.isStandalone && context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/role-shell');
+                }
+              } catch (_) {}
             },
             child: const Text('Back to Home'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.primaryTeal),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primaryTeal,
+            ),
             onPressed: () {
               Navigator.pop(ctx);
-              context.push('/citizen/details/${emergency.id}');
+              try {
+                context.push('/citizen/details/${emergency.id}');
+              } catch (_) {}
             },
             child: const Text('Track Status'),
           ),
@@ -297,7 +286,10 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                 // Step 1: Emergency Category
                 Text(
                   '1. Select Emergency Type',
-                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Wrap(
@@ -339,11 +331,17 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                   children: [
                     Text(
                       '2. Incident Location',
-                      style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
                         side: const BorderSide(color: AppColors.primaryTeal),
                       ),
                       onPressed: _isDetectingGps ? null : _detectGpsLocation,
@@ -353,7 +351,11 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                               height: 14,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Icon(Icons.my_location_rounded, size: 16, color: AppColors.primaryTeal),
+                          : const Icon(
+                              Icons.my_location_rounded,
+                              size: 16,
+                              color: AppColors.primaryTeal,
+                            ),
                       label: Text(
                         _isDetectingGps ? 'Locating...' : 'Use My GPS',
                         style: GoogleFonts.inter(
@@ -370,7 +372,9 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                   'Tap anywhere on the Karachi 2D map to adjust your emergency marker:',
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.lightTextSecondary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -382,7 +386,9 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : AppColors.lightBorder,
                     ),
                   ),
                   child: Stack(
@@ -396,8 +402,11 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                         ),
                         children: [
                           TileLayer(
-                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            urlTemplate:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                             userAgentPackageName: 'com.resq.resq_app',
+                            maxZoom: 18,
+                            panBuffer: 1,
                           ),
                           MarkerLayer(
                             markers: [
@@ -409,10 +418,15 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                                   decoration: BoxDecoration(
                                     color: AppColors.emergencyPink,
                                     shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.white, width: 2.5),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 2.5,
+                                    ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.3),
+                                        color: Colors.black.withValues(
+                                          alpha: 0.3,
+                                        ),
                                         blurRadius: 8,
                                         offset: const Offset(0, 3),
                                       ),
@@ -429,18 +443,29 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                           ),
                         ],
                       ),
+                      MapZoomControls(
+                        mapController: _mapController,
+                        alignment: Alignment.topRight,
+                        padding: const EdgeInsets.all(8),
+                      ),
                       Positioned(
                         bottom: 8,
                         left: 8,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.black.withValues(alpha: 0.7),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
                             'Karachi Map · Tap to relocate pin',
-                            style: GoogleFonts.inter(fontSize: 10, color: Colors.white),
+                            style: GoogleFonts.inter(
+                              fontSize: 10,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -467,7 +492,9 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                   label: 'Address / Landmark',
                   hint: 'e.g. Near Empress Market, Saddar',
                   prefixIcon: Icons.location_city_rounded,
-                  validator: (val) => val == null || val.trim().isEmpty ? 'Please specify location' : null,
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? 'Please specify location'
+                      : null,
                 ),
 
                 const SizedBox(height: 20),
@@ -475,7 +502,10 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                 // Step 3: Severity & Urgency
                 Text(
                   '3. Severity & Impact Details',
-                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 8),
 
@@ -490,12 +520,20 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                           children: [
                             Text(
                               'Severity Level',
-                              style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600),
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
-                                color: _getSeverityColor(_severity).withValues(alpha: 0.15),
+                                color: _getSeverityColor(
+                                  _severity,
+                                ).withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -516,7 +554,8 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                           divisions: 4,
                           activeColor: _getSeverityColor(_severity),
                           label: 'Level $_severity',
-                          onChanged: (val) => setState(() => _severity = val.round()),
+                          onChanged: (val) =>
+                              setState(() => _severity = val.round()),
                         ),
                         const SizedBox(height: 8),
 
@@ -525,11 +564,17 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                           children: [
                             Text(
                               'Urgency Rating',
-                              style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600),
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             Text(
                               'Rating $_urgency / 5',
-                              style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700),
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ],
                         ),
@@ -540,7 +585,8 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                           divisions: 4,
                           activeColor: AppColors.primaryTeal,
                           label: 'Urgency $_urgency',
-                          onChanged: (val) => setState(() => _urgency = val.round()),
+                          onChanged: (val) =>
+                              setState(() => _urgency = val.round()),
                         ),
                         const SizedBox(height: 12),
 
@@ -553,13 +599,18 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                               children: [
                                 Text(
                                   'People Affected',
-                                  style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600),
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 Text(
                                   'Estimated number of injured or stranded individuals',
                                   style: GoogleFonts.inter(
                                     fontSize: 11,
-                                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                    color: isDark
+                                        ? AppColors.darkTextSecondary
+                                        : AppColors.lightTextSecondary,
                                   ),
                                 ),
                               ],
@@ -567,17 +618,24 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                             Row(
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.remove_circle_outline_rounded),
+                                  icon: const Icon(
+                                    Icons.remove_circle_outline_rounded,
+                                  ),
                                   onPressed: _peopleAffected > 1
                                       ? () => setState(() => _peopleAffected--)
                                       : null,
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                                      color: isDark
+                                          ? AppColors.darkBorder
+                                          : AppColors.lightBorder,
                                     ),
                                   ),
                                   child: Text(
@@ -589,9 +647,12 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.add_circle_outline_rounded),
+                                  icon: const Icon(
+                                    Icons.add_circle_outline_rounded,
+                                  ),
                                   color: AppColors.primaryTeal,
-                                  onPressed: () => setState(() => _peopleAffected++),
+                                  onPressed: () =>
+                                      setState(() => _peopleAffected++),
                                 ),
                               ],
                             ),
@@ -608,7 +669,8 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                 CustomTextField(
                   controller: _descriptionController,
                   label: 'Situation Description (Optional)',
-                  hint: 'Describe what happened, any visible hazards, or specific medical needs...',
+                  hint:
+                      'Describe what happened, any visible hazards, or specific medical needs...',
                   prefixIcon: Icons.notes_rounded,
                   maxLines: 3,
                 ),
@@ -622,14 +684,6 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
                   onPressed: _submitReport,
                 ),
 
-                const SizedBox(height: 12),
-
-                Center(
-                  child: Text(
-                    '⚠️ ResQ Frontend Prototype · Simulated Karachi Dispatch Queue',
-                    style: GoogleFonts.inter(fontSize: 11, color: Colors.grey),
-                  ),
-                ),
                 const SizedBox(height: 20),
               ],
             ),
@@ -666,38 +720,42 @@ class _ReportEmergencyScreenState extends State<ReportEmergencyScreen> {
         onTap: () => setState(() => _selectedCategory = category),
         borderRadius: BorderRadius.circular(12),
         child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? color.withValues(alpha: 0.15)
-              : (isDark ? AppColors.darkSurface : Colors.white),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? color : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
-            width: isSelected ? 2 : 1,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? color.withValues(alpha: 0.15)
+                : (isDark ? AppColors.darkSurface : Colors.white),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected
+                  ? color
+                  : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+              width: isSelected ? 2 : 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 18, color: isSelected ? color : Colors.grey),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: GoogleFonts.poppins(
+                  fontSize: 13,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: isSelected
+                      ? (isDark ? Colors.white : AppColors.lightTextNavy)
+                      : (isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.lightTextSecondary),
+                ),
+              ),
+            ],
           ),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 18, color: isSelected ? color : Colors.grey),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                fontSize: 13,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected
-                    ? (isDark ? Colors.white : AppColors.lightTextNavy)
-                    : (isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
-              ),
-            ),
-          ],
-        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Color _getSeverityColor(int level) {
     switch (level) {

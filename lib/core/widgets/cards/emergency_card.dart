@@ -106,7 +106,10 @@ class EmergencyCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.emergencyPink.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(6),
@@ -123,7 +126,10 @@ class EmergencyCard extends StatelessWidget {
                   if (eta != null) ...[
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.primaryTeal.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(6),

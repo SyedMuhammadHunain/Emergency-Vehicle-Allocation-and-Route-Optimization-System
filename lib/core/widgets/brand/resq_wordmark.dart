@@ -18,8 +18,8 @@ class ResQWordmark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = color ??
-        (isLightBackground ? AppColors.lightTextNavy : Colors.white);
+    final textColor =
+        color ?? (isLightBackground ? AppColors.lightTextNavy : Colors.white);
     final aquaColor = AppColors.aquaAccent;
 
     return FittedBox(

@@ -9,13 +9,9 @@ Future<void> main() async {
   final themeController = ThemeController();
   final sessionService = SessionService();
 
-  await Future.wait([
-    themeController.load(),
-    sessionService.restore(),
-  ]);
+  await Future.wait([themeController.load(), sessionService.restore()]);
 
-  runApp(ResQApp(
-    themeController: themeController,
-    sessionService: sessionService,
-  ));
+  runApp(
+    ResQApp(themeController: themeController, sessionService: sessionService),
+  );
 }

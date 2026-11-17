@@ -11,10 +11,7 @@ import '../../../core/widgets/feedback/status_chip.dart';
 class DispatcherDashboardScreen extends StatelessWidget {
   final Function(int tabIndex)? onNavigateToTab;
 
-  const DispatcherDashboardScreen({
-    super.key,
-    this.onNavigateToTab,
-  });
+  const DispatcherDashboardScreen({super.key, this.onNavigateToTab});
 
   void _showIncidentDetails(BuildContext context, DemoEmergency emergency) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -66,7 +63,10 @@ class DispatcherDashboardScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     emergency.category,
-                    style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -74,21 +74,45 @@ class DispatcherDashboardScreen extends StatelessWidget {
                     style: GoogleFonts.inter(fontSize: 13, height: 1.4),
                   ),
                   const Divider(height: 24),
-                  _buildDetailRow('Location', emergency.locationLabel, Icons.place_rounded),
-                  _buildDetailRow('Severity', '${emergency.severity} / 5', Icons.warning_amber_rounded),
-                  _buildDetailRow('Urgency', '${emergency.urgency} / 5', Icons.timer_outlined),
-                  _buildDetailRow('People Affected', '${emergency.peopleAffected}', Icons.people_outline_rounded),
+                  _buildDetailRow(
+                    'Location',
+                    emergency.locationLabel,
+                    Icons.place_rounded,
+                  ),
+                  _buildDetailRow(
+                    'Severity',
+                    '${emergency.severity} / 5',
+                    Icons.warning_amber_rounded,
+                  ),
+                  _buildDetailRow(
+                    'Urgency',
+                    '${emergency.urgency} / 5',
+                    Icons.timer_outlined,
+                  ),
+                  _buildDetailRow(
+                    'People Affected',
+                    '${emergency.peopleAffected}',
+                    Icons.people_outline_rounded,
+                  ),
                   if (emergency.assignedVehicle != null)
-                    _buildDetailRow('Assigned Unit', '${emergency.assignedVehicle!.type} (${emergency.assignedVehicle!.licensePlate})', Icons.local_shipping_rounded),
+                    _buildDetailRow(
+                      'Assigned Unit',
+                      '${emergency.assignedVehicle!.type} (${emergency.assignedVehicle!.licensePlate})',
+                      Icons.local_shipping_rounded,
+                    ),
                   const SizedBox(height: 20),
                   if (emergency.status == EmergencyStatus.reported)
                     FilledButton.icon(
-                      style: FilledButton.styleFrom(backgroundColor: AppColors.primaryTeal),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.primaryTeal,
+                      ),
                       icon: const Icon(Icons.account_tree_rounded, size: 18),
                       label: const Text('Open Allocation Assistant'),
                       onPressed: () {
                         Navigator.pop(ctx);
-                        if (onNavigateToTab != null) onNavigateToTab!(3); // Allocation tab
+                        if (onNavigateToTab != null) {
+                          onNavigateToTab!(3); // Allocation tab
+                        }
                       },
                     ),
                 ],
@@ -107,7 +131,10 @@ class DispatcherDashboardScreen extends StatelessWidget {
         children: [
           Icon(icon, size: 16, color: AppColors.primaryTeal),
           const SizedBox(width: 8),
-          Text('$label: ', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600)),
+          Text(
+            '$label: ',
+            style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
           Expanded(child: Text(value, style: GoogleFonts.inter(fontSize: 12))),
         ],
       ),
@@ -150,7 +177,10 @@ class DispatcherDashboardScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12),
@@ -207,8 +237,11 @@ class DispatcherDashboardScreen extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final width = constraints.maxWidth;
-                    final int crossAxisCount = width > 768 ? 4 : (width > 340 ? 2 : 1);
-                    final cardWidth = (width - ((crossAxisCount - 1) * 12)) / crossAxisCount;
+                    final int crossAxisCount = width > 768
+                        ? 4
+                        : (width > 340 ? 2 : 1);
+                    final cardWidth =
+                        (width - ((crossAxisCount - 1) * 12)) / crossAxisCount;
 
                     return Wrap(
                       spacing: 12,
@@ -248,7 +281,8 @@ class DispatcherDashboardScreen extends StatelessWidget {
                           width: cardWidth,
                           child: DashboardCard(
                             title: 'Fleet Available',
-                            value: '${repo.availableVehicles.length} / ${repo.vehicles.length}',
+                            value:
+                                '${repo.availableVehicles.length} / ${repo.vehicles.length}',
                             icon: Icons.check_circle_outline_rounded,
                             iconColor: AppColors.statusCompleted,
                             subtitle: 'Ready to deploy',
@@ -273,7 +307,11 @@ class DispatcherDashboardScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.warning_amber_rounded, color: AppColors.emergencyPink, size: 24),
+                      const Icon(
+                        Icons.warning_amber_rounded,
+                        color: AppColors.emergencyPink,
+                        size: 24,
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -289,7 +327,12 @@ class DispatcherDashboardScreen extends StatelessWidget {
                             ),
                             Text(
                               'Waterline rupture near Tibet Centre. Dijkstra routing is bypassing this road segment.',
-                              style: GoogleFonts.inter(fontSize: 11, color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.lightTextSecondary,
+                              ),
                             ),
                           ],
                         ),
@@ -303,7 +346,10 @@ class DispatcherDashboardScreen extends StatelessWidget {
                 // Quick Navigation Tiles
                 Text(
                   'Quick Dispatch Actions',
-                  style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -350,13 +396,20 @@ class DispatcherDashboardScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Live Emergency Feed',
-                      style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w700),
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     TextButton(
                       onPressed: () => onNavigateToTab?.call(1),
                       child: Text(
                         'View All (${repo.emergencies.length})',
-                        style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primaryTeal),
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primaryTeal,
+                        ),
                       ),
                     ),
                   ],
@@ -374,13 +427,30 @@ class DispatcherDashboardScreen extends StatelessWidget {
                           color: AppColors.primaryTeal.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.emergency_rounded, color: AppColors.primaryTeal, size: 20),
+                        child: const Icon(
+                          Icons.emergency_rounded,
+                          color: AppColors.primaryTeal,
+                          size: 20,
+                        ),
                       ),
                       title: Row(
                         children: [
-                          Text(e.id, style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.primaryTeal)),
+                          Text(
+                            e.id,
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primaryTeal,
+                            ),
+                          ),
                           const SizedBox(width: 6),
-                          Text('· ${e.category}', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600)),
+                          Text(
+                            '· ${e.category}',
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ],
                       ),
                       subtitle: Text(
@@ -401,7 +471,13 @@ class DispatcherDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavTile(BuildContext context, {required String title, required IconData icon, required Color color, required VoidCallback onTap}) {
+  Widget _buildNavTile(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Expanded(
@@ -425,7 +501,10 @@ class DispatcherDashboardScreen extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.poppins(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ),

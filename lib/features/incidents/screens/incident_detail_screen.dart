@@ -12,10 +12,7 @@ import '../providers/incident_provider.dart';
 class IncidentDetailScreen extends StatelessWidget {
   final String incidentId;
 
-  const IncidentDetailScreen({
-    super.key,
-    required this.incidentId,
-  });
+  const IncidentDetailScreen({super.key, required this.incidentId});
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +53,9 @@ class IncidentDetailScreen extends StatelessWidget {
             tooltip: 'View on Live Map',
             onPressed: () {
               context.read<MapProvider>().animateTo(
-                    LatLng(incident.latitude, incident.longitude),
-                    16.0,
-                  );
+                LatLng(incident.latitude, incident.longitude),
+                16.0,
+              );
               context.read<MapProvider>().selectIncident(incident);
               context.go('/map');
             },
@@ -91,7 +88,11 @@ class IncidentDetailScreen extends StatelessWidget {
                           color: incident.type.color.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Icon(incident.type.icon, color: incident.type.color, size: 28),
+                        child: Icon(
+                          incident.type.icon,
+                          color: incident.type.color,
+                          size: 28,
+                        ),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
@@ -170,18 +171,28 @@ class IncidentDetailScreen extends StatelessWidget {
                 children: [
                   const Row(
                     children: [
-                      Icon(Icons.location_on, color: AppColors.primary, size: 20),
+                      Icon(
+                        Icons.location_on,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
                       SizedBox(width: 8),
                       Text(
                         'Location Details',
-                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Text(
                     incident.address,
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -200,9 +211,9 @@ class IncidentDetailScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       context.read<MapProvider>().animateTo(
-                            LatLng(incident.latitude, incident.longitude),
-                            16.0,
-                          );
+                        LatLng(incident.latitude, incident.longitude),
+                        16.0,
+                      );
                       context.read<MapProvider>().selectIncident(incident);
                       context.go('/map');
                     },
@@ -233,7 +244,11 @@ class IncidentDetailScreen extends StatelessWidget {
                       color: AppColors.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.shield_rounded, color: AppColors.primary, size: 28),
+                    child: const Icon(
+                      Icons.shield_rounded,
+                      color: AppColors.primary,
+                      size: 28,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -242,11 +257,19 @@ class IncidentDetailScreen extends StatelessWidget {
                       children: [
                         const Text(
                           'Assigned First Responders',
-                          style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         Text(
-                          incident.assignedResponderUnit ?? 'Assigning units...',
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                          incident.assignedResponderUnit ??
+                              'Assigning units...',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                         if (incident.estimatedArrivalMinutes != null)
                           Text(
@@ -306,7 +329,9 @@ class IncidentDetailScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        DateFormat('h:mm a • MMM d').format(incident.reportedAt),
+                        DateFormat(
+                          'h:mm a • MMM d',
+                        ).format(incident.reportedAt),
                         style: TextStyle(
                           fontSize: 12,
                           color: isDark
@@ -398,7 +423,9 @@ class _LifecycleStepper extends StatelessWidget {
                   height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isCompleted ? AppColors.primary : Colors.grey.shade200,
+                    color: isCompleted
+                        ? AppColors.primary
+                        : Colors.grey.shade200,
                     border: Border.all(
                       color: isCurrent ? Colors.redAccent : Colors.transparent,
                       width: 2,

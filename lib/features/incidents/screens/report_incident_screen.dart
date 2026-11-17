@@ -49,7 +49,8 @@ class _ReportIncidentScreenState extends State<ReportIncidentScreen> {
 
     setState(() => _isSubmitting = true);
 
-    final newId = 'INC-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+    final newId =
+        'INC-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
 
     final incident = IncidentModel(
       id: newId,
@@ -86,9 +87,7 @@ class _ReportIncidentScreenState extends State<ReportIncidentScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Report Emergency Incident'),
-      ),
+      appBar: AppBar(title: const Text('Report Emergency Incident')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -116,8 +115,12 @@ class _ReportIncidentScreenState extends State<ReportIncidentScreen> {
                   selected: isSelected,
                   selectedColor: type.color,
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : (isDark ? Colors.white : Colors.black87),
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected
+                        ? Colors.white
+                        : (isDark ? Colors.white : Colors.black87),
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                     fontSize: 13,
                   ),
                   onSelected: (val) {
@@ -191,7 +194,9 @@ class _ReportIncidentScreenState extends State<ReportIncidentScreen> {
             const SizedBox(height: 8),
             TextFormField(
               controller: _titleController,
-              validator: (val) => val == null || val.trim().isEmpty ? 'Please enter a title' : null,
+              validator: (val) => val == null || val.trim().isEmpty
+                  ? 'Please enter a title'
+                  : null,
               decoration: const InputDecoration(
                 hintText: 'e.g., Structure Fire on 3rd Floor',
               ),
@@ -207,15 +212,21 @@ class _ReportIncidentScreenState extends State<ReportIncidentScreen> {
             const SizedBox(height: 8),
             TextFormField(
               controller: _locationController,
-              validator: (val) => val == null || val.trim().isEmpty ? 'Please enter a location' : null,
+              validator: (val) => val == null || val.trim().isEmpty
+                  ? 'Please enter a location'
+                  : null,
               decoration: InputDecoration(
                 hintText: 'Street address or landmark',
-                prefixIcon: const Icon(Icons.location_on, color: AppColors.primary),
+                prefixIcon: const Icon(
+                  Icons.location_on,
+                  color: AppColors.primary,
+                ),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.my_location),
                   tooltip: 'Use Current GPS Location',
                   onPressed: () {
-                    _locationController.text = 'Current GPS (37.7749° N, 122.4194° W)';
+                    _locationController.text =
+                        'Current GPS (37.7749° N, 122.4194° W)';
                   },
                 ),
               ),
@@ -233,7 +244,8 @@ class _ReportIncidentScreenState extends State<ReportIncidentScreen> {
               controller: _descriptionController,
               maxLines: 4,
               decoration: const InputDecoration(
-                hintText: 'Describe injuries, hazards, vehicle details, or any immediate dangers...',
+                hintText:
+                    'Describe injuries, hazards, vehicle details, or any immediate dangers...',
               ),
             ),
 
@@ -250,12 +262,18 @@ class _ReportIncidentScreenState extends State<ReportIncidentScreen> {
                   ? const SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
                     )
                   : const Icon(Icons.send_rounded),
               label: Text(
                 _isSubmitting ? 'DISPATCHING...' : 'DISPATCH EMERGENCY REPORT',
-                style: const TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.8),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.8,
+                ),
               ),
             ),
 

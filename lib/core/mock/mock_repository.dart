@@ -5,6 +5,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
+import '../../data/models/user_profile_model.dart';
 import 'demo_data.dart';
 
 class MockRepository extends ChangeNotifier {
@@ -14,6 +15,7 @@ class MockRepository extends ChangeNotifier {
   final List<DemoVehicle> _vehicles = [];
   final List<DemoResource> _resources = [];
   final List<DemoBlockedRoad> _blockedRoads = [];
+  final Map<String, UserProfileModel> _userProfiles = {};
 
   // Default simulated location: Karachi central
   LatLng _userLocation = const LatLng(24.8607, 67.0011);
@@ -96,39 +98,129 @@ class MockRepository extends ChangeNotifier {
 
   int get unreadCount => _notifications.where((n) => !n.isRead).length;
 
-  int get totalCitizensCount => _accounts.where((u) => u.role == 'citizen').length;
-  int get totalDispatchersCount => _accounts.where((u) => u.role == 'dispatcher').length;
-  int get totalDriversCount => _accounts.where((u) => u.role == 'driver').length;
+  int get totalCitizensCount => _accounts
+      .where(
+        (u) =>
+            u.role == 'citizen' &&
+            u.id != 'USR-CIT-001' &&
+            u.name.toLowerCase() != 'demo citizen' &&
+            u.email.toLowerCase() != 'citizen@resq.com',
+      )
+      .length;
+  int get totalDispatchersCount =>
+      _accounts.where((u) => u.role == 'dispatcher').length;
+  int get totalDriversCount =>
+      _accounts.where((u) => u.role == 'driver').length;
+  int get totalRegisteredUsersCount => _accounts
+      .where(
+        (u) =>
+            u.id != 'USR-CIT-001' &&
+            u.name.toLowerCase() != 'demo citizen' &&
+            u.email.toLowerCase() != 'citizen@resq.com',
+      )
+      .length;
+
+  void addAccount(DemoUserAccount account) {
+    _accounts.removeWhere(
+      (u) => u.email.toLowerCase() == account.email.toLowerCase(),
+    );
+    _accounts.add(account);
+    notifyListeners();
+  }
 
   List<DemoVehicle> get availableVehicles =>
       _vehicles.where((v) => v.status == 'Available').toList();
-  List<DemoVehicle> get busyVehicles =>
-      _vehicles.where((v) => v.status == 'Busy' || v.status == 'En Route').toList();
+  List<DemoVehicle> get busyVehicles => _vehicles
+      .where((v) => v.status == 'Busy' || v.status == 'En Route')
+      .toList();
 
   List<DemoEmergency> get activeEmergencies => _emergencies
-      .where((e) =>
-          e.status == EmergencyStatus.reported ||
-          e.status == EmergencyStatus.assigned ||
-          e.status == EmergencyStatus.enRoute ||
-          e.status == EmergencyStatus.onScene)
+      .where(
+        (e) =>
+            e.status == EmergencyStatus.reported ||
+            e.status == EmergencyStatus.assigned ||
+            e.status == EmergencyStatus.enRoute ||
+            e.status == EmergencyStatus.onScene,
+      )
       .toList();
 
   List<DemoEmergency> get pendingEmergencies =>
       _emergencies.where((e) => e.status == EmergencyStatus.reported).toList();
 
   List<DemoEmergency> get assignedEmergencies => _emergencies
-      .where((e) =>
-          e.status == EmergencyStatus.assigned ||
-          e.status == EmergencyStatus.enRoute ||
-          e.status == EmergencyStatus.onScene)
+      .where(
+        (e) =>
+            e.status == EmergencyStatus.assigned ||
+            e.status == EmergencyStatus.enRoute ||
+            e.status == EmergencyStatus.onScene,
+      )
       .toList();
 
-  List<DemoEmergency> get resolvedEmergencies => _emergencies
-      .where((e) => e.status == EmergencyStatus.resolved)
-      .toList();
+  List<DemoEmergency> get resolvedEmergencies =>
+      _emergencies.where((e) => e.status == EmergencyStatus.resolved).toList();
 
-  List<DemoEmergency> get recentEmergencies =>
-      _emergencies.take(5).toList();
+  List<DemoEmergency> get recentEmergencies => _emergencies.take(5).toList();
+
+  void addEmergency(DemoEmergency emergency) {
+    _emergencies.removeWhere((e) => e.id == emergency.id);
+    _emergencies.insert(0, emergency);
+    notifyListeners();
+  }
+
+  List<DemoEmergency> getEmergenciesForUser(
+    String userId, {
+    String? userEmail,
+    String? userName,
+  }) {
+    final cleanUserId = userId.trim();
+    final cleanEmail = userEmail?.trim().toLowerCase();
+    final cleanName = userName?.trim().toLowerCase();
+
+    return _emergencies.where((e) {
+      final rep = e.reportedByUserId.trim();
+      final repLower = rep.toLowerCase();
+
+      if (cleanUserId.isNotEmpty && rep == cleanUserId) {
+        return true;
+      }
+      if (cleanEmail != null &&
+          cleanEmail.isNotEmpty &&
+          repLower == cleanEmail) {
+        return true;
+      }
+      if (cleanName != null && cleanName.isNotEmpty && repLower == cleanName) {
+        return true;
+      }
+      return false;
+    }).toList();
+  }
+
+  /// User Profile & Medical Details Management
+  UserProfileModel getProfileForUser(
+    String userId, {
+    String? name,
+    String? email,
+    String? phone,
+  }) {
+    return _userProfiles[userId] ??
+        UserProfileModel(
+          id: userId,
+          fullName: name ?? '',
+          phoneNumber: phone ?? '',
+          email: email ?? '',
+          bloodType: '',
+          allergies: const [],
+          medicalConditions: const [],
+          homeAddress: '',
+          preferredHospital: '',
+          emergencyContacts: const [],
+        );
+  }
+
+  void saveUserProfile(UserProfileModel profile) {
+    _userProfiles[profile.id] = profile;
+    notifyListeners();
+  }
 
   // ───────────────────────────────────────────────────────────────────────────
   // AUTHENTICATION & USER MANAGEMENT
@@ -158,7 +250,9 @@ class MockRepository extends ChangeNotifier {
   }) {
     final cleanEmail = email.trim().toLowerCase();
     // Check if account already exists
-    final existing = _accounts.where((u) => u.email.toLowerCase() == cleanEmail);
+    final existing = _accounts.where(
+      (u) => u.email.toLowerCase() == cleanEmail,
+    );
     if (existing.isNotEmpty) {
       return existing.first;
     }
@@ -210,7 +304,8 @@ class MockRepository extends ChangeNotifier {
       DemoNotification(
         id: 'NOTIF-${DateTime.now().millisecondsSinceEpoch}',
         title: 'New Staff Provisioned',
-        message: 'Account for ${newStaff.name} ($role) has been created by Administrator.',
+        message:
+            'Account for ${newStaff.name} ($role) has been created by Administrator.',
         createdAt: DateTime.now(),
         isRead: false,
         targetRole: 'admin',
@@ -281,7 +376,8 @@ class MockRepository extends ChangeNotifier {
       locationLabel: locationLabel,
       reportedAt: DateTime.now(),
       reportedByUserId: userId,
-      allocationReason: 'Awaiting Dispatcher Review: Priority rating based on severity $severity and urgency $urgency.',
+      allocationReason:
+          'Awaiting Dispatcher Review: Priority rating based on severity $severity and urgency $urgency.',
     );
 
     _emergencies.insert(0, emergency);
@@ -310,7 +406,8 @@ class MockRepository extends ChangeNotifier {
       _emergencies[idx].status = newStatus;
 
       // If resolved, free up any assigned vehicle
-      if (newStatus == EmergencyStatus.resolved && _emergencies[idx].assignedVehicle != null) {
+      if (newStatus == EmergencyStatus.resolved &&
+          _emergencies[idx].assignedVehicle != null) {
         final vId = _emergencies[idx].assignedVehicle!.id;
         final vIdx = _vehicles.indexWhere((v) => v.id == vId);
         if (vIdx != -1) {
@@ -341,7 +438,11 @@ class MockRepository extends ChangeNotifier {
   // ───────────────────────────────────────────────────────────────────────────
 
   /// Assigns a vehicle to an emergency (DP Allocation Confirmation)
-  void assignVehicleToEmergency(String emergencyId, String vehicleId, {String? notes}) {
+  void assignVehicleToEmergency(
+    String emergencyId,
+    String vehicleId, {
+    String? notes,
+  }) {
     final eIdx = _emergencies.indexWhere((e) => e.id == emergencyId);
     final vIdx = _vehicles.indexWhere((v) => v.id == vehicleId);
 
@@ -352,7 +453,8 @@ class MockRepository extends ChangeNotifier {
 
       _emergencies[eIdx].status = EmergencyStatus.assigned;
       _emergencies[eIdx].assignedVehicle = vehicle;
-      _emergencies[eIdx].allocationReason = notes ?? 'Dispatched based on DP minimum response latency.';
+      _emergencies[eIdx].allocationReason =
+          notes ?? 'Dispatched based on DP minimum response latency.';
 
       // Notify Driver & Citizen
       _notifications.insert(
@@ -360,7 +462,8 @@ class MockRepository extends ChangeNotifier {
         DemoNotification(
           id: 'NOTIF-${DateTime.now().millisecondsSinceEpoch}',
           title: 'Mission Dispatched',
-          message: 'Emergency $emergencyId assigned to unit ${vehicle.licensePlate}.',
+          message:
+              'Emergency $emergencyId assigned to unit ${vehicle.licensePlate}.',
           createdAt: DateTime.now(),
           isRead: false,
           relatedEmergencyId: emergencyId,
@@ -382,8 +485,8 @@ class MockRepository extends ChangeNotifier {
       return _emergencies.firstWhere(
         (e) =>
             (e.status == EmergencyStatus.assigned ||
-             e.status == EmergencyStatus.enRoute ||
-             e.status == EmergencyStatus.onScene) &&
+                e.status == EmergencyStatus.enRoute ||
+                e.status == EmergencyStatus.onScene) &&
             e.assignedVehicle != null,
       );
     } catch (_) {
@@ -393,7 +496,10 @@ class MockRepository extends ChangeNotifier {
 
   List<DemoEmergency> getMissionHistoryForDriver([String? driverName]) {
     return _emergencies
-        .where((e) => e.status == EmergencyStatus.resolved && e.assignedVehicle != null)
+        .where(
+          (e) =>
+              e.status == EmergencyStatus.resolved && e.assignedVehicle != null,
+        )
         .toList();
   }
 
@@ -424,7 +530,8 @@ class MockRepository extends ChangeNotifier {
         DemoNotification(
           id: 'NOTIF-${DateTime.now().millisecondsSinceEpoch}',
           title: 'Mission Update: $newStatus',
-          message: 'Emergency $emergencyId is now $newStatus. [SIMULATED PROGRESSION]',
+          message:
+              'Emergency $emergencyId is now $newStatus. [SIMULATED PROGRESSION]',
           createdAt: DateTime.now(),
           isRead: false,
           relatedEmergencyId: emergencyId,
@@ -475,14 +582,16 @@ class MockRepository extends ChangeNotifier {
     String? associatedVehicleId,
   }) {
     final newId = 'RES-00${_resources.length + 1}';
-    _resources.add(DemoResource(
-      id: newId,
-      name: name,
-      category: category,
-      quantity: quantity,
-      unit: unit,
-      associatedVehicleId: associatedVehicleId,
-    ));
+    _resources.add(
+      DemoResource(
+        id: newId,
+        name: name,
+        category: category,
+        quantity: quantity,
+        unit: unit,
+        associatedVehicleId: associatedVehicleId,
+      ),
+    );
     notifyListeners();
   }
 

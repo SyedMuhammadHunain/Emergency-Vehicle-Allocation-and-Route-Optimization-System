@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 
-enum ResponderType {
-  ambulance,
-  fireTruck,
-  policePatrol,
-  rescueUnit,
-}
+enum ResponderType { ambulance, fireTruck, policePatrol, rescueUnit }
 
 extension ResponderTypeExtension on ResponderType {
   String get displayName {

@@ -8,11 +8,7 @@ class IncidentCard extends StatelessWidget {
   final IncidentModel incident;
   final VoidCallback? onTap;
 
-  const IncidentCard({
-    super.key,
-    required this.incident,
-    this.onTap,
-  });
+  const IncidentCard({super.key, required this.incident, this.onTap});
 
   String _formatTime(DateTime time) {
     final now = DateTime.now();
@@ -167,7 +163,11 @@ class IncidentCard extends StatelessWidget {
                   if (incident.assignedResponderUnit != null)
                     Row(
                       children: [
-                        const Icon(Icons.shield_outlined, size: 14, color: AppColors.primary),
+                        const Icon(
+                          Icons.shield_outlined,
+                          size: 14,
+                          color: AppColors.primary,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           incident.assignedResponderUnit!,

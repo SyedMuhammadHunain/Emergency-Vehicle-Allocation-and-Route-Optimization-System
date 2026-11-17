@@ -75,8 +75,11 @@ class _EmergencyButtonState extends State<EmergencyButton>
                 height: 190 * scale,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: (widget.isActivated ? AppColors.warning : AppColors.primary)
-                      .withValues(alpha: 0.25),
+                  color:
+                      (widget.isActivated
+                              ? AppColors.warning
+                              : AppColors.primary)
+                          .withValues(alpha: 0.25),
                 ),
               ),
 
@@ -99,10 +102,11 @@ class _EmergencyButtonState extends State<EmergencyButton>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: (widget.isActivated
-                                ? Colors.orange
-                                : AppColors.primary)
-                            .withValues(alpha: 0.45),
+                        color:
+                            (widget.isActivated
+                                    ? Colors.orange
+                                    : AppColors.primary)
+                                .withValues(alpha: 0.45),
                         blurRadius: 24,
                         spreadRadius: 4,
                         offset: const Offset(0, 8),

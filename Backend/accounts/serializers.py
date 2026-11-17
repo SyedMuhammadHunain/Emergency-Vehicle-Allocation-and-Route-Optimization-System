@@ -21,11 +21,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    email = serializers.CharField(required=False)
+    username = serializers.CharField(required=False)
     password = serializers.CharField(trim_whitespace=False)
 
     def validate(self, attrs):
-        email = attrs["email"].strip().lower()
+        raw_email = attrs.get("email") or attrs.get("username")
+        if not raw_email:
+            raise serializers.ValidationError("Email or username is required.")
+        email = raw_email.strip().lower()
         existing = User.objects.filter(email=email).first()
         if existing and not existing.is_active and existing.check_password(attrs["password"]):
             raise serializers.ValidationError("This account has been deactivated by the administrator.")

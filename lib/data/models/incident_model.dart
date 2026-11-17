@@ -1,29 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 
-enum EmergencyType {
-  medical,
-  fire,
-  police,
-  accident,
-  rescue,
-  disaster,
-  other,
-}
+enum EmergencyType { medical, fire, police, accident, rescue, disaster, other }
 
-enum IncidentStatus {
-  reported,
-  dispatched,
-  onScene,
-  resolved,
-}
+enum IncidentStatus { reported, dispatched, onScene, resolved }
 
-enum IncidentSeverity {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum IncidentSeverity { low, medium, high, critical }
 
 extension EmergencyTypeExtension on EmergencyType {
   String get displayName {
@@ -198,7 +180,8 @@ class IncidentModel {
       address: address ?? this.address,
       reporterName: reporterName ?? this.reporterName,
       reportedAt: reportedAt ?? this.reportedAt,
-      assignedResponderUnit: assignedResponderUnit ?? this.assignedResponderUnit,
+      assignedResponderUnit:
+          assignedResponderUnit ?? this.assignedResponderUnit,
       estimatedArrivalMinutes:
           estimatedArrivalMinutes ?? this.estimatedArrivalMinutes,
     );

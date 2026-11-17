@@ -25,7 +25,8 @@ class ResQApp extends StatefulWidget {
 
 class _ResQAppState extends State<ResQApp> {
   late final _router = createRouter(widget.sessionService);
-  late final MockRepository _mockRepository = widget.mockRepository ?? MockRepository();
+  late final MockRepository _mockRepository =
+      widget.mockRepository ?? MockRepository();
 
   @override
   Widget build(BuildContext context) {

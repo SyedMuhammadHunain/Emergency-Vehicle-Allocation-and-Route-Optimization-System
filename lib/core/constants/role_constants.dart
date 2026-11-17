@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum UserRole {
-  citizen,
-  dispatcher,
-  driver,
-  admin,
-}
+enum UserRole { citizen, dispatcher, driver, admin }
 
 extension UserRoleExtension on UserRole {
   String get nameId {

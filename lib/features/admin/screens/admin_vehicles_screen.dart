@@ -34,7 +34,9 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               title: Row(
                 children: [
                   Container(
@@ -43,12 +45,19 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                       color: AppColors.primaryTeal.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.add_circle_outline_rounded, color: AppColors.primaryTeal, size: 22),
+                    child: const Icon(
+                      Icons.add_circle_outline_rounded,
+                      color: AppColors.primaryTeal,
+                      size: 22,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Text(
                     'Add Fleet Vehicle',
-                    style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
               ),
@@ -62,15 +71,28 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                       decoration: InputDecoration(
                         labelText: 'Vehicle Type',
                         isDense: true,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       items: const [
-                        DropdownMenuItem(value: 'Ambulance', child: Text('Ambulance (Paramedic Unit)')),
-                        DropdownMenuItem(value: 'Fire Brigade', child: Text('Fire Brigade (Water/Foam)')),
-                        DropdownMenuItem(value: 'Rescue Vehicle', child: Text('Rescue Vehicle (Heavy Extrication)')),
+                        DropdownMenuItem(
+                          value: 'Ambulance',
+                          child: Text('Ambulance (Paramedic Unit)'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Fire Brigade',
+                          child: Text('Fire Brigade (Water/Foam)'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Rescue Vehicle',
+                          child: Text('Rescue Vehicle (Heavy Extrication)'),
+                        ),
                       ],
                       onChanged: (val) {
-                        if (val != null) setModalState(() => selectedType = val);
+                        if (val != null) {
+                          setModalState(() => selectedType = val);
+                        }
                       },
                     ),
                     const SizedBox(height: 12),
@@ -80,9 +102,13 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                         labelText: 'License Plate / Identifier',
                         hintText: 'e.g. KHI-4499-RES',
                         isDense: true,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter registration plate' : null,
+                      validator: (v) => (v == null || v.trim().isEmpty)
+                          ? 'Enter registration plate'
+                          : null,
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
@@ -91,7 +117,9 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                         labelText: 'Assigned Driver (Optional)',
                         hintText: 'e.g. Naveed Shah',
                         isDense: true,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ],
@@ -105,7 +133,9 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                 FilledButton(
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.primaryTeal,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   onPressed: () {
                     if (!formKey.currentState!.validate()) return;
@@ -113,14 +143,18 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                     repo.addVehicle(
                       licensePlate: plateCtrl.text.trim(),
                       type: selectedType,
-                      driverName: driverCtrl.text.trim().isNotEmpty ? driverCtrl.text.trim() : null,
+                      driverName: driverCtrl.text.trim().isNotEmpty
+                          ? driverCtrl.text.trim()
+                          : null,
                     );
 
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: AppColors.statusCompleted,
-                        content: Text('Vehicle ${plateCtrl.text.trim()} added to fleet.'),
+                        content: Text(
+                          'Vehicle ${plateCtrl.text.trim()} added to fleet.',
+                        ),
                       ),
                     );
                   },
@@ -134,11 +168,18 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
     );
   }
 
-  void _showChangeStatusDialog(BuildContext context, DemoVehicle vehicle, MockRepository repo) {
+  void _showChangeStatusDialog(
+    BuildContext context,
+    DemoVehicle vehicle,
+    MockRepository repo,
+  ) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Update Status: ${vehicle.licensePlate}', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700)),
+        title: Text(
+          'Update Status: ${vehicle.licensePlate}',
+          style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: ['Available', 'Busy', 'Maintenance'].map((st) {
@@ -147,12 +188,14 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                 st == 'Available'
                     ? Icons.check_circle_rounded
                     : st == 'Busy'
-                        ? Icons.timer_rounded
-                        : Icons.build_rounded,
+                    ? Icons.timer_rounded
+                    : Icons.build_rounded,
                 color: AppColors.forStatus(st.toUpperCase()),
               ),
               title: Text(st),
-              trailing: vehicle.status == st ? const Icon(Icons.check, color: AppColors.primaryTeal) : null,
+              trailing: vehicle.status == st
+                  ? const Icon(Icons.check, color: AppColors.primaryTeal)
+                  : null,
               onTap: () {
                 repo.updateVehicleStatus(vehicle.id, st);
                 Navigator.pop(ctx);
@@ -170,7 +213,8 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
     final repo = context.watch<MockRepository>();
 
     final vehicles = repo.vehicles.where((v) {
-      if (_selectedStatus != 'ALL' && v.status.toLowerCase() != _selectedStatus.toLowerCase()) {
+      if (_selectedStatus != 'ALL' &&
+          v.status.toLowerCase() != _selectedStatus.toLowerCase()) {
         return false;
       }
       if (_searchQuery.isNotEmpty) {
@@ -213,8 +257,13 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                     hintStyle: GoogleFonts.inter(fontSize: 13),
                     prefixIcon: const Icon(Icons.search_rounded, size: 20),
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -225,18 +274,27 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                       final isSelected = _selectedStatus == st;
                       final count = st == 'ALL'
                           ? repo.vehicles.length
-                          : repo.vehicles.where((v) => v.status.toLowerCase() == st.toLowerCase()).length;
+                          : repo.vehicles
+                                .where(
+                                  (v) =>
+                                      v.status.toLowerCase() ==
+                                      st.toLowerCase(),
+                                )
+                                .length;
 
                       return Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: ChoiceChip(
                           label: Text('$st ($count)'),
                           selected: isSelected,
-                          onSelected: (_) => setState(() => _selectedStatus = st),
+                          onSelected: (_) =>
+                              setState(() => _selectedStatus = st),
                           selectedColor: AppColors.primaryTeal,
                           labelStyle: TextStyle(
                             color: isSelected ? Colors.white : null,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
                             fontSize: 11,
                           ),
                         ),
@@ -254,7 +312,8 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                 ? const Center(
                     child: EmptyState(
                       'No Vehicles Found',
-                      subtitle: 'Try adjusting your status filter or search query.',
+                      subtitle:
+                          'Try adjusting your status filter or search query.',
                       icon: Icons.no_crash_rounded,
                     ),
                   )
@@ -270,7 +329,9 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                           side: BorderSide(
-                            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : AppColors.lightBorder,
                           ),
                         ),
                         child: Padding(
@@ -280,17 +341,22 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: (isAvailable ? AppColors.statusCompleted : AppColors.statusAssigned)
-                                      .withValues(alpha: 0.15),
+                                  color:
+                                      (isAvailable
+                                              ? AppColors.statusCompleted
+                                              : AppColors.statusAssigned)
+                                          .withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Icon(
                                   v.type.contains('Fire')
                                       ? Icons.fire_truck_rounded
                                       : v.type.contains('Rescue')
-                                          ? Icons.airport_shuttle_rounded
-                                          : Icons.emergency_rounded,
-                                  color: isAvailable ? AppColors.statusCompleted : AppColors.statusAssigned,
+                                      ? Icons.airport_shuttle_rounded
+                                      : Icons.emergency_rounded,
+                                  color: isAvailable
+                                      ? AppColors.statusCompleted
+                                      : AppColors.statusAssigned,
                                   size: 26,
                                 ),
                               ),
@@ -309,13 +375,18 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                                           ),
                                         ),
                                         const SizedBox(width: 8),
-                                        StatusChip(status: v.status.toUpperCase()),
+                                        StatusChip(
+                                          status: v.status.toUpperCase(),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
                                       '${v.type} · Driver: ${v.driverName ?? "Available Pool"}',
-                                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
                                     ),
                                     if (v.assignedEmergencyId != null)
                                       Text(
@@ -330,9 +401,13 @@ class _AdminVehiclesScreenState extends State<AdminVehiclesScreen> {
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.edit_note_rounded, color: AppColors.primaryTeal),
+                                icon: const Icon(
+                                  Icons.edit_note_rounded,
+                                  color: AppColors.primaryTeal,
+                                ),
                                 tooltip: 'Change Status',
-                                onPressed: () => _showChangeStatusDialog(context, v, repo),
+                                onPressed: () =>
+                                    _showChangeStatusDialog(context, v, repo),
                               ),
                             ],
                           ),
