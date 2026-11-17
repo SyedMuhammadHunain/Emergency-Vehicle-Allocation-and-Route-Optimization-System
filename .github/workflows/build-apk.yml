@@ -5,6 +5,9 @@ on:
     branches: [ "Hunain", "main" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -38,3 +41,15 @@ jobs:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
+
+      - name: Update bundled landing page APK
+        run: |
+          cp build/app/outputs/flutter-apk/app-release.apk landing-page/app-release.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add landing-page/app-release.apk
+          if ! git diff --staged --quiet; then
+            git commit -m "build(release): update bundled release apk via CI [skip ci]"
+            git push || echo "Push skipped or branch protected; artifact available in Actions"
+          fi
+
