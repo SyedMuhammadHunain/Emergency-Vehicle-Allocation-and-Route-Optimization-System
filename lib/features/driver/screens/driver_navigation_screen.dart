@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/mock/mock_repository.dart';
 import '../../../core/services/session_service.dart';
 import '../../../core/widgets/feedback/state_widgets.dart';
@@ -87,7 +88,7 @@ class _DriverNavigationScreenState extends State<DriverNavigationScreen> {
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.resq.resq_app',
+                userAgentPackageName: AppConstants.packageName,
                 maxZoom: 18,
                 panBuffer: 1,
               ),
