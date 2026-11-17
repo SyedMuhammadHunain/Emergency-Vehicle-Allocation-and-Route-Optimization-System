@@ -9,15 +9,15 @@
 - [x] `git status` clean and up-to-date with `upstream/main`
 
 ## Task 2: Add Download Cache-Busting Version to Landing Page
-**Description:** Update `landing-page/index.html` download links with `?v=2.0.1-fixed` so browsers do not serve cached old APK.
+**Description:** Update `landing-page/index.html` download links with `?v=20261117-layout-fix` so browsers do not serve cached old APK.
 **Acceptance criteria:**
-- [ ] APK href in `landing-page/index.html` updated with version query parameter
+- [x] APK href in `landing-page/index.html` updated with version query parameter
 **Verification:**
-- [ ] Inspect `landing-page/index.html` href attributes
+- [x] Inspect `landing-page/index.html` href attributes
 
 ## Task 3: Push Live
 **Description:** Push update to `upstream` and `origin` so GitHub Pages/hosting serves the latest APK.
 **Acceptance criteria:**
-- [ ] Pushed to both remotes
+- [x] Pushed to both remotes
 **Verification:**
-- [ ] `git status` clean
+- [x] `git status` clean
