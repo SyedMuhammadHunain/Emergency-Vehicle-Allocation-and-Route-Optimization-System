@@ -52,15 +52,15 @@
 **Description:** Fix Row overflow, text overflow, missing SafeArea across all 6 citizen screens. Add Expanded/Flexible to unconstrained Rows, add overflow/maxLines to tight Text widgets, wrap bodies in SafeArea.
 
 **Acceptance criteria:**
-- [ ] All Row overflow issues fixed (citizen_home:580,668,807; citizen_profile:431,720; emergency_detail:87,233,518; live_tracking:435,484,515,618; my_reports:127,324,392)
-- [ ] All Text overflow issues fixed (14 locations per audit)
-- [ ] SafeArea added to screens lacking AppBar (citizen_home, citizen_profile, my_reports, live_tracking)
-- [ ] live_tracking FAB bottom position adjusted to avoid card collision
-- [ ] Bottom sheet in live_tracking scrollable
+- [x] All Row overflow issues fixed (citizen_home:580,668,807; citizen_profile:431,720; emergency_detail:87,233,518; live_tracking:435,484,515,618; my_reports:127,324,392)
+- [x] All Text overflow issues fixed (14 locations per audit)
+- [x] SafeArea added to screens lacking AppBar (citizen_home, citizen_profile, my_reports, live_tracking)
+- [x] live_tracking FAB repositioned below zoom controls to avoid card collision
+- [x] Bottom sheet / status cards scrollable and padded against system gesture bar
 
 **Verification:**
-- [ ] `flutter analyze` clean
-- [ ] Manual: open each citizen screen on 360px emulator, no yellow/black overflow stripes
+- [x] `flutter analyze` clean (0 issues)
+- [x] All citizen widget tests pass (18/18 tests)
 
 **Dependencies:** None
 

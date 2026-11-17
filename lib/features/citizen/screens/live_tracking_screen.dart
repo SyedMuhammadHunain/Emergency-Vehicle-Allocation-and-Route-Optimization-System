@@ -377,10 +377,10 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
             ),
           ),
 
-          // Recenter Map FAB
+          // Recenter Map FAB (placed cleanly below zoom controls to avoid card collision)
           Positioned(
             right: 16,
-            bottom: 230,
+            top: 155,
             child: FloatingActionButton.small(
               backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
               foregroundColor: AppColors.primaryTeal,
@@ -397,52 +397,58 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
             left: 16,
             right: 16,
             bottom: 16,
-            child: Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                side: BorderSide(
-                  color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+            child: SafeArea(
+              top: false,
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: hasAssignedVehicle
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryTeal.withValues(
-                                    alpha: 0.15,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: hasAssignedVehicle
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryTeal.withValues(
+                                      alpha: 0.15,
+                                    ),
+                                    shape: BoxShape.circle,
                                   ),
-                                  shape: BoxShape.circle,
+                                  child: const Icon(
+                                    Icons.directions_car_rounded,
+                                    color: AppColors.primaryTeal,
+                                    size: 24,
+                                  ),
                                 ),
-                                child: const Icon(
-                                  Icons.directions_car_rounded,
-                                  color: AppColors.primaryTeal,
-                                  size: 24,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          vehicle.licensePlate,
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              vehicle.licensePlate,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Container(
+                                          const SizedBox(width: 6),
+                                          Container(
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 6,
                                             vertical: 2,
@@ -468,6 +474,8 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                                     const SizedBox(height: 2),
                                     Text(
                                       '${vehicle.driverName ?? "Responder"} · ${vehicle.status}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.inter(
                                         fontSize: 11,
                                         color: isDark
@@ -484,30 +492,36 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              _buildStat(
-                                'Estimated ETA',
-                                '~$etaMins mins',
-                                AppColors.primaryTeal,
+                              Expanded(
+                                child: _buildStat(
+                                  'Estimated ETA',
+                                  '~$etaMins mins',
+                                  AppColors.primaryTeal,
+                                ),
                               ),
                               Container(
                                 width: 1,
                                 height: 28,
                                 color: Colors.grey.withValues(alpha: 0.2),
                               ),
-                              _buildStat(
-                                'Distance',
-                                '${distanceKm.toStringAsFixed(1)} km',
-                                isDark ? Colors.white : AppColors.lightTextNavy,
+                              Expanded(
+                                child: _buildStat(
+                                  'Distance',
+                                  '${distanceKm.toStringAsFixed(1)} km',
+                                  isDark ? Colors.white : AppColors.lightTextNavy,
+                                ),
                               ),
                               Container(
                                 width: 1,
                                 height: 28,
                                 color: Colors.grey.withValues(alpha: 0.2),
                               ),
-                              _buildStat(
-                                'Status',
-                                vehicle.status,
-                                isDark ? Colors.white : AppColors.lightTextNavy,
+                              Expanded(
+                                child: _buildStat(
+                                  'Status',
+                                  vehicle.status,
+                                  isDark ? Colors.white : AppColors.lightTextNavy,
+                                ),
                               ),
                             ],
                           ),
@@ -555,7 +569,9 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                                     size: 16,
                                   ),
                                   label: Text(
-                                    'Refresh Status',
+                                    'Refresh',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.inter(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700,
@@ -618,30 +634,36 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              _buildStat(
-                                'Category',
-                                emergency?.category ?? 'General',
-                                AppColors.primaryTeal,
+                              Expanded(
+                                child: _buildStat(
+                                  'Category',
+                                  emergency?.category ?? 'General',
+                                  AppColors.primaryTeal,
+                                ),
                               ),
                               Container(
                                 width: 1,
                                 height: 28,
                                 color: Colors.grey.withValues(alpha: 0.2),
                               ),
-                              _buildStat(
-                                'Severity',
-                                'Level ${emergency?.severity ?? 3}',
-                                AppColors.emergencyPink,
+                              Expanded(
+                                child: _buildStat(
+                                  'Severity',
+                                  'Level ${emergency?.severity ?? 3}',
+                                  AppColors.emergencyPink,
+                                ),
                               ),
                               Container(
                                 width: 1,
                                 height: 28,
                                 color: Colors.grey.withValues(alpha: 0.2),
                               ),
-                              _buildStat(
-                                'Status',
-                                emergency?.status ?? EmergencyStatus.reported,
-                                AppColors.statusPending,
+                              Expanded(
+                                child: _buildStat(
+                                  'Status',
+                                  emergency?.status ?? EmergencyStatus.reported,
+                                  AppColors.statusPending,
+                                ),
                               ),
                             ],
                           ),
@@ -668,6 +690,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                           ),
                         ],
                       ),
+                ),
               ),
             ),
           ),
@@ -678,9 +701,12 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
 
   Widget _buildStat(String label, String value, Color color) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: GoogleFonts.poppins(
             fontSize: 15,
             fontWeight: FontWeight.w800,
@@ -688,7 +714,12 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
           ),
         ),
         const SizedBox(height: 2),
-        Text(label, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey)),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.inter(fontSize: 10, color: Colors.grey),
+        ),
       ],
     );
   }

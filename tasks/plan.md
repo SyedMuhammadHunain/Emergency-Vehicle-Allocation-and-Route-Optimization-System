@@ -35,7 +35,7 @@ Layout fixes (Tasks 3-9) — all independent, parallelizable
 - [x] `flutter analyze` clean
 
 ### Phase 2: Layout Fixes (parallelizable)
-- [ ] Task 3: Fix citizen screens (6 files)
+- [x] Task 3: Fix citizen screens (6 files)
 - [ ] Task 4: Fix dispatcher screens (7 files)
 - [ ] Task 5: Fix driver screens (6 files)
 - [ ] Task 6: Fix admin screens (6 files)

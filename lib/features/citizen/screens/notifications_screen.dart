@@ -35,119 +35,126 @@ class NotificationsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: notifs.isEmpty
-          ? const Center(
-              child: EmptyState(
-                'No Notifications',
-                subtitle:
-                    'You have no dispatch or emergency notifications at this time.',
-                icon: Icons.notifications_off_outlined,
-              ),
-            )
-          : ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              itemCount: notifs.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 8),
-              itemBuilder: (context, idx) {
-                final item = notifs[idx];
-                final timeStr = DateFormat(
-                  'MMM d · h:mm a',
-                ).format(item.createdAt);
+      body: SafeArea(
+        top: false,
+        child: notifs.isEmpty
+            ? const Center(
+                child: EmptyState(
+                  'No Notifications',
+                  subtitle:
+                      'You have no dispatch or emergency notifications at this time.',
+                  icon: Icons.notifications_off_outlined,
+                ),
+              )
+            : ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                itemCount: notifs.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 8),
+                itemBuilder: (context, idx) {
+                  final item = notifs[idx];
+                  final timeStr = DateFormat(
+                    'MMM d · h:mm a',
+                  ).format(item.createdAt);
 
-                return Card(
-                  elevation: item.isRead ? 0 : 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                    side: BorderSide(
-                      color: item.isRead
-                          ? (isDark
-                                ? AppColors.darkBorder
-                                : AppColors.lightBorder)
-                          : AppColors.primaryTeal,
-                      width: item.isRead ? 1 : 1.5,
-                    ),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    leading: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
+                  return Card(
+                    elevation: item.isRead ? 0 : 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      side: BorderSide(
                         color: item.isRead
-                            ? Colors.grey.withValues(alpha: 0.1)
-                            : AppColors.primaryTeal.withValues(alpha: 0.15),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.notifications_active_rounded,
-                        color: item.isRead
-                            ? Colors.grey
+                            ? (isDark
+                                  ? AppColors.darkBorder
+                                  : AppColors.lightBorder)
                             : AppColors.primaryTeal,
-                        size: 20,
+                        width: item.isRead ? 1 : 1.5,
                       ),
                     ),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            item.title,
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: item.isRead
-                                  ? FontWeight.w600
-                                  : FontWeight.w800,
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      leading: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: item.isRead
+                              ? Colors.grey.withValues(alpha: 0.1)
+                              : AppColors.primaryTeal.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.notifications_active_rounded,
+                          color: item.isRead
+                              ? Colors.grey
+                              : AppColors.primaryTeal,
+                          size: 20,
+                        ),
+                      ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                fontWeight: item.isRead
+                                    ? FontWeight.w600
+                                    : FontWeight.w800,
+                              ),
                             ),
                           ),
-                        ),
-                        if (!item.isRead)
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.primaryTeal,
+                          if (!item.isRead)
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.primaryTeal,
+                              ),
+                            ),
+                        ],
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 4),
+                          Text(
+                            item.message,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: isDark
+                                  ? AppColors.darkTextSecondary
+                                  : AppColors.lightTextSecondary,
                             ),
                           ),
-                      ],
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
-                        Text(
-                          item.message,
-                          style: GoogleFonts.inter(
-                            fontSize: 12,
-                            color: isDark
-                                ? AppColors.darkTextSecondary
-                                : AppColors.lightTextSecondary,
+                          const SizedBox(height: 6),
+                          Text(
+                            timeStr,
+                            style: GoogleFonts.inter(
+                              fontSize: 10,
+                              color: Colors.grey,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          timeStr,
-                          style: GoogleFonts.inter(
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      onTap: () {
+                        repo.markNotificationRead(item.id);
+                        if (item.relatedEmergencyId != null) {
+                          context.push(
+                            '/citizen/details/${item.relatedEmergencyId}',
+                          );
+                        }
+                      },
                     ),
-                    onTap: () {
-                      repo.markNotificationRead(item.id);
-                      if (item.relatedEmergencyId != null) {
-                        context.push(
-                          '/citizen/details/${item.relatedEmergencyId}',
-                        );
-                      }
-                    },
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }
