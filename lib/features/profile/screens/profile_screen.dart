@@ -66,40 +66,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 26,
-                          backgroundColor: Colors.white24,
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 30,
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const CircleAvatar(
+                            radius: 26,
+                            backgroundColor: Colors.white24,
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 30,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 14),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              profile.fullName,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w900,
-                              ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  profile.fullName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                Text(
+                                  profile.phoneNumber,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              profile.phoneNumber,
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     // Blood Group Badge
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -231,9 +240,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'In Case of Emergency (ICE) Contacts',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+              const Expanded(
+                child: Text(
+                  'In Case of Emergency (ICE) Contacts',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                ),
               ),
               IconButton(
                 icon: const Icon(
@@ -267,9 +280,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 title: Row(
                   children: [
-                    Text(
-                      contact.name,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    Expanded(
+                      child: Text(
+                        contact.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
                     ),
                     if (contact.isPrimary) ...[
                       const SizedBox(width: 8),
@@ -296,6 +313,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 subtitle: Text(
                   '${contact.relationship} • ${contact.phoneNumber}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.phone, color: AppColors.success),

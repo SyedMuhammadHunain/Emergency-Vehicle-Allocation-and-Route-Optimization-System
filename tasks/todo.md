@@ -167,17 +167,17 @@
 **Description:** Fix Row overflow, text overflow, missing SafeArea in map_screen, profile_screen, incident_detail_screen.
 
 **Acceptance criteria:**
-- [ ] map_screen:575-600 Row overflow fixed
-- [ ] map_screen:550,557 Text overflow fixed
-- [ ] map_screen FAB and preview cards get SafeArea bottom padding
-- [ ] profile_screen:66-102,231-251,268-296 Row overflow fixed
-- [ ] profile_screen:84,92,234,270 Text overflow fixed
-- [ ] incident_detail_screen:319-343 Row overflow fixed
-- [ ] incident_detail_screen:322 Text overflow fixed
+- [x] map_screen:575-600 Row overflow fixed
+- [x] map_screen:550,557 Text overflow fixed
+- [x] map_screen FAB and preview cards get SafeArea bottom padding
+- [x] profile_screen:66-102,231-251,268-296 Row overflow fixed
+- [x] profile_screen:84,92,234,270 Text overflow fixed
+- [x] incident_detail_screen:319-343 Row overflow fixed
+- [x] incident_detail_screen:322 Text overflow fixed
 
 **Verification:**
-- [ ] `flutter analyze` clean
-- [ ] Manual: open each screen on 360px emulator, no overflow
+- [x] `flutter analyze` clean (0 issues)
+- [x] All test suites pass (76/76 tests)
 
 **Dependencies:** None
 

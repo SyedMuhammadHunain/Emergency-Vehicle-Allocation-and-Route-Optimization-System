@@ -274,26 +274,29 @@ class MapScreen extends StatelessWidget {
                     mapProvider.selectedResponder != null
                 ? 210
                 : 24,
-            child: Column(
-              children: [
-                FloatingActionButton.small(
-                  heroTag: 'recenter_map',
-                  backgroundColor: isDark
-                      ? AppColors.surfaceDark
-                      : Colors.white,
-                  foregroundColor: AppColors.primary,
-                  onPressed: () => mapProvider.resetToDefault(),
-                  child: const Icon(Icons.my_location_rounded),
-                ),
-                const SizedBox(height: 8),
-                FloatingActionButton.small(
-                  heroTag: 'report_from_map',
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  onPressed: () => context.push('/incidents/new'),
-                  child: const Icon(Icons.add_alert_rounded),
-                ),
-              ],
+            child: SafeArea(
+              top: false,
+              child: Column(
+                children: [
+                  FloatingActionButton.small(
+                    heroTag: 'recenter_map',
+                    backgroundColor: isDark
+                        ? AppColors.surfaceDark
+                        : Colors.white,
+                    foregroundColor: AppColors.primary,
+                    onPressed: () => mapProvider.resetToDefault(),
+                    child: const Icon(Icons.my_location_rounded),
+                  ),
+                  const SizedBox(height: 8),
+                  FloatingActionButton.small(
+                    heroTag: 'report_from_map',
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    onPressed: () => context.push('/incidents/new'),
+                    child: const Icon(Icons.add_alert_rounded),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -303,11 +306,14 @@ class MapScreen extends StatelessWidget {
               left: 16,
               right: 16,
               bottom: 16,
-              child: _IncidentMapPreview(
-                incident: mapProvider.selectedIncident!,
-                onClose: () => mapProvider.clearSelection(),
-                onViewDetails: () => context.push(
-                  '/incidents/${mapProvider.selectedIncident!.id}',
+              child: SafeArea(
+                top: false,
+                child: _IncidentMapPreview(
+                  incident: mapProvider.selectedIncident!,
+                  onClose: () => mapProvider.clearSelection(),
+                  onViewDetails: () => context.push(
+                    '/incidents/${mapProvider.selectedIncident!.id}',
+                  ),
                 ),
               ),
             ),
@@ -318,9 +324,12 @@ class MapScreen extends StatelessWidget {
               left: 16,
               right: 16,
               bottom: 16,
-              child: _ResponderMapPreview(
-                responder: mapProvider.selectedResponder!,
-                onClose: () => mapProvider.clearSelection(),
+              child: SafeArea(
+                top: false,
+                child: _ResponderMapPreview(
+                  responder: mapProvider.selectedResponder!,
+                  onClose: () => mapProvider.clearSelection(),
+                ),
               ),
             ),
         ],
@@ -474,10 +483,13 @@ class _IncidentMapPreview extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              StatusBadge(
-                label: incident.status.displayName,
-                color: incident.status.color,
+              Flexible(
+                child: StatusBadge(
+                  label: incident.status.displayName,
+                  color: incident.status.color,
+                ),
               ),
+              const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: onViewDetails,
                 style: ElevatedButton.styleFrom(
@@ -548,6 +560,8 @@ class _ResponderMapPreview extends StatelessWidget {
                   children: [
                     Text(
                       responder.callSign,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
@@ -555,6 +569,8 @@ class _ResponderMapPreview extends StatelessWidget {
                     ),
                     Text(
                       responder.stationName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark
@@ -572,8 +588,11 @@ class _ResponderMapPreview extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
             children: [
               StatusBadge(
                 label: responder.isAvailable

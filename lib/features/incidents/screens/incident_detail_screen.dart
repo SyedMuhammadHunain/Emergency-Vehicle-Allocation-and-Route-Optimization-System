@@ -319,15 +319,20 @@ class IncidentDetailScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Reported by: ${incident.reporterName}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: isDark
-                              ? AppColors.textSecondaryDark
-                              : AppColors.textSecondaryLight,
+                      Expanded(
+                        child: Text(
+                          'Reported by: ${incident.reporterName}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondaryLight,
+                          ),
                         ),
                       ),
+                      const SizedBox(width: 8),
                       Text(
                         DateFormat(
                           'h:mm a • MMM d',
